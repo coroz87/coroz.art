@@ -16,84 +16,50 @@ jQuery(window).load(function () {
 
 
 /*-----------------------------------------------------------------------------------*/
-/*	MENU
+/*	PAGE TRANSITIONS
 /*-----------------------------------------------------------------------------------*/
-function calculateScroll() {
-	var contentTop = [];
-	var contentBottom = [];
-	var winTop = $(window).scrollTop();
-	var rangeTop = 200;
-	var rangeBottom = 500;
-	$('.navmenu').find('.scroll_btn a').each(function () {
-		contentTop.push($($(this).attr('href')).offset().top);
-		contentBottom.push($($(this).attr('href')).offset().top + $($(this).attr('href')).height());
-	})
-	$.each(contentTop, function (i) {
-		if (winTop > contentTop[i] - rangeTop && winTop < contentBottom[i] - rangeBottom) {
-			$('.navmenu li.scroll_btn')
-				.removeClass('active')
-				.eq(i).addClass('active');
-		}
-	})
-};
+document.addEventListener('DOMContentLoaded', function () {
+	// Trigger enter animation
+	document.body.classList.add('page-entering');
 
-jQuery(document).ready(function () {
-	//MobileMenu
-	if ($(window).width() < 768) {
-		jQuery('.menu_block .container').prepend('<a href="javascript:void(0)" class="menu_toggler"><span class="fa fa-align-justify"></span></a>');
-		jQuery('header .navmenu').hide();
-		jQuery('.menu_toggler, .navmenu ul li a').click(function () {
-			jQuery('header .navmenu').slideToggle(300);
-		});
-	}
+	// Intercept nav links for page-leave animation
+	document.querySelectorAll('.navmenu a[href], .logo a').forEach(function (link) {
+		// Only intercept same-origin .html links (not # anchors, not external)
+		var href = link.getAttribute('href');
+		if (!href || href.startsWith('#') || href.startsWith('javascript')) return;
+		if (link.hostname && link.hostname !== window.location.hostname) return;
 
-	// if single_page
-	if (jQuery("#page").hasClass("single_page")) {
-	}
-	else {
-		$(window).scroll(function (event) {
-			calculateScroll();
-		});
-
-		$('.navmenu ul li a, .mobile_menu ul li a, .btn_down').click(function (e) {
+		link.addEventListener('click', function (e) {
+			var dest = this.href;
+			// Don't animate if already on this page
+			if (dest === window.location.href) return;
 			e.preventDefault();
-
-			const target = document.querySelector(this.hash);
-			if (!target) return;
-
-			// Signal the scroll snap listener to ignore this programmatic scroll
-			if (window.setSnapLock) window.setSnapLock(1500);
-
-			// Calculate center position exactly like the snap logic
-			const secTop = target.getBoundingClientRect().top + window.scrollY;
-			const secMid = secTop + target.offsetHeight / 2;
-			const targetY = Math.max(0, Math.round(secMid - window.innerHeight / 2));
-
-			// Except #home - always snap home to the absolute top
-			if (this.hash === '#home') {
-				window.scrollTo({ top: 0, behavior: "smooth" });
-			} else {
-				window.scrollTo({ top: targetY, behavior: "smooth" });
-			}
+			document.body.classList.add('page-leaving');
+			setTimeout(function () {
+				window.location.href = dest;
+			}, 400);
 		});
-
-	};
+	});
 });
 
 
 /* Superfish */
 jQuery(document).ready(function () {
-	if ($(window).width() >= 768) {
+	if ($(window).width() >= 992) {
 		$('.navmenu ul').superfish();
 	}
+
+	// Mobile Menu Toggler
+	$('.menu_toggler').click(function () {
+		$('.navmenu').slideToggle();
+	});
 });
 
-
-
-
-
-
-
+jQuery(window).resize(function () {
+	if ($(window).width() > 991) {
+		$('.navmenu').css('display', '');
+	}
+});
 
 /*-----------------------------------------------------------------------------------*/
 /*	FLEXSLIDER
@@ -143,8 +109,9 @@ jQuery(document).ready(function () {
 });
 
 function homeHeight() {
-	var wh = jQuery(window).height() - 80;
+	var wh = jQuery(window).height() - 60;
 	jQuery('.top_slider, .top_slider .slides li').css('height', wh);
+	jQuery('#home').css('height', wh);
 }
 
 
@@ -191,7 +158,7 @@ jQuery(window).resize(function () {
 
 function blogHeight() {
 	if ($(window).width() > 991) {
-		var wh = jQuery(window).height() - 80;
+		var wh = jQuery(window).height() - 60;
 		jQuery('#blog').css('min-height', wh);
 	}
 
@@ -300,7 +267,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 document.addEventListener('DOMContentLoaded', function () {
 
-	const sliders = document.querySelectorAll('.team_slider, .projects_slider, .news_slider');
+	const sliders = document.querySelectorAll('.team_slider, .news_slider');
 
 	sliders.forEach(function (slider) {
 
@@ -308,9 +275,10 @@ document.addEventListener('DOMContentLoaded', function () {
 			loop: true,
 			slidesPerView: "auto",
 			spaceBetween: 0,
-			speed: 12000,
+			speed: 8000,
 			allowTouchMove: true,
 			grabCursor: true,
+			loopedSlides: 15, // Provide massive amount of cloned slides so rapid reverse dragging/scrolling never hits the edge
 			autoplay: {
 				delay: 0,
 				disableOnInteraction: false,
@@ -320,135 +288,121 @@ document.addEventListener('DOMContentLoaded', function () {
 		// Force linear motion
 		swiper.wrapperEl.style.transitionTimingFunction = 'linear';
 
-		// Immediate pause on hover
-		slider.addEventListener('mouseenter', () => {
-			swiper.autoplay.stop();
-			const translate = swiper.getTranslate();
-			swiper.setTransition(0);
-			swiper.setTranslate(translate);
-		});
+		// Custom Mouse Wheel Navigation (Reversed natural scroll to match gallery)
+		slider.addEventListener('wheel', (e) => {
+			if (e.deltaY !== 0) {
+				e.preventDefault();
 
-		slider.addEventListener('mouseleave', () => {
-			let resumeSpeed = swiper.params.speed;
-			try {
-				const translate = Math.abs(swiper.getTranslate());
-				const slideWidth = (swiper.slides && swiper.slides.length > 0)
-					? swiper.slides[0].offsetWidth
-					: (swiper.width / swiper.params.slidesPerView);
+				// Momentarily pause the autoplay animation to allow manual scroll
+				swiper.autoplay.stop();
 
-				if (slideWidth > 0) {
-					const remainingDistance = slideWidth - (translate % slideWidth);
-					resumeSpeed = (remainingDistance / slideWidth) * swiper.params.speed;
+				// To move seamlessly in reverse while respecting Swiper's internal loop bounds:
+				swiper.setTransition(0);
+				// Minus deltaY reverses the scroll input direction
+				swiper.setTranslate(swiper.getTranslate() - e.deltaY);
+
+				// Force Swiper to recalculate loop boundaries if we scroll outside them
+				if (swiper.isBeginning || swiper.isEnd) {
+					swiper.loopFix();
 				}
-			} catch (e) {
-				console.log("Swiper math error:", e);
+
+				// Re-engage auto-play motion fluidly after manual wheel
+				clearTimeout(slider.wheelTimeout);
+				slider.wheelTimeout = setTimeout(() => {
+					// We must calculate the remaining distance of the current slide to resume the exact speed linear animation
+					let resumeSpeed = swiper.params.speed;
+					try {
+						const translate = Math.abs(swiper.getTranslate());
+						const slideWidth = (swiper.slides && swiper.slides.length > 0)
+							? swiper.slides[0].offsetWidth
+							: (swiper.width / swiper.params.slidesPerView);
+
+						if (slideWidth > 0) {
+							const remainingDistance = slideWidth - (translate % slideWidth);
+							resumeSpeed = (remainingDistance / slideWidth) * swiper.params.speed;
+						}
+					} catch (mathErr) { }
+
+					swiper.setTransition(resumeSpeed);
+					swiper.slideNext(resumeSpeed);
+					swiper.autoplay.start();
+				}, 100);
 			}
+		}, { passive: false });
 
-			// Force a transition to the next slide using precisely the remaining time
-			swiper.setTransition(resumeSpeed);
-			swiper.slideNext(resumeSpeed);
+		// Listen to touch/drag events to also resume autoplay correctly instead of it stalling
+		swiper.on('touchEnd', () => {
+			swiper.autoplay.stop();
+			setTimeout(() => {
+				let resumeSpeed = swiper.params.speed;
+				try {
+					const translate = Math.abs(swiper.getTranslate());
+					const slideWidth = (swiper.slides && swiper.slides.length > 0)
+						? swiper.slides[0].offsetWidth
+						: (swiper.width / swiper.params.slidesPerView);
 
-			// Re-enable the continuous autoplay tracker
-			swiper.autoplay.start();
+					if (slideWidth > 0) {
+						const remainingDistance = slideWidth - (translate % slideWidth);
+						resumeSpeed = (remainingDistance / slideWidth) * swiper.params.speed;
+					}
+				} catch (mathErr) { }
+
+				swiper.setTransition(resumeSpeed);
+				swiper.slideNext(resumeSpeed);
+				swiper.autoplay.start();
+			}, 100);
 		});
 
 	});
 
 });
+
 /*-----------------------------------------------------------------------------------*/
-/*	SCROLL SNAP
+/*	HEADER SCROLL NAVIGATION
 /*-----------------------------------------------------------------------------------*/
-(function () {
-	var snapTimeout = null;
-	var isSnapping = false;
-	var snapLockTimeout = null;
-	var DEBOUNCE_MS = 150;
-	var SNAP_DURATION = 700;
+document.addEventListener('DOMContentLoaded', function () {
+	const pages = [
+		'index.html',
+		'2dprojects.html',
+		'3dprojects.html',
+		'arts.html',
+		'contact.html'
+	];
 
-	// Gesture tracking
-	var gestureStartY = -1;
-	var SCROLL_THRESHOLD = 30; // Minimum pixels scrolled to trigger a section change
+	const headerSelector = document.querySelector('.menu_block');
+	if (headerSelector) {
+		let isNavigating = false;
+		headerSelector.addEventListener('wheel', function (e) {
+			if (isNavigating) return;
 
-	window.setSnapLock = function (duration) {
-		isSnapping = true;
-		clearTimeout(snapLockTimeout);
-		snapLockTimeout = setTimeout(function () {
-			isSnapping = false;
-			gestureStartY = -1;
-		}, duration);
-	};
+			let currentPath = window.location.pathname.split('/').pop();
+			if (!currentPath || currentPath === '') currentPath = 'index.html';
 
-	function getSections() {
-		return Array.from(document.querySelectorAll('#page > section, #contacts'));
+			let currentIndex = pages.indexOf(currentPath);
+			if (currentIndex === -1) return;
+
+			let targetIndex = currentIndex;
+			// Scroll Down -> e.deltaY > 0. Scroll Up -> e.deltaY < 0.
+			if (e.deltaY > 0) {
+				// Scroll down = left (previous page, home loops to contact)
+				targetIndex = (currentIndex - 1 + pages.length) % pages.length;
+			} else if (e.deltaY < 0) {
+				// Scroll up = right (next page, contact loops to home)
+				targetIndex = (currentIndex + 1) % pages.length;
+			}
+
+			if (targetIndex !== currentIndex && targetIndex >= 0 && targetIndex < pages.length) {
+				e.preventDefault();
+				isNavigating = true;
+
+				document.body.classList.add('page-leaving');
+				setTimeout(function () {
+					window.location.href = pages[targetIndex];
+				}, 400);
+			}
+		}, { passive: false });
 	}
+});
 
-	function getNearestSectionIndex(fallbackY) {
-		var scrollMid = fallbackY + window.innerHeight / 2;
-		var sections = getSections();
-		var nearestIdx = 0;
-		var nearestDist = Infinity;
-		sections.forEach(function (sec, idx) {
-			var secTop = sec.getBoundingClientRect().top + window.scrollY;
-			var secMid = secTop + sec.offsetHeight / 2;
-			var dist = Math.abs(scrollMid - secMid);
-			if (dist < nearestDist) {
-				nearestDist = dist;
-				nearestIdx = idx;
-			}
-		});
-		return nearestIdx;
-	}
 
-	function snapToSection(sec) {
-		if (sec.id === 'home') {
-			window.setSnapLock(SNAP_DURATION + 300);
-			window.scrollTo({ top: 0, behavior: 'smooth' });
-			return;
-		}
-		var secTop = sec.getBoundingClientRect().top + window.scrollY;
-		var secMid = secTop + sec.offsetHeight / 2;
-		var targetY = Math.max(0, Math.round(secMid - window.innerHeight / 2));
-
-		window.setSnapLock(SNAP_DURATION + 300);
-		window.scrollTo({ top: targetY, behavior: 'smooth' });
-	}
-
-	window.addEventListener('scroll', function () {
-		if (isSnapping) return;
-
-		if (gestureStartY === -1) {
-			gestureStartY = window.scrollY;
-		}
-
-		clearTimeout(snapTimeout);
-		snapTimeout = setTimeout(function () {
-			var currentY = window.scrollY;
-			var deltaY = currentY - gestureStartY;
-
-			var sections = getSections();
-			var startIdx = getNearestSectionIndex(gestureStartY);
-			var targetIdx = startIdx;
-
-			// If user deliberately scrolled down
-			if (deltaY > SCROLL_THRESHOLD) {
-				targetIdx = Math.min(sections.length - 1, startIdx + 1);
-			}
-			// If user deliberately scrolled up
-			else if (deltaY < -SCROLL_THRESHOLD) {
-				targetIdx = Math.max(0, startIdx - 1);
-			}
-			// Fallback to geometric nearest if it was a giant leap (scrollbar drag)
-			if (Math.abs(deltaY) > window.innerHeight) {
-				targetIdx = getNearestSectionIndex(currentY);
-			}
-
-			if (sections[targetIdx]) {
-				snapToSection(sections[targetIdx]);
-			}
-
-			// Reset tracking after snap decision
-			gestureStartY = -1;
-		}, DEBOUNCE_MS);
-	}, { passive: true });
-})();
 
