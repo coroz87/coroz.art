@@ -149,6 +149,44 @@
         .menu_block {
             box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
         }
+
+        /* ── Mobile Layout Specific Spacing ── */
+        @media (max-width: 768px) {
+            /* Create a universal 40px gap between all structural blocks in the footer content */
+
+            /* Gap between "Featured Posts" title and its first post */
+            .contact-content footer .col-lg-4:first-child h4 {
+                margin-top: 10px !important;
+                /* Top already has 30px from margin-bottom of clients-stripe */
+                margin-bottom: 40px !important;
+            }
+
+            /* Gap between last post and "About Coroz" title */
+            /* Last post has margin-bottom: 15px default. padbot30 adds padding. We override: */
+            .contact-content footer .padbot30 {
+                padding-bottom: 0 !important;
+            }
+
+            .contact-content footer .foot_about_block h4 {
+                margin-top: 25px !important;
+                /* 25px + 15px (from last post) = exactly 40px */
+                margin-bottom: 40px !important;
+                /* Gap between title and its first paragraph */
+            }
+
+            /* Gap between "Contact Us" title and whatever is above it */
+            .contact-content footer .col-lg-4:last-child h4 {
+                margin-top: 40px !important;
+                /* assuming social icons above it have no margin */
+                margin-bottom: 40px !important;
+            }
+
+            /* Between paragraphs */
+            .contact-content footer p {
+                margin-top: 0;
+                margin-bottom: 25px;
+            }
+        }
     </style>
 
 </head>

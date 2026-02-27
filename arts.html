@@ -255,18 +255,75 @@
             .projects-wrapper,
             .projects_wrapper {
                 display: none !important;
-                /* Hide bottom slider on mobile safely */
             }
 
+            .gallery-area {
+                justify-content: flex-start;
+                overflow: hidden;
+            }
+
+            /* Mobile: fill remaining space */
             .galleries-container {
-                height: 100% !important;
-                /* Maximize space on small screens */
+                margin-bottom: 0 !important;
+                margin-top: 18px;
+                width: 100%;
+                height: 100%;
                 border: none;
-                /* Cleaner look on mobile */
+                overflow: hidden;
+                position: relative;
+            }
+
+            /* Mobile: hide all grids by default */
+            .gallery-grid {
+                display: none;
+                opacity: 1;
+                visibility: visible;
+            }
+
+            /* Mobile: show active grid as 3-column masonry */
+            .gallery-grid.active {
+                display: grid;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                grid-template-columns: repeat(3, 1fr);
+                grid-auto-rows: calc(33.33vw - 2px);
+                grid-auto-flow: row dense;
+                grid-template-rows: unset;
+                overflow-x: hidden;
+                overflow-y: auto;
+                gap: 3px;
+                padding: 3px;
+                box-sizing: border-box;
+            }
+
+            .gallery-grid.active>a {
+                width: 100%;
+                height: auto;
+                aspect-ratio: unset;
+                overflow: hidden;
+            }
+
+            /* Every 4th item starting at 1: tall portrait */
+            .gallery-grid.active>a:nth-child(4n+1) {
+                grid-row: span 2;
+            }
+
+            .gallery-grid.active>a:not(:nth-child(4n+1)) {
+                grid-row: span 1;
+            }
+
+            .gallery-grid.active img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                display: block;
             }
 
             .top-header-area {
-                padding: 15px 0 10px 0;
+                padding: 20px 0 12px 0;
             }
 
             .subpage-main h2 {
@@ -287,7 +344,7 @@
                             &amp; Design</span></a>
                 </div>
 
-                <a class="menu_toggler" href="javascript:void(0);"><i class="fa fa-align-justify"></i></a>
+                <a class="menu_toggler" href="javascript:void(0);"><i class="fa fa-bars"></i></a>
 
                 <div class="pull-right">
                     <nav class="navmenu center">
@@ -327,7 +384,7 @@
 
         <div class="gallery-area">
             <div class="galleries-container">
-                <div class="gallery-grid" id="gallery-main">
+                <div class="gallery-grid active" id="gallery-main">
                     <a href="images/works/1.jpg" class="glightbox"><img src="images/works/1.jpg" alt="Artwork" /></a>
                     <a href="images/works/2.jpg" class="glightbox"><img src="images/works/2.jpg" alt="Artwork" /></a>
                     <a href="images/works/3.jpg" class="glightbox"><img src="images/works/3.jpg" alt="Artwork" /></a>
@@ -388,134 +445,342 @@
         document.addEventListener('DOMContentLoaded', () => {
             const grids = document.querySelectorAll('.gallery-grid');
 
-            // True Seamless Infinite Scrolling (Cloned DOM approach)
-            grids.forEach(grid => {
-                // 1. Clone the content to make it infinitely scrollable without visual breaks
-                const originalContent = grid.innerHTML;
-                grid.innerHTML = originalContent + originalContent; // Double the items
+            // Responsive Infinite Scrolling (Desktop horizontal / Mobile vertical)
+            class InfiniteGrid {
+                constructor(grid) {
+                    this.grid = grid;
+                    this.originalContent = grid.innerHTML;
+                    this.isActive = false;
+                    this.isDesktop = window.innerWidth > 768;
+                    this.rafId = null;
 
-                // Prevent native image drag breaking JS mouseup dragging
-                grid.addEventListener('dragstart', (e) => e.preventDefault());
+                    // State definition
+                    this.isDown = false;
+                    this.isDragging = false;
+                    this.startPos = 0;
+                    this.scrollStart = 0;
+                    this.velocity = 0;
+                    this.prevMousePos = 0;
+                    this.prevTime = 0;
+                    this.exactScroll = 0;
+                    this.initialized = false;
 
-                // Wait for layout calculation
-                setTimeout(() => {
-                    // Re-initialize GLightbox for newly cloned links
-                    if (typeof GLightbox !== 'undefined') {
-                        GLightbox({ selector: '.glightbox' });
+                    // Binders for events so we can remove them later
+                    this.onDragStart = (e) => e.preventDefault();
+                    this.onMouseDown = this.handleMouseDown.bind(this);
+                    this.onMouseLeave = this.handleMouseUpOrLeave.bind(this);
+                    this.onMouseUp = this.handleMouseUpOrLeave.bind(this);
+                    this.onMouseMove = this.handleMouseMove.bind(this);
+                    this.onWheel = this.handleWheel.bind(this);
+                    this.onClick = this.handleClick.bind(this);
+                    this.onTouchStart = this.handleTouchStart.bind(this);
+                    this.onTouchMove = this.handleTouchMove.bind(this);
+                    this.onTouchEnd = this.handleTouchEnd.bind(this);
+
+                    this.init();
+                }
+
+                init() {
+                    const currentIsDesktop = window.innerWidth > 768;
+
+                    if (this.isActive && this.isDesktop === currentIsDesktop) return; // Mode hasn't changed
+
+                    this.destroy(); // Clean up if mode changed
+                    this.isDesktop = currentIsDesktop;
+                    this.isActive = true;
+
+                    if (this.isDesktop) {
+                        this.initDesktop();
+                    } else {
+                        this.initMobile();
                     }
 
-                    // 2. Variables for dragging and boundaries
-                    let isDown = false;
-                    let isDragging = false;
-                    let startX;
-                    let scrollLeftStart;
-                    let velocity = 0;
-                    let prevMouseX = 0;
-                    let prevTime = 0;
+                    this.grid.addEventListener('dragstart', this.onDragStart);
+                    this.grid.addEventListener('click', this.onClick, true);
 
-                    const halfScrollWidth = grid.scrollWidth / 2;
-                    // Start right in the exact middle so we can scroll left or right immediately
-                    grid.scrollLeft = halfScrollWidth;
+                    // Mouse events
+                    this.grid.addEventListener('mousedown', this.onMouseDown);
+                    this.grid.addEventListener('mouseleave', this.onMouseLeave);
+                    this.grid.addEventListener('mouseup', this.onMouseUp);
+                    this.grid.addEventListener('mousemove', this.onMouseMove);
+                    this.grid.addEventListener('wheel', this.onWheel, { passive: false });
 
-                    let exactScrollLeft = grid.scrollLeft;
+                    // Touch events for drag physics
+                    this.grid.addEventListener('touchstart', this.onTouchStart, { passive: false });
+                    this.grid.addEventListener('touchmove', this.onTouchMove, { passive: false });
+                    this.grid.addEventListener('touchend', this.onTouchEnd);
 
-                    // 3. The invisible bounding box reset and momentum loop
-                    const momentumLoop = () => {
-                        // Ease towards the target (momentum deceleration)
-                        if (!isDown) {
-                            if (Math.abs(velocity) > 0.1) {
-                                velocity *= 0.98; // 0.98 = Takes even longer to stop!
-                                exactScrollLeft -= velocity;
-                                grid.scrollLeft = exactScrollLeft; // Let browser natively handle sub-pixel numbers
+                    setTimeout(() => {
+                        if (typeof GLightbox !== 'undefined') {
+                            GLightbox({
+                                selector: '.glightbox',
+                                touchNavigation: false,
+                                dragToleranceX: 40,
+                                dragToleranceY: 150,
+                                dragAutoSnap: true,
+                                zoomable: false,
+                                draggable: false
+                            });
+                        }
+                    }, 200);
+                }
+
+                destroy() {
+                    this.isActive = false;
+                    if (this.rafId) cancelAnimationFrame(this.rafId);
+                    this.grid.innerHTML = this.originalContent; // Remove clones
+
+                    this.grid.removeEventListener('dragstart', this.onDragStart);
+                    this.grid.removeEventListener('click', this.onClick, true);
+                    this.grid.removeEventListener('mousedown', this.onMouseDown);
+                    this.grid.removeEventListener('mouseleave', this.onMouseLeave);
+                    this.grid.removeEventListener('mouseup', this.onMouseUp);
+                    this.grid.removeEventListener('mousemove', this.onMouseMove);
+                    this.grid.removeEventListener('wheel', this.onWheel);
+
+                    this.grid.removeEventListener('touchstart', this.onTouchStart);
+                    this.grid.removeEventListener('touchmove', this.onTouchMove);
+                    this.grid.removeEventListener('touchend', this.onTouchEnd);
+                }
+
+                // --- DESKTOP LOGIC (Horizontal Grid Math Alignment) ---
+                initDesktop() {
+                    // The CSS grid relies on an `nth-child(3n+1)` pattern.
+                    // If the original item count is not divisible by 3, cloning it breaks the physical layout sync.
+                    // By repeating the base content exactly 3 times, we mathematically guarantee the item count is a multiple of 3!
+                    const perfectBlock = this.originalContent.repeat(3);
+
+                    // Now repeat this geometrically perfect block 5 times to create a massive scroll runway
+                    this.grid.innerHTML = perfectBlock.repeat(5);
+                    this.boundSize = 0;
+                    this.initialized = false;
+
+                    setTimeout(() => {
+                        this.tryInitDesktopGeometry();
+                        this.loopDesktop();
+                    }, 100);
+                }
+
+                tryInitDesktopGeometry() {
+                    if (this.boundSize === 0 && this.grid.scrollWidth > 0) {
+                        // The entire runway consists of exactly 5 perfect geometric blocks
+                        this.boundSize = this.grid.scrollWidth / 5;
+                        // Start directly in the middle (the 3rd block, index 2)
+                        this.grid.scrollLeft = this.boundSize * 2;
+                        this.exactScroll = this.grid.scrollLeft;
+                        this.scrollStart = this.exactScroll;
+                        this.initialized = true;
+                    }
+                }
+
+                loopDesktop() {
+                    if (!this.isActive) return;
+
+                    // Lazy init if tab was hidden on load
+                    if (!this.initialized) {
+                        this.tryInitDesktopGeometry();
+                    }
+
+                    if (!this.isDown) {
+                        if (Math.abs(this.velocity) > 0.1) {
+                            this.velocity *= 0.98;
+                            this.exactScroll -= this.velocity;
+                            this.grid.scrollLeft = this.exactScroll;
+                        } else {
+                            this.velocity = 0;
+                        }
+                    }
+
+                    // Keep the user bouncing invisibly around the middle to avoid maxScroll physically
+                    if (this.initialized && this.boundSize > 0) {
+                        if (this.exactScroll <= this.boundSize * 1.5) {
+                            this.exactScroll += this.boundSize;
+                            this.grid.scrollLeft = this.exactScroll;
+                            this.scrollStart += this.boundSize;
+                        } else if (this.exactScroll >= this.boundSize * 2.5) {
+                            this.exactScroll -= this.boundSize;
+                            this.grid.scrollLeft = this.exactScroll;
+                            this.scrollStart -= this.boundSize;
+                        }
+                    }
+
+                    this.rafId = requestAnimationFrame(() => this.loopDesktop());
+                }
+
+                // --- MOBILE LOGIC (Vertical LCM Blocks) ---
+                initMobile() {
+                    const itemsCount = this.grid.querySelectorAll('a').length;
+                    if (itemsCount === 0) return;
+
+                    const gcd = (a, b) => b === 0 ? a : gcd(b, a % b);
+                    const lcm = (a, b) => (a * b) / gcd(a, b);
+                    const baseLcm = lcm(itemsCount, 12);
+
+                    let blockItems = baseLcm;
+                    while (blockItems < 36) blockItems += baseLcm;
+
+                    this.mobileBlockItems = blockItems;
+                    const repeats = blockItems / itemsCount;
+
+                    let blockContent = '';
+                    for (let i = 0; i < repeats; i++) blockContent += this.originalContent;
+
+                    this.grid.innerHTML = blockContent + blockContent;
+                    this.initialized = false;
+                    this.boundSize = 0;
+
+                    setTimeout(() => this.loopMobile(), 100);
+                }
+
+                loopMobile() {
+                    if (!this.isActive) return;
+
+                    // Init geometry on first frame it becomes visible (tab switch)
+                    if (!this.initialized && this.grid.scrollHeight > 0) {
+                        const targetNode = this.grid.children[this.mobileBlockItems];
+                        if (targetNode) {
+                            this.boundSize = targetNode.offsetTop - 3;
+                            this.grid.scrollTop = this.boundSize;
+                            this.exactScroll = this.grid.scrollTop;
+                            this.initialized = true;
+                        }
+                    }
+
+                    if (this.initialized && this.boundSize > 0) {
+                        if (!this.isDown) {
+                            if (Math.abs(this.velocity) > 0.1) {
+                                this.velocity *= 0.98;
+                                this.exactScroll -= this.velocity;
+                                this.grid.scrollTop = this.exactScroll;
                             } else {
-                                velocity = 0;
+                                this.velocity = 0;
                             }
                         }
 
-                        // Teleport Logic (Seamless Loop)
-                        const maxGridScroll = grid.scrollWidth - grid.clientWidth;
-
-                        if (exactScrollLeft <= 0) {
-                            exactScrollLeft += halfScrollWidth;
-                            grid.scrollLeft = exactScrollLeft;
-                            scrollLeftStart += halfScrollWidth; // Adjust drag origin so we don't snap back
+                        if (this.exactScroll < this.boundSize * 0.2) {
+                            this.exactScroll += this.boundSize;
+                            this.grid.scrollTop = this.exactScroll;
+                            this.scrollStart += this.boundSize;
+                        } else if (this.exactScroll > this.boundSize * 1.2) {
+                            this.exactScroll -= this.boundSize;
+                            this.grid.scrollTop = this.exactScroll;
+                            this.scrollStart -= this.boundSize;
                         }
-                        else if (exactScrollLeft >= maxGridScroll - 5) {
-                            exactScrollLeft -= halfScrollWidth;
-                            grid.scrollLeft = exactScrollLeft;
-                            scrollLeftStart -= halfScrollWidth; // Adjust drag origin so we don't snap back
-                        }
+                    }
 
-                        requestAnimationFrame(momentumLoop);
-                    };
-                    requestAnimationFrame(momentumLoop);
+                    this.rafId = requestAnimationFrame(() => this.loopMobile());
+                }
 
-                    // Prevent click opening lightbox if dragging
-                    grid.addEventListener('click', (e) => {
-                        if (isDragging) {
-                            e.preventDefault();
-                            e.stopPropagation();
-                        }
-                    }, true);
-
-                    // 4. Mouse Dragging
-                    grid.addEventListener('mousedown', (e) => {
-                        isDown = true;
-                        isDragging = false;
-                        grid.style.cursor = 'grabbing';
-                        startX = e.pageX - grid.offsetLeft;
-                        scrollLeftStart = exactScrollLeft;
-                        velocity = 0; // stop immediately on touch
-                        prevMouseX = startX;
-                        prevTime = Date.now();
-                    });
-
-                    grid.addEventListener('mouseleave', () => {
-                        isDown = false;
-                        grid.style.cursor = 'pointer';
-                        if (Date.now() - prevTime > 50) velocity = 0;
-                    });
-
-                    grid.addEventListener('mouseup', () => {
-                        isDown = false;
-                        grid.style.cursor = 'pointer';
-                        if (Date.now() - prevTime > 50) velocity = 0;
-                    });
-
-                    grid.addEventListener('mousemove', (e) => {
-                        if (!isDown) return;
+                // --- EVENT HANDLERS (Axis Aware) ---
+                handleClick(e) {
+                    if (this.isDragging) {
                         e.preventDefault();
-                        const x = e.pageX - grid.offsetLeft;
-                        const walk = (x - startX) * 2; // scroll speed multiplier
+                        e.stopPropagation();
+                    }
+                }
 
-                        if (Math.abs(walk) > 5) {
-                            isDragging = true; // Mark as drag if moved more than 5px
+                startInteraction(pos) {
+                    this.isDown = true;
+                    this.isDragging = false;
+                    this.grid.style.cursor = 'grabbing';
+                    this.startPos = pos;
+                    this.scrollStart = this.isDesktop ? this.exactScroll : this.grid.scrollTop; // Fallback sync
+                    // Force exactScroll sync
+                    this.exactScroll = this.isDesktop ? this.grid.scrollLeft : this.grid.scrollTop;
+                    this.scrollStart = this.exactScroll;
+
+                    this.velocity = 0;
+                    this.prevMousePos = pos;
+                    this.prevTime = Date.now();
+                }
+
+                handleMouseDown(e) {
+                    const pos = this.isDesktop ? e.pageX - this.grid.offsetLeft : e.pageY - this.grid.offsetTop;
+                    this.startInteraction(pos);
+                }
+
+                handleTouchStart(e) {
+                    const touch = e.touches[0];
+                    const pos = this.isDesktop ? touch.pageX - this.grid.offsetLeft : touch.pageY - this.grid.offsetTop;
+                    this.startInteraction(pos);
+                }
+
+                endInteraction() {
+                    this.isDown = false;
+                    this.grid.style.cursor = 'grab';
+                    if (Date.now() - this.prevTime > 50) this.velocity = 0;
+                }
+
+                handleMouseUpOrLeave() { this.endInteraction(); }
+                handleTouchEnd() { this.endInteraction(); }
+
+                moveInteraction(pos, preventDefaultFn) {
+                    if (!this.isDown) return;
+                    preventDefaultFn();
+
+                    // Unified walk multiplier for natural dragging
+                    const walk = (pos - this.startPos) * 1.5;
+                    if (Math.abs(walk) > 5) this.isDragging = true;
+
+                    this.exactScroll = this.scrollStart - walk;
+
+                    if (this.isDesktop) this.grid.scrollLeft = this.exactScroll;
+                    else this.grid.scrollTop = this.exactScroll;
+
+                    const now = Date.now();
+                    const dt = now - this.prevTime;
+                    if (dt > 0) {
+                        // Reduced momentum multiplier from 3.6 to 2.4 for less chaotic sensitivity
+                        this.velocity = ((pos - this.prevMousePos) / dt) * 2.4;
+                    }
+                    this.prevTime = now;
+                    this.prevMousePos = pos;
+                }
+
+                handleMouseMove(e) {
+                    if (!this.isDown) return; // Must check isDown before preventDefault specifically for mouse
+                    const pos = this.isDesktop ? e.pageX - this.grid.offsetLeft : e.pageY - this.grid.offsetTop;
+                    this.moveInteraction(pos, () => e.preventDefault());
+                }
+
+                handleTouchMove(e) {
+                    if (!this.isDown) return;
+                    const touch = e.touches[0];
+                    const pos = this.isDesktop ? touch.pageX - this.grid.offsetLeft : touch.pageY - this.grid.offsetTop;
+                    this.moveInteraction(pos, () => {
+                        // Only prevent default on the axis we are scrolling
+                        if (this.isDesktop) {
+                            if (Math.abs(touch.pageX - this.startPos) > Math.abs(touch.pageY - this.startPos)) e.preventDefault();
+                        } else {
+                            if (Math.abs(touch.pageY - this.startPos) > Math.abs(touch.pageX - this.startPos)) e.preventDefault();
                         }
-
-                        exactScrollLeft = scrollLeftStart - walk;
-                        grid.scrollLeft = exactScrollLeft;
-
-                        let now = Date.now();
-                        let dt = now - prevTime;
-                        if (dt > 0) {
-                            // Calculate current velocity of your hand gesture
-                            // Reduced sensitivity by another 20% (4.5 -> 3.6)
-                            velocity = ((x - prevMouseX) / dt) * 3.6;
-                        }
-                        prevTime = now;
-                        prevMouseX = x;
                     });
+                }
 
-                    // 5. Mouse Wheel (Reversed natural curved scroll + momentum)
-                    grid.addEventListener('wheel', (e) => {
-                        if (e.deltaY !== 0) {
-                            e.preventDefault();
-                            // Reduced wheel sensitivity by another 20% (0.045 -> 0.036)
-                            // Changed subtraction to addition to reverse the scroll direction
-                            velocity += (e.deltaY * 0.036);
+                handleWheel(e) {
+                    if (e.deltaY !== 0) {
+                        e.preventDefault(); // Global prevent, fixes the mobile "wall" glitch mapping scroll momentum to touch loop
+                        if (this.isDesktop) {
+                            this.velocity += (e.deltaY * 0.036);
+                        } else {
+                            // Invert scroll direction for mobile vertical views
+                            this.velocity -= (e.deltaY * 0.036);
                         }
-                    }, { passive: false });
-                }, 100);
+                    }
+                }
+            }
+
+            const gridInstances = [];
+            grids.forEach(grid => {
+                gridInstances.push(new InfiniteGrid(grid));
+            });
+
+            let resizeTimer;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(() => {
+                    gridInstances.forEach(instance => instance.init());
+                }, 250);
             });
 
             // Bottom Slider Continuous Autoplay Clone Approach
@@ -530,7 +795,15 @@
                 // Wait for layout calculation and image load
                 setTimeout(() => {
                     if (typeof GLightbox !== 'undefined') {
-                        GLightbox({ selector: '.glightbox' });
+                        GLightbox({
+                            selector: '.glightbox',
+                            touchNavigation: false,
+                            dragToleranceX: 40,
+                            dragToleranceY: 150,
+                            dragAutoSnap: true,
+                            zoomable: false,
+                            draggable: false
+                        });
                     }
 
                     // Force browser to calculate width AFTER cloned images render

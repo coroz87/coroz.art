@@ -251,12 +251,45 @@ $(document).ready(function () {
 document.addEventListener('DOMContentLoaded', function () {
 	const lightbox = GLightbox({
 		selector: '.glightbox',
-		touchNavigation: true,
+		touchNavigation: true, // Allow swiping arrows
 		loop: true,
-		zoomable: true,
+		zoomable: false, // Disables the buggy zoom/drag-to-close behavior on mobile
+		draggable: false, // Disables image drag physics
 		autoplayVideos: false
 	});
+
 });
+
+// Native Mouse Wheel to switch Images within Lightbox (Globally applied to all GLightbox instances)
+window.addEventListener('wheel', (e) => {
+	const lightboxContainer = document.querySelector('.glightbox-container');
+	const bodyHasOpenClass = document.body.classList.contains('glightbox-open');
+
+	// If the lightbox is open globally
+	if (lightboxContainer && bodyHasOpenClass) {
+		const nextBtn = document.querySelector('.gnext');
+		const prevBtn = document.querySelector('.gprev');
+
+		if (nextBtn && prevBtn) {
+			e.preventDefault(); // Prevent page scroll
+
+			// Add a small debounce buffer to prevent rapid fire skipping
+			if (window.glightboxWheelTimer) return;
+
+			window.glightboxWheelTimer = setTimeout(() => {
+				window.glightboxWheelTimer = null;
+			}, 300);
+
+			if (e.deltaY > 0) {
+				// Reverse for mobile: Scroll down (push up) -> Prev image 
+				prevBtn.click();
+			} else if (e.deltaY < 0) {
+				// Scroll up (pull down) -> Next image
+				nextBtn.click();
+			}
+		}
+	}
+}, { passive: false });
 
 
 
