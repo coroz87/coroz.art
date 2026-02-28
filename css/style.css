@@ -570,6 +570,7 @@ a.menu_toggler {
 	display: block;
 	margin: 0 0 0 -3px;
 	padding: 20px 20px;
+	font-family: 'Roboto', sans-serif;
 	font-weight: 900;
 	line-height: 20px;
 	font-size: 14px;
@@ -624,6 +625,7 @@ a.menu_toggler {
 	position: relative;
 	margin: 0;
 	padding: 15px 5px 14px 21px;
+	font-family: 'Roboto', sans-serif;
 	font-weight: 400;
 	text-align: justify;
 	font-size: 13px;
@@ -2786,7 +2788,7 @@ html {
 		position: absolute;
 		left: 0;
 		right: 0;
-		top: 80px;
+		top: 60px;
 		background-color: #fff;
 		display: none;
 	}
@@ -3348,7 +3350,25 @@ html {
 	transform: scale(1.05);
 }
 
-/* Force GLightbox arrows to show on mobile */
+/* Force GLightbox arrows to show on mobile and customize styling globally */
+.gnext,
+.gprev,
+.glightbox-clean .gprev,
+.glightbox-modern .gprev,
+.glightbox-clean .gnext,
+.glightbox-modern .gnext,
+.glightbox-mobile .gnext,
+.glightbox-mobile .gprev {
+	background-color: transparent !important;
+	border-radius: 0 !important;
+	box-shadow: none !important;
+}
+
+.gnext svg,
+.gprev svg {
+	filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.9)) !important;
+}
+
 @media (max-width: 768px) {
 
 	.gnext,
@@ -3363,12 +3383,10 @@ html {
 		opacity: 1 !important;
 		visibility: visible !important;
 		pointer-events: auto !important;
-		background-color: rgba(0, 0, 0, 0.4) !important;
 		width: 40px !important;
 		height: 50px !important;
 		top: 50% !important;
 		transform: translateY(-50%) !important;
-		border-radius: 4px !important;
 	}
 
 	.gnext {

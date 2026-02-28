@@ -332,7 +332,7 @@
                 visibility: visible;
             }
 
-            /* Mobile: show active grid as 3-column masonry */
+            /* Mobile: show active grid as 2-column masonry */
             .gallery-grid.active {
                 display: grid;
                 position: absolute;
@@ -340,8 +340,8 @@
                 left: 0;
                 width: 100%;
                 height: 100%;
-                grid-template-columns: repeat(3, 1fr);
-                grid-auto-rows: calc(33.33vw - 2px);
+                grid-template-columns: repeat(2, 1fr);
+                grid-auto-rows: calc(50vw - 4.5px);
                 grid-auto-flow: row dense;
                 grid-template-rows: unset;
                 overflow-x: hidden;
@@ -358,12 +358,14 @@
                 overflow: hidden;
             }
 
-            /* Every 4th item starting at 1: tall portrait */
-            .gallery-grid.active>a:nth-child(4n+1) {
+            /* Every 5th item starting at 1: large square occupying 2 columns */
+            .gallery-grid.active>a:nth-child(5n+1) {
+                grid-column: span 2;
                 grid-row: span 2;
             }
 
-            .gallery-grid.active>a:not(:nth-child(4n+1)) {
+            .gallery-grid.active>a:not(:nth-child(5n+1)) {
+                grid-column: span 1;
                 grid-row: span 1;
             }
 
@@ -658,7 +660,7 @@
                         if (typeof GLightbox !== 'undefined') {
                             GLightbox({
                                 selector: '.glightbox',
-                                touchNavigation: false,
+                                touchNavigation: true,
                                 dragToleranceX: 40,
                                 dragToleranceY: 150,
                                 dragAutoSnap: true,
@@ -758,10 +760,10 @@
 
                     const gcd = (a, b) => b === 0 ? a : gcd(b, a % b);
                     const lcm = (a, b) => (a * b) / gcd(a, b);
-                    const baseLcm = lcm(itemsCount, 12);
+                    const baseLcm = lcm(itemsCount, 60);
 
                     let blockItems = baseLcm;
-                    while (blockItems < 36) blockItems += baseLcm;
+                    while (blockItems < 60) blockItems += baseLcm;
 
                     this.mobileBlockItems = blockItems;
                     const repeats = blockItems / itemsCount;
@@ -780,35 +782,24 @@
                     if (!this.isActive) return;
 
                     // Init geometry on first frame it becomes visible (tab switch)
+                    // We only want teleporting to occur when nearing edges to maintain infinite behavior natively.
                     if (!this.initialized && this.grid.scrollHeight > 0) {
                         const targetNode = this.grid.children[this.mobileBlockItems];
                         if (targetNode) {
                             this.boundSize = targetNode.offsetTop - 3;
                             this.grid.scrollTop = this.boundSize;
-                            this.exactScroll = this.grid.scrollTop;
                             this.initialized = true;
                         }
                     }
 
                     if (this.initialized && this.boundSize > 0) {
-                        if (!this.isDown) {
-                            if (Math.abs(this.velocity) > 0.1) {
-                                this.velocity *= 0.98;
-                                this.exactScroll -= this.velocity;
-                                this.grid.scrollTop = this.exactScroll;
-                            } else {
-                                this.velocity = 0;
-                            }
-                        }
+                        const currentScroll = this.grid.scrollTop;
 
-                        if (this.exactScroll < this.boundSize * 0.2) {
-                            this.exactScroll += this.boundSize;
-                            this.grid.scrollTop = this.exactScroll;
-                            this.scrollStart += this.boundSize;
-                        } else if (this.exactScroll > this.boundSize * 1.2) {
-                            this.exactScroll -= this.boundSize;
-                            this.grid.scrollTop = this.exactScroll;
-                            this.scrollStart -= this.boundSize;
+                        // Let Native OS handle velocity and momentum, only explicitly jump if we hit limits
+                        if (currentScroll < this.boundSize * 0.2) {
+                            this.grid.scrollTop = currentScroll + this.boundSize;
+                        } else if (currentScroll > this.boundSize * 1.5) {
+                            this.grid.scrollTop = currentScroll - this.boundSize;
                         }
                     }
 
@@ -828,14 +819,16 @@
                     this.isDragging = false;
                     this.grid.style.cursor = 'grabbing';
                     this.startPos = pos;
-                    this.scrollStart = this.isDesktop ? this.exactScroll : this.grid.scrollTop; // Fallback sync
-                    // Force exactScroll sync
-                    this.exactScroll = this.isDesktop ? this.grid.scrollLeft : this.grid.scrollTop;
-                    this.scrollStart = this.exactScroll;
-
+                    this.scrollStart = this.isDesktop ? this.grid.scrollLeft : this.grid.scrollTop;
+                    this.exactScroll = this.scrollStart;
                     this.velocity = 0;
                     this.prevMousePos = pos;
                     this.prevTime = Date.now();
+
+                    // Temporarily grab scroll physics manually to stop any ongoing momentum
+                    if (this.isDesktop) {
+                        this.grid.style.scrollBehavior = 'auto';
+                    }
                 }
 
                 handleMouseDown(e) {
@@ -844,8 +837,11 @@
                 }
 
                 handleTouchStart(e) {
+                    // Mobile works best with native scrolling, skip manual touch physics there to avoid conflict
+                    if (!this.isDesktop) return;
+
                     const touch = e.touches[0];
-                    const pos = this.isDesktop ? touch.pageX - this.grid.offsetLeft : touch.pageY - this.grid.offsetTop;
+                    const pos = touch.pageX - this.grid.offsetLeft;
                     this.startInteraction(pos);
                 }
 
@@ -856,25 +852,24 @@
                 }
 
                 handleMouseUpOrLeave() { this.endInteraction(); }
-                handleTouchEnd() { this.endInteraction(); }
+                handleTouchEnd() { if (this.isDesktop) this.endInteraction(); }
 
                 moveInteraction(pos, preventDefaultFn) {
                     if (!this.isDown) return;
                     preventDefaultFn();
 
-                    // Unified walk multiplier for natural dragging
                     const walk = (pos - this.startPos) * 1.5;
                     if (Math.abs(walk) > 5) this.isDragging = true;
 
                     this.exactScroll = this.scrollStart - walk;
 
-                    if (this.isDesktop) this.grid.scrollLeft = this.exactScroll;
-                    else this.grid.scrollTop = this.exactScroll;
+                    if (this.isDesktop) {
+                        this.grid.scrollLeft = this.exactScroll;
+                    }
 
                     const now = Date.now();
                     const dt = now - this.prevTime;
                     if (dt > 0) {
-                        // Reduced momentum multiplier from 3.6 to 2.4 for less chaotic sensitivity
                         this.velocity = ((pos - this.prevMousePos) / dt) * 2.4;
                     }
                     this.prevTime = now;
@@ -882,34 +877,27 @@
                 }
 
                 handleMouseMove(e) {
-                    if (!this.isDown) return; // Must check isDown before preventDefault specifically for mouse
+                    if (!this.isDown) return;
                     const pos = this.isDesktop ? e.pageX - this.grid.offsetLeft : e.pageY - this.grid.offsetTop;
                     this.moveInteraction(pos, () => e.preventDefault());
                 }
 
                 handleTouchMove(e) {
-                    if (!this.isDown) return;
+                    if (!this.isDesktop || !this.isDown) return;
                     const touch = e.touches[0];
-                    const pos = this.isDesktop ? touch.pageX - this.grid.offsetLeft : touch.pageY - this.grid.offsetTop;
+                    const pos = touch.pageX - this.grid.offsetLeft;
                     this.moveInteraction(pos, () => {
-                        // Only prevent default on the axis we are scrolling
-                        if (this.isDesktop) {
-                            if (Math.abs(touch.pageX - this.startPos) > Math.abs(touch.pageY - this.startPos)) e.preventDefault();
-                        } else {
-                            if (Math.abs(touch.pageY - this.startPos) > Math.abs(touch.pageX - this.startPos)) e.preventDefault();
-                        }
+                        if (Math.abs(touch.pageX - this.startPos) > Math.abs(touch.pageY - this.startPos)) e.preventDefault();
                     });
                 }
 
                 handleWheel(e) {
+                    // For mobile native scrolling, we don't interfere
+                    if (!this.isDesktop) return;
+
                     if (e.deltaY !== 0) {
-                        e.preventDefault(); // Global prevent, fixes the mobile "wall" glitch mapping scroll momentum to touch loop
-                        if (this.isDesktop) {
-                            this.velocity += (e.deltaY * 0.036);
-                        } else {
-                            // Invert scroll direction for mobile vertical views
-                            this.velocity -= (e.deltaY * 0.036);
-                        }
+                        e.preventDefault();
+                        this.velocity += (e.deltaY * 0.036);
                     }
                 }
             }
@@ -940,7 +928,7 @@
                     if (typeof GLightbox !== 'undefined') {
                         GLightbox({
                             selector: '.glightbox',
-                            touchNavigation: false,
+                            touchNavigation: true,
                             dragToleranceX: 40,
                             dragToleranceY: 150,
                             dragAutoSnap: true,
