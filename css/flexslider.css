@@ -1090,6 +1090,16 @@ html[xmlns] .slides {
 		text-align: left;
 	}
 
+	/* Snap background to top-right on portrait mobile */
+	.top_slider .slide1,
+	.top_slider .slide2,
+	.top_slider .slide3,
+	.top_slider .slide4 {
+		background-position: top right;
+		background-attachment: scroll;
+		/* fixed bg is broken on iOS */
+	}
+
 }
 
 @media (max-width: 479px) {

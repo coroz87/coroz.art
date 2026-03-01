@@ -32,7 +32,7 @@
         }
 
         .about-page {
-            margin-top: 0;
+            margin-top: 60px;
             min-height: calc(100vh - 60px);
             display: flex;
             flex-direction: column;
@@ -186,6 +186,19 @@
                 margin-top: 0;
                 margin-bottom: 25px;
             }
+
+            /* About Coroz — mobile text & icons */
+            .contact-content footer .foot_about_block p {
+                font-size: 15px;
+                text-align: justify;
+                padding: 0 4px;
+            }
+
+            .contact-content footer .foot_about_block ul.social {
+                display: flex;
+                justify-content: center;
+                padding: 0;
+            }
         }
     </style>
 
@@ -194,14 +207,19 @@
 <body>
 
     <div class="menu_block">
+
+        <!-- CONTAINER -->
         <div class="container clearfix">
+
+            <!-- LOGO -->
             <div class="logo pull-left">
-                <a href="index.html"><span class="b1">COROZ</span><span class="b3">|</span><span class="b4">Arts
-                        &amp; Design</span></a>
-            </div>
+                <a href="index.html"><span class="b1">COROZ</span><span class="b3">|</span><span class="b4">Arts &amp;
+                        Design</span></a>
+            </div><!-- //LOGO -->
 
             <a class="menu_toggler" href="javascript:void(0);"><i class="fa fa-bars"></i></a>
 
+            <!-- MENU -->
             <div class="pull-right">
                 <nav class="navmenu center">
                     <ul>
@@ -212,21 +230,19 @@
                                 <li><a href="2dprojects.html#ill">Illustrations &amp; Sketches</a></li>
                                 <li><a href="2dprojects.html#graphic">Graphic Design</a></li>
                             </ul>
-                        </li>
                         <li class="sub-menu">
                             <a href="3dprojects.html">3D PROJECTS</a>
                             <ul>
                                 <li><a href="3dprojects.html#3ddesign">3D Design</a></li>
                                 <li><a href="3dprojects.html#3dart">3D Art</a></li>
                             </ul>
-                        </li>
                         <li class="scroll_btn"><a href="arts.html">ARTWORK</a></li>
                         <li class="scroll_btn last active"><a href="contact.html">CONTACT</a></li>
                     </ul>
                 </nav>
-            </div>
-        </div>
-    </div>
+            </div><!-- //MENU -->
+        </div><!-- //MENU BLOCK -->
+    </div><!-- //CONTAINER -->
 
     <div class="about-page">
 
@@ -253,9 +269,10 @@
                                     <img src="images/blog/1.jpg" alt="" />
                                 </div>
                                 <div class="post_item_content_small">
-                                    <a class="title" href="blog.html">As we have developed a unique layout template</a>
+                                    <a class="title" href="https://hivespace-eycich0.gamma.site/">As we have developed a
+                                        unique initiative</a>
                                     <ul class="post_item_inf_small">
-                                        <li>10 January 2014</li>
+                                        <li>3 September 2025</li>
                                     </ul>
                                 </div>
                             </div>
@@ -264,9 +281,10 @@
                                     <img src="images/blog/2.jpg" alt="" />
                                 </div>
                                 <div class="post_item_content_small">
-                                    <a class="title" href="blog.html">How much is to develop a design for the game?</a>
+                                    <a class="title" href="https://wa.me/17785864452">How much is to design a
+                                        solution?</a>
                                     <ul class="post_item_inf_small">
-                                        <li>14 January 2014</li>
+                                        <li>March 2026</li>
                                     </ul>
                                 </div>
                             </div>
@@ -275,9 +293,9 @@
                                     <img src="images/blog/3.jpg" alt="" />
                                 </div>
                                 <div class="post_item_content_small">
-                                    <a class="title" href="blog.html">How to pump designer</a>
+                                    <a class="title" href="https://www.behance.net/corozarts">Consider Behance</a>
                                     <ul class="post_item_inf_small">
-                                        <li>21 December 2013</li>
+                                        <li>March 2026</li>
                                     </ul>
                                 </div>
                             </div>
@@ -285,12 +303,9 @@
 
                         <div class="col-lg-4 col-md-4 col-sm-6 padbot30 foot_about_block">
                             <h4><b>About</b> Coroz</h4>
-                            <p>Carlos Orozco is a versatile Colombian artist and designer, experienced in traditional
-                                and
-                                digital art, spatial design, furniture and product design.</p>
-                            <p>Computer Tools: Adobe Photoshop &amp; Illustrator, Rhinoceros (3D modeling), Keyshot
-                                (rendering),
-                                Zbrush, C++, Python and Touch Designer.</p>
+                            <p>Coroz is a creative studio founded by Carlos Orozco, a Colombian artist and designer
+                                experienced in coding, traditional
+                                and digital arts, spatial design, 3D modeling & rendering.</p>
                             <ul class="social">
                                 <li><a href="https://www.behance.net/corozarts" target="_blank"><i
                                             class="fa-brands fa-behance"></i></a></li>
@@ -298,8 +313,10 @@
                                             class="fa-brands fa-instagram"></i></a></li>
                                 <li><a href="https://www.linkedin.com/in/coroz-arts" target="_blank"><i
                                             class="fa-brands fa-linkedin"></i></a></li>
-                                <li><a href="https://www.artstation.com/coroz" target="_blank"><i
-                                            class="fa-brands fa-artstation"></i></a></li>
+                                <li><a href="https://wa.me/17785864452" target="_blank"><i
+                                            class="fa-brands fa-whatsapp"></i></a></li>
+                                <li><a href="javascript:void(0);" id="map-icon-btn" title="Montreal Location"><i
+                                            class="fa-solid fa-location-dot"></i></a></li>
                             </ul>
                         </div>
 
@@ -353,6 +370,59 @@
                 });
             });
         });
+    </script>
+
+    <!-- MAP MODAL -->
+    <div id="map-modal" style="
+        display:none;
+        position:fixed;
+        inset:0;
+        z-index:9999;
+        background:rgba(0,0,0,0.75);
+        align-items:center;
+        justify-content:center;">
+        <div style="
+            position:relative;
+            width:90%;
+            max-width:680px;
+            background:#111;
+            box-shadow:0 8px 40px rgba(0,0,0,0.6);">
+            <button id="map-close" style="
+                position:absolute;
+                top:-16px;
+                right:-16px;
+                width:34px;
+                height:34px;
+                border-radius:50%;
+                border:none;
+                background:#fff;
+                color:#333;
+                font-size:18px;
+                line-height:34px;
+                text-align:center;
+                cursor:pointer;
+                z-index:10;
+                box-shadow:0 2px 8px rgba(0,0,0,0.3);">&times;</button>
+            <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63308.77523151947!2d-73.62183682003582!3d45.472240981123264!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4cc910fa9cbdea19%3A0x57f86e154e8da1ed!2s6759%20Bd%20Monk%2C%20Montr%C3%A9al%2C%20QC%20H4E%203J2!5e0!3m2!1sen!2sca!4v1771974117049!5m2!1sen!2sca"
+                width="100%" height="380" style="border:0;display:block;" allowfullscreen="" loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            var modal = document.getElementById('map-modal');
+            var btn = document.getElementById('map-icon-btn');
+            var close = document.getElementById('map-close');
+            function openMap() { modal.style.display = 'flex'; }
+            function closeMap() { modal.style.display = 'none'; }
+            btn.addEventListener('click', openMap);
+            close.addEventListener('click', closeMap);
+            modal.addEventListener('click', function (e) {
+                if (e.target === modal) closeMap();
+            });
+        })();
     </script>
 
 </body>
