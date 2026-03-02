@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	document.body.classList.add('page-entering');
 
 	// Intercept nav links for page-leave animation
-	document.querySelectorAll('.navmenu a[href], .logo a').forEach(function (link) {
+	document.querySelectorAll('.navmenu a[href], .logo a, .slide_btn').forEach(function (link) {
 		// Only intercept same-origin .html links (not # anchors, not external)
 		var href = link.getAttribute('href');
 		if (!href || href.startsWith('#') || href.startsWith('javascript')) return;
@@ -36,7 +36,13 @@ document.addEventListener('DOMContentLoaded', function () {
 			e.preventDefault();
 			document.body.classList.add('page-leaving');
 			setTimeout(function () {
-				window.location.href = dest;
+				let finalDest = dest;
+				// If local file browsing and pointing to a directory, append index.html
+				if (window.location.protocol === 'file:' && (dest.endsWith('/') || !dest.split('/').pop().includes('.'))) {
+					if (!finalDest.endsWith('/')) finalDest += '/';
+					finalDest += 'index.html';
+				}
+				window.location.href = finalDest;
 			}, 400);
 		});
 	});
@@ -252,10 +258,10 @@ document.addEventListener('DOMContentLoaded', function () {
 	if (typeof GLightbox === 'undefined') return;
 	const lightbox = GLightbox({
 		selector: '.glightbox',
-		touchNavigation: true, // Allow swiping
-		loop: true,
-		zoomable: true, // Enabled for native mobile pinching
-		draggable: false, // Keep disabled for shrunk laptop windows
+		touchNavigation: true,
+		loop: true, // Smooth looping for continuous swiping
+		zoomable: true, // Native pinch-to-zoom
+		draggable: false, // Maintain stability in scaled windows
 		autoplayVideos: false
 	});
 
@@ -396,11 +402,11 @@ document.addEventListener('DOMContentLoaded', function () {
 /*-----------------------------------------------------------------------------------*/
 document.addEventListener('DOMContentLoaded', function () {
 	const pages = [
-		'index.html',
-		'2dprojects.html',
-		'3dprojects.html',
-		'arts.html',
-		'contact.html'
+		'home',
+		'2dprojects',
+		'3dprojects',
+		'arts',
+		'contact'
 	];
 
 	const headerSelector = document.querySelector('.menu_block');
@@ -409,29 +415,33 @@ document.addEventListener('DOMContentLoaded', function () {
 		headerSelector.addEventListener('wheel', function (e) {
 			if (isNavigating) return;
 
-			let currentPath = window.location.pathname.split('/').pop();
-			if (!currentPath || currentPath === '') currentPath = 'index.html';
+			// Get the current section name from the URL path
+			let pathParts = window.location.pathname.split('/').filter(p => p !== '');
+			let currentSection = pathParts[pathParts.length - 1] || 'home';
 
-			let currentIndex = pages.indexOf(currentPath);
-			if (currentIndex === -1) return;
+			// Detect if we are in index.html and if it shifted the path
+			if (currentSection === 'index.html') {
+				currentSection = pathParts[pathParts.length - 2] || 'home';
+			}
+
+			let currentIndex = pages.indexOf(currentSection);
+			if (currentIndex === -1) currentIndex = 0; // Fallback to home
 
 			let targetIndex = currentIndex;
-			// Scroll Down -> e.deltaY > 0. Scroll Up -> e.deltaY < 0.
 			if (e.deltaY > 0) {
-				// Scroll down = left (previous page, home loops to contact)
 				targetIndex = (currentIndex - 1 + pages.length) % pages.length;
 			} else if (e.deltaY < 0) {
-				// Scroll up = right (next page, contact loops to home)
 				targetIndex = (currentIndex + 1) % pages.length;
 			}
 
-			if (targetIndex !== currentIndex && targetIndex >= 0 && targetIndex < pages.length) {
+			if (targetIndex !== currentIndex) {
 				e.preventDefault();
 				isNavigating = true;
 
 				document.body.classList.add('page-leaving');
 				setTimeout(function () {
-					window.location.href = pages[targetIndex];
+					let suffix = window.location.protocol === 'file:' ? 'index.html' : '';
+					window.location.href = '../' + pages[targetIndex] + '/' + suffix;
 				}, 400);
 			}
 		}, { passive: false });

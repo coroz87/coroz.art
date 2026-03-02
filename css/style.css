@@ -1,4 +1,4 @@
-/*-----------------------------------------------------------------------------------*/
+﻿/*-----------------------------------------------------------------------------------*/
 /*	GENERAL STYLING
 /*-----------------------------------------------------------------------------------*/
 ::selection {
@@ -378,7 +378,7 @@ blockquote {
 }
 
 blockquote:before {
-	content: '“';
+	content: 'â€œ';
 	position: absolute;
 	left: 15px;
 	top: 13px;
@@ -2172,7 +2172,7 @@ input[type="color"]:focus {
 }
 
 .widget_meta li:before {
-	content: '°';
+	content: 'Â°';
 	position: absolute;
 	left: 10px;
 	top: 20px;
@@ -3365,15 +3365,9 @@ html {
 	.glightbox-modern .gnext,
 	.glightbox-mobile .gnext,
 	.glightbox-mobile .gprev {
-		display: flex !important;
-		opacity: 1 !important;
-		visibility: visible !important;
-		pointer-events: auto !important;
-		width: 40px !important;
-		height: 50px !important;
-		top: 50% !important;
-		transform: translateY(-50%) !important;
+		display: none !important;
 	}
+
 
 	.gnext {
 		right: 10px !important;
@@ -3385,3 +3379,24 @@ html {
 	}
 
 }
+
+
+.gslide-description {
+	color: #fff !important;
+	font-size: 1.1em !important;
+	text-align: center !important;
+}
+
+.gslide-title {
+	color: #fff !important;
+	font-weight: bold;
+	font-size: 1.25em !important;
+	text-align: center !important;
+}
+
+.gslide-description-content,
+.gslide-description {
+	background: transparent !important;
+	box-shadow: none !important;
+}
+

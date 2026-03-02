@@ -1,0 +1,1098 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <title>Coroz | Artwork</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link rel="shortcut icon" href="../images/favicon.ico">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
+    <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="../css/flexslider.css" rel="stylesheet" type="text/css" />
+    <link href="../css/animate.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="../css/style.css" rel="stylesheet" type="text/css" />
+    <link href="../css/transitions.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+    <link
+        href='http://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500italic,700,500,700italic,900,900italic'
+        rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <script src="../js/jquery.min.js" type="text/javascript"></script>
+    <script src="../js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="../js/superfish.min.js" type="text/javascript"></script>
+    <script src="../js/jquery.flexslider-min.js" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="../js/animate.js" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+    <script src="../js/myscript.js" type="text/javascript"></script>
+
+    <style>
+        body {
+            overflow: hidden;
+        }
+
+        .subpage-main {
+            position: fixed;
+            top: 60px;
+            /* Claim the adjusted 60px header space */
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            padding-bottom: 10px;
+            /* Padding for slider at the bottom */
+            background: #fff;
+        }
+
+        .subpage-main h2 {
+            font-size: 32px;
+            line-height: 1;
+            flex-shrink: 0;
+            margin: 0;
+            text-align: left;
+        }
+
+        /* Top Header Area (Title) */
+        .top-header-area {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            padding: 38px 0 26px 0;
+            width: 100%;
+        }
+
+        /* Center Gallery Area */
+        .gallery-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: #fff;
+            align-items: center;
+            /* Center the grid wrapper */
+            justify-content: center;
+            /* Vertically center the square */
+        }
+
+        /* Clip wrapper */
+        .galleries-clip {
+            position: relative;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            width: 95%;
+            max-width: 1600px;
+            margin: 0 auto 10px auto;
+            padding: 10px 0;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        /* Scrollable Container */
+        .galleries-container {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            border: none;
+            box-sizing: border-box;
+        }
+
+        /* Gallery scroll arrows â€” GLightbox style */
+        .gallery-arrow {
+            display: none;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 20;
+            width: 50px;
+            height: 50px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 32px;
+            color: #fff;
+            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7), 0 1px 3px rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            transition: text-shadow 0.2s, transform 0.2s;
+        }
+
+        .gallery-arrow:hover {
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.9), 0 1px 5px rgba(0, 0, 0, 0.7);
+            transform: translateY(-50%) scale(1.15);
+        }
+
+        .gallery-arrow.arrow-left {
+            left: -8px;
+        }
+
+        .gallery-arrow.arrow-right {
+            right: -8px;
+        }
+
+        @media (min-width: 769px) {
+            .gallery-arrow {
+                display: inline-flex;
+            }
+        }
+
+        .gallery-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 5px;
+
+            /* CSS Grid for predictable alternating masonry pattern */
+            display: grid;
+            grid-template-rows: repeat(2, calc(50% - 2.5px));
+            /* Force exactly 50% height rows minus half the 5px gap */
+            grid-auto-flow: column;
+            /* Fill column by column left-to-right */
+            grid-auto-columns: max-content;
+            /* Size column to fit explicit item widths */
+            gap: 5px;
+            /* Tighter gap as requested */
+
+            opacity: 1;
+            visibility: visible;
+            /* Scrollbar styling for inner grid - Hidden */
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .gallery-grid::-webkit-scrollbar {
+            display: none;
+        }
+
+        .gallery-grid::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .gallery-grid::-webkit-scrollbar-thumb {
+            background-color: #ccc;
+            border-radius: 10px;
+        }
+
+        /* Alternating grid masonry layout */
+        .gallery-grid>a {
+            display: flex;
+            box-sizing: border-box;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            background: #f0f0f0;
+        }
+
+        /* 1 complete (spans 2 full rows) */
+        .gallery-grid>a:nth-child(3n+1) {
+            grid-row: span 2;
+            width: auto;
+        }
+
+        /* Natural aspect ratio for full-height single images */
+        .gallery-grid>a:nth-child(3n+1) img {
+            width: auto;
+            height: 100%;
+            object-fit: contain;
+            background: #f0f0f0;
+        }
+
+        .gallery-grid img {
+            flex: 1;
+            min-height: 0;
+            min-width: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+            border-radius: 4px;
+            object-fit: contain;
+            background: #f0f0f0;
+            cursor: pointer;
+            transition: filter 0.3s ease, transform 0.3s ease;
+        }
+
+        .gallery-grid img:hover {
+            filter: brightness(0.85);
+            transform: scale(1.05);
+            /* Magnify effect */
+        }
+
+        /* Bottom Slider wrapper */
+        .subpage-main .projects-wrapper {
+            flex-shrink: 0;
+            height: 100px;
+            /* Restored to exactly 100px */
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+            background: #fff;
+        }
+
+        .bottom-gallery-track {
+            display: flex;
+            height: 100%;
+            width: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+            align-items: center;
+            scrollbar-width: none;
+            /* Hide scrollbar */
+        }
+
+        .bottom-gallery-track::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Override global work_item height for this subpage */
+        .subpage-main .work_item {
+            height: 100px !important;
+            flex-shrink: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Ensure link wrapper propagates height */
+        .subpage-main .work_item a {
+            display: block;
+            height: 100%;
+        }
+
+        /* Ensure images inside shrink proportionally without cropping top/bottom */
+        .subpage-main .work_item img {
+            height: 100% !important;
+            width: auto !important;
+            /* Width auto ensures aspect-ratio constraint dynamically pulls in the sides */
+            object-fit: contain !important;
+            display: block !important;
+            cursor: pointer;
+            /* 'contain' fits entire image completely visible inside the 100px height limit */
+            transition: filter 0.3s ease, transform 0.3s ease;
+        }
+
+        /* Restore slider hover darkening and add zoom */
+        .subpage-main .work_item:hover img {
+            filter: brightness(0.4);
+            transform: scale(1.05) !important;
+        }
+
+        /* Mobile specific adjustments */
+        @media (max-width: 768px) {
+
+            .subpage-main .projects-wrapper,
+            .subpage-main .projects_wrapper,
+            .projects-wrapper,
+            .projects_wrapper {
+                display: none !important;
+            }
+
+            .gallery-area {
+                justify-content: flex-start;
+                overflow: hidden;
+            }
+
+            /* Mobile: fill remaining space */
+            .galleries-clip {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+
+            .galleries-container {
+                margin-bottom: 0 !important;
+                margin-top: 18px;
+                width: 100%;
+                height: 100%;
+                border: none;
+                overflow: hidden;
+                position: relative;
+            }
+
+            /* Mobile: hide all grids by default */
+            .gallery-grid {
+                display: none;
+                opacity: 1;
+                visibility: visible;
+            }
+
+            /* Mobile: show active grid as flex-flow masonry */
+            .gallery-grid.active {
+                display: flex;
+                flex-wrap: wrap;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                overflow-x: hidden;
+                overflow-y: auto;
+                gap: 5px;
+                padding: 5px;
+                box-sizing: border-box;
+                align-content: flex-start;
+            }
+
+            /* All items: dynamic height based on aspect ratio */
+            .gallery-grid.active>a {
+                width: calc(50% - 2.5px);
+                height: auto;
+                aspect-ratio: unset;
+                overflow: hidden;
+                background: #f0f0f0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-sizing: border-box;
+            }
+
+            /* Large items: 100% width */
+            .gallery-grid.active>a:nth-child(5n+1) {
+                width: 100%;
+                height: auto;
+            }
+
+            .gallery-grid.active>a img {
+                width: 100%;
+                height: auto;
+                object-fit: contain;
+                display: block;
+            }
+
+            .top-header-area {
+                padding: 20px 0 12px 0;
+            }
+
+            .subpage-main h2 {
+                font-size: 24px;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <header>
+        <div class="menu_block">
+            <div class="container clearfix">
+                <div class="logo pull-left">
+                    <a href="../home/"><span class="b1">COROZ</span><span class="b3">|</span><span class="b4">Arts
+                            &amp; Design</span></a>
+                </div>
+
+                <a class="menu_toggler" href="javascript:void(0);"><i class="fa fa-bars"></i></a>
+
+                <div class="pull-right">
+                    <nav class="navmenu center">
+                        <ul>
+                            <li class="first scroll_btn"><a href="../home/">HOME</a></li>
+                            <li class="sub-menu">
+                                <a href="../2dprojects/">2D PROJECTS</a>
+                                <ul>
+                                    <li><a href="../2dprojects/#ill">Illustrations &amp; Sketches</a></li>
+                                    <li><a href="../2dprojects/#graphic">Graphic Design</a></li>
+                                </ul>
+                            </li>
+                            <li class="sub-menu">
+                                <a href="../3dprojects/">3D PROJECTS</a>
+                                <ul>
+                                    <li><a href="../3dprojects/#3ddesign">3D Design</a></li>
+                                    <li><a href="../3dprojects/#3dart">3D Art</a></li>
+                                </ul>
+                            </li>
+                            <li class="scroll_btn active"><a href="../arts/">ARTWORK</a></li>
+                            <li class="scroll_btn last"><a href="../contact/">CONTACT</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="subpage-main">
+        <div style="width: 100%;">
+            <div class="container">
+                <div class="top-header-area">
+                    <h2><b>Featured</b> Artwork</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="gallery-area">
+            <div class="galleries-clip">
+                <button class="gallery-arrow arrow-left" id="gallery-arrow-left" aria-label="Scroll left"><i
+                        class="fa fa-angle-left"></i></button>
+                <button class="gallery-arrow arrow-right" id="gallery-arrow-right" aria-label="Scroll right"><i
+                        class="fa fa-angle-right"></i></button>
+                <div class="galleries-container">
+                    <div class="gallery-grid active" id="gallery-main">
+                        <a href="../images/works/1.jpg" class="glightbox"
+                            data-description="Portrait (2006) Pencil drawing"><img
+                                src="../images/works/1_thumbnail_900.jpg" alt="Artwork" /></a>
+                        <a href="../images/works/coroz.art-1691131084724.jpg" class="glightbox"
+                            data-description="Portrait (2006) Pencil drawing"><img
+                                src="../images/works/coroz.art-1691131084724_thumbnail_600.jpg" alt="Artwork" /></a>
+                        <a href="../images/works/2.jpg" class="glightbox"
+                            data-description="Portrait (2006) Pencil drawing"><img
+                                src="../images/works/2_thumbnail_600.jpg" alt="Artwork" /></a>
+                        <a href="../images/works/DSC_00272.jpg" class="glightbox"
+                            data-description="Portrait (2016) Pencil drawing"><img
+                                src="../images/works/DSC_00272_thumbnail_900.jpg" alt="Artwork" /></a>
+                        <a href="../images/works/3.jpg" class="glightbox"
+                            data-description="Self Portrait (2013) Pencil drawing and ink pen"><img
+                                src="../images/works/3_thumbnail_600.jpg" alt="Artwork" /></a>
+                        <a href="../images/works/4.jpg" class="glightbox"
+                            data-description="Cosmic Friendship - Sketch (2016) Pencil drawing"><img
+                                src="../images/works/4_thumbnail_900.jpg" alt="Artwork" /></a>
+                        <a href="../images/works/7.jpg" class="glightbox"
+                            data-description="Ancestral Chaos (2006) Acrylic Painting"><img
+                                src="../images/works/7_thumbnail_900.jpg" alt="Artwork" /></a>
+                        <a href="../images/works/8.jpg" class="glightbox"
+                            data-description="Wonder (2010) Oil Painting"><img src="../images/works/8_thumbnail_600.jpg"
+                                alt="Artwork" /></a>
+                        <a href="../images/works/900.jpg" class="glightbox"
+                            data-description="Abstract Red (2011) Acrylic Painting 2m x 1m"><img
+                                src="../images/works/900_thumbnail_600.jpg" alt="Artwork" /></a>
+                        <a href="../images/works/10.jpg" class="glightbox"
+                            data-description="Fatal Kiss (2011) Oil Painting"><img
+                                src="../images/works/10_thumbnail_900.jpg" alt="Artwork" /></a>
+                        <a href="../images/works/11.jpg" class="glightbox"
+                            data-description="3 cats (2015) Digital illustration printed onto pine wood, subsequently cut and intricately intervened with acrylic painting"><img
+                                src="../images/works/11_thumbnail_900.jpg" alt="Artwork" /></a>
+                        <a href="../images/works/101.jpg" class="glightbox"
+                            data-description="3 cats (2015) Digital illustration printed onto pine wood, subsequently cut and intricately intervened with acrylic painting"><img
+                                src="../images/works/101_thumbnail_600.jpg" alt="Artwork" /></a>
+                        <a href="../images/works/12.jpg" class="glightbox" What does a fish know about the water in
+                            which it swims all its life?" - Albert Einstein - Digital illustration printed onto pine
+                            wood, subsequently cut, carved, and intricately intervened with acrylic painting."
+                            data-description="&quot;What does a fish know about the water in which it swims all its life?&quot; - Albert Einstein - Digital illustration printed onto pine wood, subsequently cut, carved, and intricately intervened with acrylic painting."><img
+                                src="../images/works/12_thumbnail_900.jpg" alt="Artwork" /></a>
+                        <a href="../images/works/3 (2).jpg" class="glightbox" What does a fish know about the water in
+                            which it swims all its life?" - Albert Einstein - Digital illustration printed onto canvas
+                            and intricately intervened with UV acrylic painting."
+                            data-description="&quot;What does a fish know about the water in which it swims all its life?&quot; - Albert Einstein - Digital illustration printed onto canvas and intricately intervened with UV acrylic painting."><img
+                                src="../images/works/3 (2)_thumbnail_600.jpg" alt="Artwork" /></a>
+                        <a href="../images/works/2 (4).jpg" class="glightbox" What does a fish know about the water in
+                            which it swims all its life?" - Albert Einstein - Digital illustration printed onto canvas
+                            and intricately intervened with UV acrylic painting."
+                            data-description="&quot;What does a fish know about the water in which it swims all its life?&quot; - Albert Einstein - Digital illustration printed onto canvas and intricately intervened with UV acrylic painting."><img
+                                src="../images/works/2 (4)_thumbnail_600.jpg" alt="Artwork" /></a>
+                        <a href="../images/works/13.jpg" class="glightbox"
+                            data-description="Léna Kahlo (2018) Digital illustration Adobe Photoshop"><img
+                                src="../images/works/13_thumbnail_900.jpg" alt="Artwork" /></a>
+                        <a href="../images/works/14.jpg" class="glightbox"
+                            data-description="Balance (2021) Acrylic Painting"><img
+                                src="../images/works/14_thumbnail_600.jpg" alt="Artwork" /></a>
+                        <a href="../images/works/15.jpg" class="glightbox"
+                            data-description="Drowned (2021) UV Reactive Acrylic Painting"><img
+                                src="../images/works/15_thumbnail_600.jpg" alt="Artwork" /></a>
+                        <a href="../images/works/38.jpg" class="glightbox"
+                            data-description="Creation & Destruction when energies collide (2018) Triptyque Art"><img
+                                src="../images/works/38_thumbnail_900.jpg" alt="Artwork" /></a>
+                        <a href="../images/works/IMG_20190803_155406_553.jpg" class="glightbox"
+                            data-description="Orcinus Orca (2007) Colored pencils"><img
+                                src="../images/works/IMG_20190803_155406_553_thumbnail_600.jpg" alt="Artwork" /></a>
+                        <a href="../images/works/g4.jpg" class="glightbox"
+                            data-description="Anatomy studies (2025) Pencil Sketch"><img
+                                src="../images/works/g4_thumbnail_900.jpg" alt="Artwork" /></a>
+                        <a href="../images/works/IMG_20161208_134725_20161218164051299.jpg" class="glightbox"
+                            data-description="Portrait (2016) Pencil drawing"><img
+                                src="../images/works/IMG_20161208_134725_20161218164051299_thumbnail_900.jpg"
+                                alt="Artwork" /></a>
+                        <a href="../images/works/120.jpg" class="glightbox"
+                            data-description="The Hulk - Unfinished (2007) Pencil drawing"><img
+                                src="../images/works/120_thumbnail_600.jpg" alt="Artwork" /></a>
+                        <a href="../images/works/g2.jpg" class="glightbox"
+                            data-description="Portrait (2006) Pencil drawing"><img
+                                src="../images/works/g2_thumbnail_600.jpg" alt="Artwork" /></a>
+                        <a href="../images/works/121.jpg" class="glightbox"
+                            data-description="Portrait (2006) Pencil drawing"><img
+                                src="../images/works/121_thumbnail_600.jpg" alt="Artwork" /></a>
+                        <a href="../images/works/1.jpg" class="glightbox"
+                            data-description="Portrait (2006) Pencil drawing"><img
+                                src="../images/works/1_thumbnail_900.jpg" alt="Artwork" /></a>
+                        <a href="../images/works/2.jpg" class="glightbox"
+                            data-description="Portrait (2006) Pencil drawing"><img
+                                src="../images/works/2_thumbnail_600.jpg" alt="Artwork" /></a>
+                    </div>
+                </div>
+            </div><!-- /.galleries-clip -->
+        </div>
+
+        <div class="projects-wrapper">
+            <!-- Continuous Marquee Bottom Slider -->
+            <div class="bottom-gallery-track" id="bottom-track">
+                <div class="work_item"><a class="glightbox" href="../images/works/1.jpg"
+                        data-description="Portrait (2006) Pencil drawing"><img src="../images/works/1_thumbnail_600.jpg"
+                            alt="Artwork" /></a></div>
+                <div class="work_item"><a class="glightbox" href="../images/works/3.jpg"
+                        data-description="Self Portrait (2013) Pencil drawing and ink pen"><img
+                            src="../images/works/3_thumbnail_600.jpg" alt="Artwork" /></a></div>
+                <div class="work_item"><a class="glightbox" href="../images/works/5.jpg"
+                        data-description="Salvador Dali (2016) Digital Portrait"><img
+                            src="../images/works/5_thumbnail_600.jpg" alt="Artwork" /></a></div>
+                <div class="work_item"><a class="glightbox" href="../images/works/7.jpg"
+                        data-description="Ancestral Chaos (2006) Acrylic Painting"><img
+                            src="../images/works/7_thumbnail_600.jpg" alt="Artwork" /></a></div>
+                <div class="work_item"><a class="glightbox" href="../images/works/9.jpg"
+                        data-description="Abstract Red (2011) Acrylic Painting 2m x 1m"><img
+                            src="../images/works/9_thumbnail_600.jpg" alt="Artwork" /></a></div>
+                <div class="work_item"><a class="glightbox" href="../images/works/11.jpg"
+                        data-description="3 cats (2015) Digital illustration printed onto pine wood, subsequently cut and intricately intervened with acrylic painting"><img
+                            src="../images/works/11_thumbnail_600.jpg" alt="Artwork" /></a></div>
+                <div class="work_item"><a class="glightbox" href="../images/works/13.jpg"
+                        data-description="Léna Kahlo (2018) Digital illustration Adobe Photoshop"><img
+                            src="../images/works/13_thumbnail_600.jpg" alt="Artwork" /></a></div>
+                <div class="work_item"><a class="glightbox" href="../images/works/15.jpg"
+                        data-description="Drowned (2021) UV Reactive Acrylic Painting"><img
+                            src="../images/works/15_thumbnail_600.jpg" alt="Artwork" /></a></div>
+                <div class="work_item"><a class="glightbox" href="../images/works/2.jpg"
+                        data-description="Portrait (2006) Pencil drawing"><img src="../images/works/2_thumbnail_600.jpg"
+                            alt="Artwork" /></a></div>
+                <div class="work_item"><a class="glightbox" href="../images/works/4.jpg"
+                        data-description="Cosmic Friendship - Sketch (2016) Pencil drawing"><img
+                            src="../images/works/4_thumbnail_600.jpg" alt="Artwork" /></a></div>
+                <div class="work_item"><a class="glightbox" href="../images/works/6.jpg"
+                        data-description="Cara Delevinge (2017) Digital Portrait"><img
+                            src="../images/works/6_thumbnail_600.jpg" alt="Artwork" /></a></div>
+                <div class="work_item"><a class="glightbox" href="../images/works/8.jpg"
+                        data-description="Wonder (2010) Oil Painting"><img src="../images/works/8_thumbnail_600.jpg"
+                            alt="Artwork" /></a></div>
+                <div class="work_item"><a class="glightbox" href="../images/works/10.jpg"
+                        data-description="Fatal Kiss (2011) Oil Painting"><img
+                            src="../images/works/10_thumbnail_600.jpg" alt="Artwork" /></a></div>
+                <div class="work_item"><a class="glightbox" href="../images/works/12.jpg" What does a fish know about
+                        the water in which it swims all its life?" - Albert Einstein - Digital illustration printed onto
+                        pine wood, subsequently cut, carved, and intricately intervened with acrylic painting."
+                        data-description="&quot;What does a fish know about the water in which it swims all its life?&quot; - Albert Einstein - Digital illustration printed onto pine wood, subsequently cut, carved, and intricately intervened with acrylic painting."><img
+                            src="../images/works/12_thumbnail_600.jpg" alt="Artwork" /></a></div>
+                <div class="work_item"><a class="glightbox" href="../images/works/14.jpg"
+                        data-description="Balance (2021) Acrylic Painting"><img
+                            src="../images/works/14_thumbnail_600.jpg" alt="Artwork" /></a></div>
+                <div class="work_item"><a class="glightbox" href="../images/works/1.jpg"
+                        data-description="Portrait (2006) Pencil drawing"><img src="../images/works/1_thumbnail_600.jpg"
+                            alt="Artwork" /></a></div>
+                <div class="work_item"><a class="glightbox" href="../images/works/2.jpg"
+                        data-description="Portrait (2006) Pencil drawing"><img src="../images/works/2_thumbnail_600.jpg"
+                            alt="Artwork" /></a></div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Gallery Arrows
+        (function () {
+            var SCROLL_STEP = 420;
+            var btnLeft = document.getElementById('gallery-arrow-left');
+            var btnRight = document.getElementById('gallery-arrow-right');
+            function activeGrid() { return document.querySelector('.gallery-grid.active'); }
+            function smoothScroll(g, d) { g.scrollBy({ left: d, behavior: 'smooth' }); }
+            btnLeft.addEventListener('click', function () { var g = activeGrid(); if (g) smoothScroll(g, -SCROLL_STEP); });
+            btnRight.addEventListener('click', function () { var g = activeGrid(); if (g) smoothScroll(g, SCROLL_STEP); });
+        })();
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const grids = document.querySelectorAll('.gallery-grid');
+
+            // Responsive Infinite Scrolling (Desktop horizontal / Mobile vertical)
+            class InfiniteGrid {
+                constructor(grid) {
+                    this.grid = grid;
+                    this.originalContent = grid.innerHTML;
+                    this.isActive = false;
+                    this.isDesktop = window.innerWidth > 768;
+                    this.rafId = null;
+
+                    // State definition
+                    this.isDown = false;
+                    this.isDragging = false;
+                    this.startPos = 0;
+                    this.scrollStart = 0;
+                    this.velocity = 0;
+                    this.prevMousePos = 0;
+                    this.prevTime = 0;
+                    this.exactScroll = 0;
+                    this.initialized = false;
+
+                    // Binders for events so we can remove them later
+                    this.onDragStart = (e) => e.preventDefault();
+                    this.onMouseDown = this.handleMouseDown.bind(this);
+                    this.onMouseLeave = this.handleMouseUpOrLeave.bind(this);
+                    this.onMouseUp = this.handleMouseUpOrLeave.bind(this);
+                    this.onMouseMove = this.handleMouseMove.bind(this);
+                    this.onWheel = this.handleWheel.bind(this);
+                    this.onClick = this.handleClick.bind(this);
+                    this.onTouchStart = this.handleTouchStart.bind(this);
+                    this.onTouchMove = this.handleTouchMove.bind(this);
+                    this.onTouchEnd = this.handleTouchEnd.bind(this);
+
+                    this.init();
+                }
+
+                init() {
+                    const currentIsDesktop = window.innerWidth > 768;
+
+                    if (this.isActive && this.isDesktop === currentIsDesktop) return; // Mode hasn't changed
+
+                    this.destroy(); // Clean up if mode changed
+                    this.isDesktop = currentIsDesktop;
+                    this.isActive = true;
+
+                    if (this.isDesktop) {
+                        this.initDesktop();
+                    } else {
+                        this.initMobile();
+                    }
+
+                    this.grid.addEventListener('dragstart', this.onDragStart);
+                    this.grid.addEventListener('click', this.onClick, true);
+
+                    // Mouse events
+                    this.grid.addEventListener('mousedown', this.onMouseDown);
+                    this.grid.addEventListener('mouseleave', this.onMouseLeave);
+                    this.grid.addEventListener('mouseup', this.onMouseUp);
+                    this.grid.addEventListener('mousemove', this.onMouseMove);
+                    this.grid.addEventListener('wheel', this.onWheel, { passive: false });
+
+                    // Touch events for drag physics
+                    this.grid.addEventListener('touchstart', this.onTouchStart, { passive: false });
+                    this.grid.addEventListener('touchmove', this.onTouchMove, { passive: false });
+                    this.grid.addEventListener('touchend', this.onTouchEnd);
+
+                    setTimeout(() => {
+                        if (typeof GLightbox !== 'undefined') {
+                            GLightbox({
+                                selector: '.glightbox',
+                                touchNavigation: true,
+                                dragToleranceX: 40,
+                                dragToleranceY: 150,
+                                dragAutoSnap: true,
+                                zoomable: false,
+                                draggable: false
+                            });
+                        }
+                    }, 200);
+                }
+
+                destroy() {
+                    this.isActive = false;
+                    if (this.rafId) cancelAnimationFrame(this.rafId);
+                    this.grid.innerHTML = this.originalContent; // Remove clones
+
+                    this.grid.removeEventListener('dragstart', this.onDragStart);
+                    this.grid.removeEventListener('click', this.onClick, true);
+                    this.grid.removeEventListener('mousedown', this.onMouseDown);
+                    this.grid.removeEventListener('mouseleave', this.onMouseLeave);
+                    this.grid.removeEventListener('mouseup', this.onMouseUp);
+                    this.grid.removeEventListener('mousemove', this.onMouseMove);
+                    this.grid.removeEventListener('wheel', this.onWheel);
+
+                    this.grid.removeEventListener('touchstart', this.onTouchStart);
+                    this.grid.removeEventListener('touchmove', this.onTouchMove);
+                    this.grid.removeEventListener('touchend', this.onTouchEnd);
+                }
+
+                // --- DESKTOP LOGIC (Horizontal Grid Math Alignment) ---
+                initDesktop() {
+                    // The CSS grid relies on an `nth-child(3n+1)` pattern.
+                    // If the original item count is not divisible by 3, cloning it breaks the physical layout sync.
+                    // By repeating the base content exactly 3 times, we mathematically guarantee the item count is a multiple of 3!
+                    const perfectBlock = this.originalContent.repeat(3);
+
+                    // Now repeat this geometrically perfect block 5 times to create a massive scroll runway
+                    this.grid.innerHTML = perfectBlock.repeat(5);
+                    this.boundSize = 0;
+                    this.initialized = false;
+
+                    setTimeout(() => {
+                        this.tryInitDesktopGeometry();
+                        this.loopDesktop();
+                    }, 100);
+                }
+
+                tryInitDesktopGeometry() {
+                    if (this.boundSize === 0 && this.grid.scrollWidth > 0) {
+                        // The entire runway consists of exactly 5 perfect geometric blocks
+                        this.boundSize = this.grid.scrollWidth / 5;
+                        // Start directly in the middle (the 3rd block, index 2)
+                        this.grid.scrollLeft = this.boundSize * 2;
+                        this.exactScroll = this.grid.scrollLeft;
+                        this.scrollStart = this.exactScroll;
+                        this.initialized = true;
+                    }
+                }
+
+                loopDesktop() {
+                    if (!this.isActive) return;
+
+                    // Lazy init if tab was hidden on load
+                    if (!this.initialized) {
+                        this.tryInitDesktopGeometry();
+                    }
+
+                    if (!this.isDown) {
+                        if (Math.abs(this.velocity) > 0.1) {
+                            this.velocity *= 0.98;
+                            this.exactScroll -= this.velocity;
+                            this.grid.scrollLeft = this.exactScroll;
+                        } else {
+                            this.velocity = 0;
+                        }
+                    }
+
+                    // Keep the user bouncing invisibly around the middle to avoid maxScroll physically
+                    if (this.initialized && this.boundSize > 0) {
+                        if (this.exactScroll <= this.boundSize * 1.5) {
+                            this.exactScroll += this.boundSize;
+                            this.grid.scrollLeft = this.exactScroll;
+                            this.scrollStart += this.boundSize;
+                        } else if (this.exactScroll >= this.boundSize * 2.5) {
+                            this.exactScroll -= this.boundSize;
+                            this.grid.scrollLeft = this.exactScroll;
+                            this.scrollStart -= this.boundSize;
+                        }
+                    }
+
+                    this.rafId = requestAnimationFrame(() => this.loopDesktop());
+                }
+
+                // --- MOBILE LOGIC (Vertical LCM Blocks) ---
+                initMobile() {
+                    const itemsCount = this.grid.querySelectorAll('a').length;
+                    if (itemsCount === 0) return;
+
+                    const gcd = (a, b) => b === 0 ? a : gcd(b, a % b);
+                    const lcm = (a, b) => (a * b) / gcd(a, b);
+                    const baseLcm = lcm(itemsCount, 60);
+
+                    let blockItems = baseLcm;
+                    while (blockItems < 60) blockItems += baseLcm;
+
+                    this.mobileBlockItems = blockItems;
+                    const repeats = blockItems / itemsCount;
+
+                    let blockContent = '';
+                    for (let i = 0; i < repeats; i++) blockContent += this.originalContent;
+
+                    this.grid.innerHTML = blockContent + blockContent;
+                    this.initialized = false;
+                    this.boundSize = 0;
+
+                    setTimeout(() => this.loopMobile(), 100);
+                }
+
+                loopMobile() {
+                    if (!this.isActive) return;
+
+                    // Init geometry on first frame it becomes visible (tab switch)
+                    // We only want teleporting to occur when nearing edges to maintain infinite behavior natively.
+                    if (!this.initialized && this.grid.scrollHeight > 0) {
+                        const targetNode = this.grid.children[this.mobileBlockItems];
+                        if (targetNode) {
+                            this.boundSize = targetNode.offsetTop - 3;
+                            this.grid.scrollTop = this.boundSize;
+                            this.initialized = true;
+                        }
+                    }
+
+                    if (this.initialized && this.boundSize > 0) {
+                        const currentScroll = this.grid.scrollTop;
+
+                        // Let Native OS handle velocity and momentum, only explicitly jump if we hit limits
+                        if (currentScroll < this.boundSize * 0.2) {
+                            this.grid.scrollTop = currentScroll + this.boundSize;
+                        } else if (currentScroll > this.boundSize * 1.5) {
+                            this.grid.scrollTop = currentScroll - this.boundSize;
+                        }
+                    }
+
+                    this.rafId = requestAnimationFrame(() => this.loopMobile());
+                }
+
+                // --- EVENT HANDLERS (Axis Aware) ---
+                handleClick(e) {
+                    if (this.isDragging) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
+                }
+
+                startInteraction(pos) {
+                    this.isDown = true;
+                    this.isDragging = false;
+                    this.grid.style.cursor = 'grabbing';
+                    this.startPos = pos;
+                    this.scrollStart = this.isDesktop ? this.grid.scrollLeft : this.grid.scrollTop;
+                    this.exactScroll = this.scrollStart;
+                    this.velocity = 0;
+                    this.prevMousePos = pos;
+                    this.prevTime = Date.now();
+
+                    // Temporarily grab scroll physics manually to stop any ongoing momentum
+                    if (this.isDesktop) {
+                        this.grid.style.scrollBehavior = 'auto';
+                    }
+                }
+
+                handleMouseDown(e) {
+                    const pos = this.isDesktop ? e.pageX - this.grid.offsetLeft : e.pageY - this.grid.offsetTop;
+                    this.startInteraction(pos);
+                }
+
+                handleTouchStart(e) {
+                    // Mobile works best with native scrolling, skip manual touch physics there to avoid conflict
+                    if (!this.isDesktop) return;
+
+                    const touch = e.touches[0];
+                    const pos = touch.pageX - this.grid.offsetLeft;
+                    this.startInteraction(pos);
+                }
+
+                endInteraction() {
+                    this.isDown = false;
+                    this.grid.style.cursor = 'grab';
+                    if (Date.now() - this.prevTime > 50) this.velocity = 0;
+                }
+
+                handleMouseUpOrLeave() { this.endInteraction(); }
+                handleTouchEnd() { if (this.isDesktop) this.endInteraction(); }
+
+                moveInteraction(pos, preventDefaultFn) {
+                    if (!this.isDown) return;
+                    preventDefaultFn();
+
+                    const walk = (pos - this.startPos) * 1.5;
+                    if (Math.abs(walk) > 5) this.isDragging = true;
+
+                    this.exactScroll = this.scrollStart - walk;
+
+                    if (this.isDesktop) {
+                        this.grid.scrollLeft = this.exactScroll;
+                    }
+
+                    const now = Date.now();
+                    const dt = now - this.prevTime;
+                    if (dt > 0) {
+                        this.velocity = ((pos - this.prevMousePos) / dt) * 2.4;
+                    }
+                    this.prevTime = now;
+                    this.prevMousePos = pos;
+                }
+
+                handleMouseMove(e) {
+                    if (!this.isDown) return;
+                    const pos = this.isDesktop ? e.pageX - this.grid.offsetLeft : e.pageY - this.grid.offsetTop;
+                    this.moveInteraction(pos, () => e.preventDefault());
+                }
+
+                handleTouchMove(e) {
+                    if (!this.isDesktop || !this.isDown) return;
+                    const touch = e.touches[0];
+                    const pos = touch.pageX - this.grid.offsetLeft;
+                    this.moveInteraction(pos, () => {
+                        if (Math.abs(touch.pageX - this.startPos) > Math.abs(touch.pageY - this.startPos)) e.preventDefault();
+                    });
+                }
+
+                handleWheel(e) {
+                    // For mobile native scrolling, we don't interfere
+                    if (!this.isDesktop) return;
+
+                    if (e.deltaY !== 0) {
+                        e.preventDefault();
+                        this.velocity += (e.deltaY * 0.036);
+                    }
+                }
+            }
+
+            const gridInstances = [];
+            grids.forEach(grid => {
+                gridInstances.push(new InfiniteGrid(grid));
+            });
+
+            let resizeTimer;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(() => {
+                    gridInstances.forEach(instance => instance.init());
+                }, 250);
+            });
+
+            // Bottom Slider Continuous Autoplay Clone Approach
+            const bottomTrack = document.getElementById('bottom-track');
+            if (bottomTrack) {
+                bottomTrack.addEventListener('dragstart', (e) => e.preventDefault());
+
+                const originalBottomHTML = bottomTrack.innerHTML;
+                bottomTrack.innerHTML = originalBottomHTML + originalBottomHTML; // Double items
+
+                // Wait for layout calculation and image load
+                setTimeout(() => {
+                    if (typeof GLightbox !== 'undefined') {
+                        GLightbox({
+                            selector: '.glightbox',
+                            touchNavigation: true,
+                            dragToleranceX: 40,
+                            dragToleranceY: 150,
+                            dragAutoSnap: true,
+                            zoomable: false,
+                            draggable: false
+                        });
+                    }
+
+                    // Force browser to calculate width AFTER cloned images render
+                    const images = bottomTrack.querySelectorAll('img');
+                    let imagesLoaded = 0;
+
+                    const initializeSlider = () => {
+                        const halfScrollWidth = bottomTrack.scrollWidth / 2;
+                        bottomTrack.scrollLeft = halfScrollWidth; // Start in middle
+
+                        // Bottom Slider Interaction State
+                        let isDown = false;
+                        let isDragging = false;
+                        let startX;
+                        let scrollLeftStart;
+                        let velocity = 0;
+                        let prevMouseX = 0;
+                        let prevTime = 0;
+
+                        let exactScrollLeft = bottomTrack.scrollLeft;
+
+                        // Unified Momentum + Autoplay Loop
+                        const momentumLoop = () => {
+                            // ALWAYS apply constant baseline flow (conveyor belt)
+                            if (!isDown) { // Only drift if NOT holding it, otherwise it fights the user's cursor
+                                exactScrollLeft += 0.25;
+                            }
+
+                            if (!isDown) {
+                                if (Math.abs(velocity) > 0.1) {
+                                    // Fling Momentum Physics
+                                    velocity *= 0.98;
+                                    exactScrollLeft -= velocity;
+                                    bottomTrack.scrollLeft = exactScrollLeft;
+                                } else {
+                                    velocity = 0;
+                                    bottomTrack.scrollLeft = exactScrollLeft; // Apply drift
+                                }
+                            }
+
+                            // Teleport Logic (Seamless Loop)
+                            const maxScroll = bottomTrack.scrollWidth - bottomTrack.clientWidth;
+
+                            if (exactScrollLeft <= 0) {
+                                exactScrollLeft += halfScrollWidth;
+                                bottomTrack.scrollLeft = exactScrollLeft;
+                                scrollLeftStart += halfScrollWidth;
+                            } else if (exactScrollLeft >= maxScroll - 5) {
+                                exactScrollLeft -= halfScrollWidth;
+                                bottomTrack.scrollLeft = exactScrollLeft;
+                                scrollLeftStart -= halfScrollWidth;
+                            }
+
+                            requestAnimationFrame(momentumLoop);
+                        };
+                        requestAnimationFrame(momentumLoop);
+
+                        bottomTrack.addEventListener('click', (e) => {
+                            if (isDragging) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                            }
+                        }, true);
+
+                        bottomTrack.addEventListener('mousedown', (e) => {
+                            isDown = true;
+                            isDragging = false;
+                            bottomTrack.style.cursor = 'grabbing';
+                            startX = e.pageX - bottomTrack.offsetLeft;
+                            scrollLeftStart = exactScrollLeft;
+                            velocity = 0;
+                            prevMouseX = startX;
+                            prevTime = Date.now();
+                        });
+
+                        bottomTrack.addEventListener('mouseleave', () => {
+                            isDown = false;
+                            bottomTrack.style.cursor = 'pointer';
+                            if (Date.now() - prevTime > 50) velocity = 0;
+                        });
+
+                        bottomTrack.addEventListener('mouseup', () => {
+                            isDown = false;
+                            bottomTrack.style.cursor = 'pointer';
+                            if (Date.now() - prevTime > 50) velocity = 0;
+                        });
+
+                        bottomTrack.addEventListener('mousemove', (e) => {
+                            if (!isDown) return;
+                            e.preventDefault();
+                            const x = e.pageX - bottomTrack.offsetLeft;
+                            const walk = (x - startX) * 2;
+
+                            if (Math.abs(walk) > 5) isDragging = true;
+
+                            exactScrollLeft = scrollLeftStart - walk;
+                            bottomTrack.scrollLeft = exactScrollLeft;
+
+                            let now = Date.now();
+                            let dt = now - prevTime;
+                            if (dt > 0) {
+                                velocity = ((x - prevMouseX) / dt) * 3.6;
+                            }
+                            prevTime = now;
+                            prevMouseX = x;
+                        });
+
+                        bottomTrack.addEventListener('wheel', (e) => {
+                            if (e.deltaY !== 0) {
+                                e.preventDefault();
+                                velocity += (e.deltaY * 0.036);
+                            }
+                        }, { passive: false });
+
+                    }; // End initializeSlider
+
+                    images.forEach(img => {
+                        if (img.complete) {
+                            imagesLoaded++;
+                        } else {
+                            img.addEventListener('load', () => {
+                                imagesLoaded++;
+                                if (imagesLoaded === images.length) initializeSlider();
+                            });
+                        }
+                    });
+
+                    if (imagesLoaded === images.length) {
+                        initializeSlider();
+                    } else {
+                        setTimeout(initializeSlider, 300);
+                    }
+
+                }, 100);
+            }
+        });
+    </script>
+</body>
+
+</html>
