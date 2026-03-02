@@ -72,7 +72,7 @@ jQuery(window).load(function () {
 		directionNav: false,
 		animationLoop: true,
 		slideshow: true,
-		slideshowSpeed: 5000,
+		slideshowSpeed: 7000,
 		animationSpeed: 1500,
 		pauseOnAction: false,
 		useCSS: true,
@@ -249,12 +249,13 @@ $(document).ready(function () {
 
 
 document.addEventListener('DOMContentLoaded', function () {
+	if (typeof GLightbox === 'undefined') return;
 	const lightbox = GLightbox({
 		selector: '.glightbox',
-		touchNavigation: true, // Allow swiping arrows
+		touchNavigation: true, // Allow swiping
 		loop: true,
-		zoomable: false, // Disables the buggy zoom/drag-to-close behavior on mobile
-		draggable: false, // Disables image drag physics
+		zoomable: true, // Enabled for native mobile pinching
+		draggable: false, // Keep disabled for shrunk laptop windows
 		autoplayVideos: false
 	});
 

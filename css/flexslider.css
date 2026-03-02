@@ -529,7 +529,8 @@ html[xmlns] .slides {
 	width: 680px;
 	font-weight: 300;
 	line-height: 34px;
-	font-size: 26px;
+	font-size: 26.6px;
+	text-align: justify;
 }
 
 
@@ -584,7 +585,8 @@ html[xmlns] .slides {
 	width: 680px;
 	font-weight: 300;
 	line-height: 34px;
-	font-size: 26px;
+	font-size: 26.6px;
+	text-align: justify;
 }
 
 
@@ -638,7 +640,8 @@ html[xmlns] .slides {
 	width: 680px;
 	font-weight: 300;
 	line-height: 34px;
-	font-size: 26px;
+	font-size: 26.6px;
+	text-align: justify;
 }
 
 .top_slider .slide4 {
@@ -691,7 +694,8 @@ html[xmlns] .slides {
 	width: 680px;
 	font-weight: 300;
 	line-height: 34px;
-	font-size: 26px;
+	font-size: 26.6px;
+	text-align: justify;
 }
 
 
@@ -1039,9 +1043,9 @@ html[xmlns] .slides {
 	.top_slider .slide2 .flex_caption1 .title4,
 	.top_slider .slide3 .flex_caption1 .title4,
 	.top_slider .slide4 .flex_caption1 .title4 {
-		font-size: 13px;
-		line-height: 19px;
-		width: 420px;
+		font-size: 15px;
+		line-height: 22px;
+		width: 300px;
 	}
 
 
@@ -1124,7 +1128,9 @@ html[xmlns] .slides {
 	.top_slider .slide2 .flex_caption1 .title4,
 	.top_slider .slide3 .flex_caption1 .title4,
 	.top_slider .slide4 .flex_caption1 .title4 {
-		width: 290px;
+		font-size: 15px;
+		line-height: 20px;
+		width: 250px;
 	}
 
 	#carousel {
@@ -1132,4 +1138,31 @@ html[xmlns] .slides {
 	}
 
 
+}
+
+/* Mobile Slider Backgrounds */
+@media (max-width: 767px) {
+
+	.top_slider .slide1,
+	.top_slider .slide2,
+	.top_slider .slide3,
+	.top_slider .slide4 {
+		background-size: cover;
+	}
+
+	.top_slider .slide1 {
+		background-image: url(../images/slider/slide1_bg\ m.jpg) !important;
+	}
+
+	.top_slider .slide2 {
+		background-image: url(../images/slider/slide_bg2\ m.jpg) !important;
+	}
+
+	.top_slider .slide3 {
+		background-image: url(../images/slider/slide_bg3\ m.jpg) !important;
+	}
+
+	.top_slider .slide4 {
+		background-image: url(../images/slider/slide4_bg\ m.jpg) !important;
+	}
 }
