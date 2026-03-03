@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
     <link
-        href='http://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500italic,700,500,700italic,900,900italic'
+        href='https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500italic,700,500,700italic,900,900italic'
         rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
@@ -524,12 +524,6 @@
                         <a href="../images/works/121.jpg" class="glightbox"
                             data-description="Portrait (2006) Pencil drawing"><img
                                 src="../images/works/121_thumbnail_600.jpg" alt="Artwork" /></a>
-                        <a href="../images/works/1.jpg" class="glightbox"
-                            data-description="Portrait (2006) Pencil drawing"><img
-                                src="../images/works/1_thumbnail_900.jpg" alt="Artwork" /></a>
-                        <a href="../images/works/2.jpg" class="glightbox"
-                            data-description="Portrait (2006) Pencil drawing"><img
-                                src="../images/works/2_thumbnail_600.jpg" alt="Artwork" /></a>
                     </div>
                 </div>
             </div><!-- /.galleries-clip -->
@@ -585,11 +579,16 @@
                 <div class="work_item"><a class="glightbox" href="../images/works/14.jpg"
                         data-description="Balance (2021) Acrylic Painting"><img
                             src="../images/works/14_thumbnail_600.jpg" alt="Artwork" /></a></div>
-                <div class="work_item"><a class="glightbox" href="../images/works/1.jpg"
-                        data-description="Portrait (2006) Pencil drawing"><img src="../images/works/1_thumbnail_600.jpg"
-                            alt="Artwork" /></a></div>
-                <div class="work_item"><a class="glightbox" href="../images/works/2.jpg"
-                        data-description="Portrait (2006) Pencil drawing"><img src="../images/works/2_thumbnail_600.jpg"
+                <div class="work_item"><a href="../images/works/2 (4).jpg" class="glightbox"
+                        data-description="&quot;What does a fish know about the water in which it swims all its life?&quot; - Albert Einstein - Digital illustration printed onto canvas and intricately intervened with UV acrylic painting."><img
+                            src="../images/works/2 (4)_thumbnail_600.jpg" alt="Artwork" /></a></div>
+                <div class="work_item"><a href="../images/works/IMG_20190803_155406_553.jpg" class="glightbox"
+                        data-description="Orcinus Orca (2007) Colored pencils"><img
+                            src="../images/works/IMG_20190803_155406_553_thumbnail_600.jpg" alt="Artwork" /></a></div>
+                <div class="work_item"><a class="glightbox"
+                        href="../images/works/WhatsApp Image 2026-03-02 at 7.52.40 PM.jpeg"
+                        data-description="Artwork"><img
+                            src="../images/works/WhatsApp Image 2026-03-02 at 7.52.40 PM_thumbnail_600.jpg"
                             alt="Artwork" /></a></div>
             </div>
         </div>
@@ -685,8 +684,8 @@
                                 dragToleranceX: 40,
                                 dragToleranceY: 150,
                                 dragAutoSnap: true,
-                                zoomable: false,
-                                draggable: false
+                                zoomable: true,
+                                draggable: true
                             });
                         }
                     }, 200);
@@ -829,6 +828,7 @@
 
                 // --- EVENT HANDLERS (Axis Aware) ---
                 handleClick(e) {
+                    if (document.body.classList.contains('glightbox-open')) return;
                     if (this.isDragging) {
                         e.preventDefault();
                         e.stopPropagation();
@@ -853,11 +853,13 @@
                 }
 
                 handleMouseDown(e) {
+                    if (document.body.classList.contains('glightbox-open')) return;
                     const pos = this.isDesktop ? e.pageX - this.grid.offsetLeft : e.pageY - this.grid.offsetTop;
                     this.startInteraction(pos);
                 }
 
                 handleTouchStart(e) {
+                    if (document.body.classList.contains('glightbox-open')) return;
                     // Mobile works best with native scrolling, skip manual touch physics there to avoid conflict
                     if (!this.isDesktop) return;
 
@@ -953,8 +955,8 @@
                             dragToleranceX: 40,
                             dragToleranceY: 150,
                             dragAutoSnap: true,
-                            zoomable: false,
-                            draggable: false
+                            zoomable: true,
+                            draggable: true
                         });
                     }
 

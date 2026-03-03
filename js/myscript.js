@@ -259,10 +259,13 @@ document.addEventListener('DOMContentLoaded', function () {
 	const lightbox = GLightbox({
 		selector: '.glightbox',
 		touchNavigation: true,
-		loop: true, // Smooth looping for continuous swiping
-		zoomable: true, // Native pinch-to-zoom
-		draggable: false, // Maintain stability in scaled windows
-		autoplayVideos: false
+		loop: true,
+		zoomable: true,
+		draggable: true,
+		dragAutoSnap: true,
+		autoplayVideos: false,
+		descriptionLength: 10000,
+		descPosition: 'bottom'
 	});
 
 });
