@@ -120,12 +120,12 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            width: 95%;
-            max-width: 1600px;
+            width: 100%;
+            max-width: 1170px;
             margin: 0 auto 10px auto;
-            padding: 10px 0;
+            padding: 10px 15px;
             box-sizing: border-box;
-            overflow: hidden;
+            /* overflow removed for arrows */
         }
 
         /* Scrollable Container */
@@ -153,7 +153,7 @@
             cursor: pointer;
             font-size: 32px;
             color: #fff;
-            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7), 0 1px 3px rgba(0, 0, 0, 0.5);
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
             align-items: center;
             justify-content: center;
             padding: 0;
@@ -161,16 +161,21 @@
         }
 
         .gallery-arrow:hover {
-            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.9), 0 1px 5px rgba(0, 0, 0, 0.7);
+            text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9);
             transform: translateY(-50%) scale(1.15);
         }
 
         .gallery-arrow.arrow-left {
-            left: -8px;
+            left: -50px;
         }
 
         .gallery-arrow.arrow-right {
-            right: -8px;
+            right: -50px;
+        }
+
+        @media (max-width: 1300px) {
+            .gallery-arrow.arrow-left { left: 0px; }
+            .gallery-arrow.arrow-right { right: 0px; }
         }
 
         @media (min-width: 769px) {
@@ -187,7 +192,7 @@
             height: 100%;
             overflow-x: auto;
             overflow-y: hidden;
-            padding: 5px;
+            padding: 0;
 
             /* CSS Grid for predictable alternating masonry pattern */
             display: grid;
@@ -360,11 +365,17 @@
 
             /* Mobile: fill remaining space */
             .galleries-clip {
-                width: 100%;
-                height: 100%;
-                margin: 0;
-                padding: 0;
-            }
+            position: relative;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 1170px;
+            margin: 0 auto 10px auto;
+            padding: 10px 15px;
+            box-sizing: border-box;
+            /* overflow removed for arrows */
+        }
 
             .galleries-container {
                 margin-bottom: 0 !important;
@@ -395,7 +406,7 @@
                 overflow-x: hidden;
                 overflow-y: auto;
                 gap: 5px;
-                padding: 5px;
+                padding: 0;
                 box-sizing: border-box;
                 align-content: flex-start;
             }
@@ -749,7 +760,9 @@
                 constructor(grid) {
                     this.grid = grid;
                     this.originalContent = grid.innerHTML;
-                    this.isActive = false;
+                    this.baseCount = grid.children.length;
+                                        this.isActive = false;
+                    if (this.resizeObserver) this.resizeObserver.disconnect();
                     this.isDesktop = window.innerWidth > 768;
                     this.rafId = null;
 
@@ -776,7 +789,35 @@
                     this.onTouchMove = this.handleTouchMove.bind(this);
                     this.onTouchEnd = this.handleTouchEnd.bind(this);
 
-                    this.init();
+                                        this.init();
+                    
+                    // Add ResizeObserver to dynamically update metrics if images load out of band
+                    this.resizeObserver = new ResizeObserver(() => {
+                        if (this.initialized) {
+                            if (this.isDesktop) {
+                                let newBound = this.boundSize;
+                                const targetChild = this.grid.children[this.baseCount * 3];
+                                if (targetChild && targetChild.offsetLeft > 0) {
+                                    newBound = targetChild.offsetLeft;
+                                } else {
+                                    newBound = this.grid.scrollWidth / 5;
+                                }
+                                if (newBound > 0 && Math.abs(this.boundSize - newBound) > 2) {
+                                    const factor = this.exactScroll / this.boundSize;
+                                    this.boundSize = newBound;
+                                    this.exactScroll = factor * this.boundSize;
+                                    this.grid.scrollLeft = this.exactScroll;
+                                    this.scrollStart = this.exactScroll;
+                                }
+                            } else {
+                                const targetNode = this.grid.children[this.mobileBlockItems];
+                                if (targetNode) {
+                                    this.boundSize = targetNode.offsetTop - 3;
+                                }
+                            }
+                        }
+                    });
+                    this.resizeObserver.observe(this.grid);
                 }
 
                 init() {
@@ -861,14 +902,23 @@
                 }
 
                 tryInitDesktopGeometry() {
-                    if (this.boundSize === 0 && this.grid.scrollWidth > 0) {
-                        // The entire runway consists of exactly 5 perfect geometric blocks
-                        this.boundSize = this.grid.scrollWidth / 5;
-                        // Start directly in the middle (the 3rd block, index 2)
-                        this.grid.scrollLeft = this.boundSize * 2;
-                        this.exactScroll = this.grid.scrollLeft;
-                        this.scrollStart = this.exactScroll;
-                        this.initialized = true;
+                    if (this.boundSize === 0 && this.grid.children.length > this.baseCount) {
+                        // The exact physical pixel width of one perfect geometry block
+                        const targetChild = this.grid.children[this.baseCount * 3]; // 3 repeats = 1 perfect block
+                        if (targetChild && targetChild.offsetLeft > 0) {
+                            this.boundSize = targetChild.offsetLeft;
+                            this.grid.scrollLeft = this.boundSize * 2;
+                            this.exactScroll = this.grid.scrollLeft;
+                            this.scrollStart = this.exactScroll;
+                            this.initialized = true;
+                        } else if (this.grid.scrollWidth > 0) {
+                            // Fallback
+                            this.boundSize = this.grid.scrollWidth / 5;
+                            this.grid.scrollLeft = this.boundSize * 2;
+                            this.exactScroll = this.grid.scrollLeft;
+                            this.scrollStart = this.exactScroll;
+                            this.initialized = true;
+                        }
                     }
                 }
 
@@ -1233,6 +1283,18 @@
             }
         });
     </script>
+
+    <!-- Safe Image Loader -->
+    <style>
+        .gallery-grid img,
+        .bottom-gallery-track img {
+            opacity: 0;
+            animation: fadeInImage 0.8s ease-in-out forwards;
+        }
+        @keyframes fadeInImage {
+            to { opacity: 1; }
+        }
+    </style>
 </body>
 
 </html>

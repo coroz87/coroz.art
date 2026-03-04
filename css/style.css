@@ -692,6 +692,7 @@ a.menu_toggler {
 /*-----------------------------------------------------------------------------------*/
 #projects {
 	min-height: 100vh;
+	min-height: 100dvh;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -718,12 +719,6 @@ a.menu_toggler {
 	display: block;
 }
 
-.owl-item:hover .work_item {
-	transform: scale(1.03);
-	-o-transform: scale(1.03);
-	-ms-transform: scale(1.03);
-	-webkit-transform: scale(1.03);
-}
 
 .work_item .work_description {
 	position: absolute;
@@ -931,6 +926,7 @@ ul.project_info li span {
 /*-----------------------------------------------------------------------------------*/
 #team {
 	min-height: 100vh;
+	min-height: 100dvh;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -1146,6 +1142,7 @@ ul.team_info li span {
 /*-----------------------------------------------------------------------------------*/
 #news {
 	min-height: 100vh;
+	min-height: 100dvh;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -2306,6 +2303,7 @@ html {
 #team,
 #news {
 	min-height: 100vh;
+	min-height: 100dvh;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -3354,7 +3352,43 @@ html {
 
 .gnext svg,
 .gprev svg {
-	filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.9)) !important;
+	display: none !important;
+}
+
+.gprev::after {
+	content: '\f104';
+	font-family: 'Font Awesome 6 Free', 'FontAwesome';
+	font-weight: 900;
+	color: #fff;
+	font-size: 32px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 50px;
+	height: 50px;
+	text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+	transition: text-shadow 0.2s, transform 0.2s;
+}
+
+.gnext::after {
+	content: '\f105';
+	font-family: 'Font Awesome 6 Free', 'FontAwesome';
+	font-weight: 900;
+	color: #fff;
+	font-size: 32px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 50px;
+	height: 50px;
+	text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+	transition: text-shadow 0.2s, transform 0.2s;
+}
+
+.gnext:hover::after,
+.gprev:hover::after {
+	text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9);
+	transform: scale(1.15);
 }
 
 @media (max-width: 768px) {
@@ -3421,4 +3455,80 @@ html {
 .gshow-more {
 	display: none !important;
 	/* Hide "see more" toggle */
+}
+
+/* Home Slider Responsive UI Updates */
+#home .flex-control-nav {
+	display: none !important;
+}
+
+#home .top_slider .slide_btn {
+	border-radius: 100px !important;
+	font-size: clamp(12px, 1vw, 20px) !important;
+	padding: clamp(10px, 1.2vw, 20px) clamp(40px, 3.5vw, 60px) clamp(10px, 1.2vw, 20px) clamp(20px, 2vw, 35px) !important;
+	width: max-content !important;
+	position: absolute !important;
+	z-index: 50 !important;
+	left: 50% !important;
+	margin-left: -585px !important;
+	top: 67% !important;
+	/* Adjusted to 67% for fine-tuned placement */
+	bottom: auto !important;
+	transform: none !important;
+	display: inline-flex !important;
+	align-items: center;
+	text-align: left !important;
+}
+
+#home .top_slider .slide_btn:before {
+	position: absolute !important;
+	right: clamp(15px, 1.5vw, 25px) !important;
+	top: 50% !important;
+	bottom: auto !important;
+	left: auto !important;
+	transform: translateY(-50%) !important;
+	line-height: 1 !important;
+	margin: 0 !important;
+	font-size: clamp(16px, 1.5vw, 24px) !important;
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+	#home .top_slider .slide_btn {
+		margin-left: -485px !important;
+	}
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+	#home .top_slider .slide_btn {
+		margin-left: -375px !important;
+	}
+}
+
+@media (max-width: 767px) {
+	#home .top_slider .slide_btn {
+		margin-left: 0 !important;
+		left: 15px !important;
+		/* Match mobile caption alignment */
+		bottom: 30px !important;
+		top: auto !important;
+		/* Detach from fixed vertical offset on mobile */
+	}
+
+	/* Force full description text in GLightbox on mobile, hide the 'See More' collapse button */
+	.gdesc-inner {
+		max-height: none !important;
+	}
+
+	.gdesc-more {
+		display: none !important;
+	}
+}
+
+/* GPU Hardware Acceleration for Apple Devices / Safari */
+#home .flexslider .slides>li {
+	will-change: opacity;
+}
+
+#home .flex_caption1 p {
+	will-change: transform, opacity;
 }

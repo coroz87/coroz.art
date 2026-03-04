@@ -490,14 +490,11 @@ html[xmlns] .slides {
 	position: absolute;
 	z-index: 30;
 	left: 50%;
-	top: 45%;
+	top: 30%;
+	/* Rigid top anchor */
 	width: 100%;
 	margin-left: -585px;
 	color: #333;
-	transform: translateY(-50%);
-	-o-transform: translateY(-50%);
-	-ms-transform: translateY(-50%);
-	-webkit-transform: translateY(-50%);
 }
 
 .top_slider .slide1 .flex_caption1 .title1 {
@@ -530,7 +527,7 @@ html[xmlns] .slides {
 	font-weight: 300;
 	line-height: 34px;
 	font-size: 26.6px;
-	text-align: justify;
+	text-align: left;
 }
 
 
@@ -546,14 +543,11 @@ html[xmlns] .slides {
 	position: absolute;
 	z-index: 30;
 	left: 50%;
-	top: 45%;
+	top: 30%;
+	/* Rigid top anchor */
 	width: 100%;
 	margin-left: -585px;
 	color: #fff;
-	transform: translateY(-50%);
-	-o-transform: translateY(-50%);
-	-ms-transform: translateY(-50%);
-	-webkit-transform: translateY(-50%);
 }
 
 .top_slider .slide2 .flex_caption1 .title1 {
@@ -586,7 +580,7 @@ html[xmlns] .slides {
 	font-weight: 300;
 	line-height: 34px;
 	font-size: 26.6px;
-	text-align: justify;
+	text-align: left;
 }
 
 
@@ -601,14 +595,11 @@ html[xmlns] .slides {
 	position: absolute;
 	z-index: 30;
 	left: 50%;
-	top: 45%;
+	top: 30%;
+	/* Rigid top anchor */
 	width: 100%;
 	margin-left: -585px;
 	color: #fff;
-	transform: translateY(-50%);
-	-o-transform: translateY(-50%);
-	-ms-transform: translateY(-50%);
-	-webkit-transform: translateY(-50%);
 }
 
 .top_slider .slide3 .flex_caption1 .title1 {
@@ -641,7 +632,7 @@ html[xmlns] .slides {
 	font-weight: 300;
 	line-height: 34px;
 	font-size: 26.6px;
-	text-align: justify;
+	text-align: left;
 }
 
 .top_slider .slide4 {
@@ -655,14 +646,11 @@ html[xmlns] .slides {
 	position: absolute;
 	z-index: 30;
 	left: 50%;
-	top: 45%;
+	top: 30%;
+	/* Rigid top anchor */
 	width: 100%;
 	margin-left: -585px;
 	color: #fff;
-	transform: translateY(-50%);
-	-o-transform: translateY(-50%);
-	-ms-transform: translateY(-50%);
-	-webkit-transform: translateY(-50%);
 }
 
 .top_slider .slide4 .flex_caption1 .title1 {
@@ -695,7 +683,7 @@ html[xmlns] .slides {
 	font-weight: 300;
 	line-height: 34px;
 	font-size: 26.6px;
-	text-align: justify;
+	text-align: left;
 }
 
 

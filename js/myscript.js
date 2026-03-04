@@ -78,12 +78,55 @@ jQuery(window).load(function () {
 		directionNav: false,
 		animationLoop: true,
 		slideshow: true,
-		slideshowSpeed: 7000,
+		slideshowSpeed: 6000, /* Start at 6s for the first slide */
 		animationSpeed: 1500,
 		pauseOnAction: false,
 		useCSS: true,
 		prevText: "",
-		nextText: ""
+		nextText: "",
+		before: function (slider) {
+			var masterBtn = document.getElementById('master_slide_btn');
+			if (!masterBtn) return;
+
+			var nextSlide = slider.animatingTo;
+
+			// Slide 0 (Arts & Design): No button, fade it out instantly
+			if (nextSlide === 0) {
+				masterBtn.style.transition = 'opacity 0.5s ease';
+				masterBtn.style.opacity = '0';
+				masterBtn.style.pointerEvents = 'none';
+			}
+			// Slide 1 (2D): Fade in slowly AFTER all text is done (2.0s delay)
+			else if (nextSlide === 1) {
+				masterBtn.href = '../2dprojects/';
+				masterBtn.style.transition = 'opacity 2.0s ease 2.0s';
+				masterBtn.style.opacity = '1';
+				masterBtn.style.pointerEvents = 'auto';
+			}
+			// Slide 2 (3D) & Slide 3 (Arts): Keep persistent, switch links instantly
+			else if (nextSlide === 2 || nextSlide === 3) {
+				masterBtn.href = (nextSlide === 2) ? '../3dprojects/' : '../arts/';
+				masterBtn.style.transition = 'none'; // Don't fade out/in, stay solid during transition
+				masterBtn.style.opacity = '1';
+				masterBtn.style.pointerEvents = 'auto';
+			}
+		},
+		after: function (slider) {
+			// If we just transitioned TO slide 0 (the first slide), set the next wait to 6s.
+			// Otherwise (slide 1, 2, or 3), set next wait to 7s.
+			var speed = (slider.currentSlide === 0) ? 6000 : 7000;
+
+			if (slider.vars.slideshowSpeed !== speed) {
+				slider.vars.slideshowSpeed = speed;
+
+				// Flexslider doesn't update its internal interval dynamically, so we must 
+				// pause and play manually to lock in the new delay interval on the fly
+				if (slider.playing) {
+					slider.pause();
+					slider.play();
+				}
+			}
+		}
 	});
 
 	homeHeight();
