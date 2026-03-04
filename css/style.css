@@ -709,6 +709,10 @@ a.menu_toggler {
 	justify-content: center;
 	transition: all 0.3s ease-in-out;
 	-webkit-transition: all 0.3s ease-in-out;
+	/* Safari Flicker Prevention */
+	backface-visibility: hidden;
+	-webkit-backface-visibility: hidden;
+	transform: translateZ(0);
 }
 
 .work_item img {
@@ -729,13 +733,33 @@ a.menu_toggler {
 	height: 100%;
 	text-align: center;
 	opacity: 0;
-	background-color: rgba(0, 0, 0, 0.70);
+	background-color: transparent;
+	/* Removed rgba(0, 0, 0, 0.70) to prevent darkening */
 	transition: all 0.3s ease-in-out;
 	-webkit-transition: all 0.3s ease-in-out;
 }
 
-.work_item:hover .work_description {
-	opacity: 1;
+@media (hover: hover) {
+	.work_item:hover .work_description {
+		opacity: 1;
+	}
+
+	.work_item:hover .work_description .work_descr_cont {
+		opacity: 1;
+		transform: translateY(-50%);
+		-o-transform: translateY(-50%);
+		-ms-transform: translateY(-50%);
+		-webkit-transform: translateY(-50%);
+	}
+
+	.work_item:hover a.zoom {
+		bottom: 56px;
+		opacity: 1;
+	}
+
+	.work_item a.zoom:hover {
+		background-image: url(../images/zoom_h.png);
+	}
 }
 
 .work_item .work_description .work_descr_cont {
@@ -750,14 +774,6 @@ a.menu_toggler {
 	-webkit-transform: translateY(-100%);
 	transition: all 0.3s ease-in-out;
 	-webkit-transition: all 0.3s ease-in-out;
-}
-
-.work_item:hover .work_description .work_descr_cont {
-	opacity: 1;
-	transform: translateY(-50%);
-	-o-transform: translateY(-50%);
-	-ms-transform: translateY(-50%);
-	-webkit-transform: translateY(-50%);
 }
 
 .work_item .work_description a {
@@ -789,15 +805,6 @@ a.menu_toggler {
 	-webkit-background-size: 100% auto;
 	transition: bottom 0.3s ease-in-out, opacity 0.3s ease-in-out;
 	-webkit-transition: bottom 0.3s ease-in-out, opacity 0.3s ease-in-out;
-}
-
-.work_item:hover a.zoom {
-	bottom: 56px;
-	opacity: 1;
-}
-
-.work_item a.zoom:hover {
-	background-image: url(../images/zoom_h.png);
 }
 
 
@@ -3332,8 +3339,10 @@ html {
 	transition: transform 0.3s ease-in-out;
 }
 
-.work_item:hover .work_img img {
-	transform: scale(1.05);
+@media (hover: hover) {
+	.work_item:hover .work_img img {
+		transform: scale(1.05);
+	}
 }
 
 /* Force GLightbox arrows to show on mobile and customize styling globally */
@@ -3444,7 +3453,7 @@ html {
 	box-shadow: none !important;
 	max-height: none !important;
 	width: 100% !important;
-	padding-top: 15px !important;
+	padding-top: 5px !important;
 	/* Space between image and text */
 }
 
@@ -3531,4 +3540,25 @@ html {
 
 #home .flex_caption1 p {
 	will-change: transform, opacity;
+}
+
+/* ----------------------------------------------------------------------------------- */
+/* ACCESSIBILITY: Disable animations/transitions for users who prefer reduced motion 
+/* ----------------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+
+	/* Specific overrides for JS-driven elements like sliders */
+	.swiper-wrapper, .gallery-grid, .bottom-gallery-track {
+		transition-duration: 0ms !important;
+		animation: none !important;
+	}
 }

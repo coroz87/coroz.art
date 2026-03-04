@@ -16,37 +16,184 @@ jQuery(window).load(function () {
 
 
 /*-----------------------------------------------------------------------------------*/
-/*	PAGE TRANSITIONS
+/*	PAGE TRANSITIONS — PJAX Router
+/*  On file:// (local preview): falls back to hard reload (Chrome blocks local fetch)
+/*  On https:// (deployed):     fetches page silently, swaps content, keeps header alive
 /*-----------------------------------------------------------------------------------*/
 document.addEventListener('DOMContentLoaded', function () {
-	// Trigger enter animation
+	// Mark page as entering for the CSS fade-in animation
 	document.body.classList.add('page-entering');
 
-	// Intercept nav links for page-leave animation
-	document.querySelectorAll('.navmenu a[href], .logo a, .slide_btn').forEach(function (link) {
-		// Only intercept same-origin .html links (not # anchors, not external)
-		var href = link.getAttribute('href');
-		if (!href || href.startsWith('#') || href.startsWith('javascript')) return;
-		if (link.hostname && link.hostname !== window.location.hostname) return;
+	function getContentFromDoc(doc) {
+		// Try each known page content container in priority order
+		return doc.querySelector('.subpage-main')
+			|| doc.querySelector('.about-page')
+			|| doc.querySelector('#home')
+			|| doc.querySelector('main')
+			|| doc.querySelector('body');
+	}
 
-		link.addEventListener('click', function (e) {
-			var dest = this.href;
-			// Don't animate if already on this page
-			if (dest === window.location.href) return;
-			e.preventDefault();
-			document.body.classList.add('page-leaving');
+	function getBodyClassesFromDoc(doc) {
+		// Extract inline style from body (e.g. background)
+		var bodyEl = doc.querySelector('body');
+		return bodyEl ? bodyEl.getAttribute('style') || '' : '';
+	}
+
+	function getInlineStylesFromDoc(doc) {
+		// Extract page-specific inline <style> blocks from <head>
+		var styles = doc.querySelectorAll('head style');
+		var combined = '';
+		styles.forEach(function (s) { combined += s.innerHTML; });
+		return combined;
+	}
+
+	function navigateTo(dest, pushHistory) {
+		document.body.classList.remove('page-entering');
+		document.body.classList.add('page-leaving');
+
+		// --- FILE PROTOCOL FALLBACK ---
+		if (window.location.protocol === 'file:') {
 			setTimeout(function () {
-				let finalDest = dest;
-				// If local file browsing and pointing to a directory, append index.html
-				if (window.location.protocol === 'file:' && (dest.endsWith('/') || !dest.split('/').pop().includes('.'))) {
-					if (!finalDest.endsWith('/')) finalDest += '/';
-					finalDest += 'index.html';
+				var parts = dest.split('#');
+				var baseUrl = parts[0];
+				var hash = parts.length > 1 ? '#' + parts.slice(1).join('#') : '';
+				if (baseUrl.endsWith('/') || !baseUrl.split('/').pop().includes('.')) {
+					if (!baseUrl.endsWith('/')) baseUrl += '/';
+					baseUrl += 'index.html';
 				}
-				window.location.href = finalDest;
+				window.location.href = baseUrl + hash;
 			}, 400);
-		});
+			return;
+		}
+
+		// --- PJAX FETCH (https:// only) ---
+		fetch(dest, { credentials: 'same-origin' })
+			.then(function (response) {
+				if (!response.ok) throw new Error('Navigation fetch failed: ' + response.status);
+				return response.text();
+			})
+			.then(function (html) {
+				var parser = new DOMParser();
+				var newDoc = parser.parseFromString(html, 'text/html');
+
+				var newContent = getContentFromDoc(newDoc);
+				var currentContent = getContentFromDoc(document);
+				var newTitle = newDoc.title || document.title;
+				var newBodyStyle = getBodyClassesFromDoc(newDoc);
+				var newStyles = getInlineStylesFromDoc(newDoc);
+
+				// Swap page title
+				document.title = newTitle;
+
+				// Swap body inline style (e.g. background image for contact page)
+				var bodyEl = document.querySelector('body');
+				if (newBodyStyle) {
+					bodyEl.setAttribute('style', newBodyStyle);
+				} else {
+					bodyEl.removeAttribute('style');
+				}
+
+				// Swap per-page inline styles (replace existing pjax style tag)
+				var oldPjaxStyle = document.getElementById('pjax-page-style');
+				if (oldPjaxStyle) oldPjaxStyle.remove();
+				if (newStyles) {
+					var styleTag = document.createElement('style');
+					styleTag.id = 'pjax-page-style';
+					styleTag.innerHTML = newStyles;
+					document.head.appendChild(styleTag);
+				}
+
+				// Swap body content while keeping headers
+				if (newContent && currentContent) {
+					currentContent.outerHTML = newContent.outerHTML;
+				}
+
+				// Update history
+				if (pushHistory) {
+					history.pushState({ pjaxUrl: dest }, newTitle, dest);
+				}
+
+				// Update active nav item
+				document.querySelectorAll('.navmenu li').forEach(function (li) {
+					li.classList.remove('active');
+				});
+				document.querySelectorAll('.navmenu a').forEach(function (a) {
+					// Match if the link path matches the current pathname
+					try {
+						var linkUrl = new URL(a.href, window.location.href);
+						if (linkUrl.pathname !== '/' && window.location.pathname.startsWith(linkUrl.pathname)) {
+							a.closest('li') && a.closest('li').classList.add('active');
+						}
+					} catch (e) { }
+				});
+
+				// Trigger page enter animation on new content
+				document.body.classList.remove('page-leaving');
+				document.body.classList.add('page-entering');
+
+				// Re-initialize page-specific scripts on the new content
+				window.dispatchEvent(new Event('pjax:complete'));
+				window.dispatchEvent(new Event('resize'));
+
+				// Re-bind superfish nav and mobile toggler in case they've detached
+				if (window.jQuery && window.$.fn.superfish) {
+					if ($(window).width() >= 992) {
+						$('.navmenu ul').superfish();
+					}
+				}
+
+				// Handle hash scroll after PJAX swap
+				var hash = new URL(dest, window.location.href).hash;
+				if (hash) {
+					var target = document.querySelector(hash.replace('#', '[data-target="gallery-') + '"]')
+						|| document.querySelector(hash);
+					if (target && typeof target.click === 'function') {
+						setTimeout(function () { target.click(); }, 100);
+					}
+				}
+			})
+			.catch(function (err) {
+				// On any fetch error, fall back to hard redirect
+				console.warn('PJAX fetch failed, falling back to hard redirect:', err);
+				window.location.href = dest;
+			});
+	}
+
+	// Intercept all nav clicks
+	document.body.addEventListener('click', function (e) {
+		if (document.body.classList.contains('glightbox-open')) return;
+		var link = e.target.closest('a[href]');
+		if (!link) return;
+
+		var href = link.getAttribute('href');
+		if (!href || href.startsWith('#') || href.startsWith('javascript') || href.startsWith('mailto') || href.startsWith('tel')) return;
+		if (link.target === '_blank') return;
+
+		// External link
+		try {
+			var linkUrl = new URL(href, window.location.href);
+			if (linkUrl.hostname !== window.location.hostname) return;
+			if (linkUrl.protocol !== window.location.protocol) return;
+		} catch (e) { return; }
+
+		var dest = link.href;
+		if (dest === window.location.href) return;
+
+		e.preventDefault();
+		navigateTo(dest, true);
 	});
+
+	// Handle browser back/forward
+	window.addEventListener('popstate', function (e) {
+		if (e.state && e.state.pjaxUrl) {
+			navigateTo(e.state.pjaxUrl, false);
+		}
+	});
+
+	// Set initial history state
+	history.replaceState({ pjaxUrl: window.location.href }, document.title, window.location.href);
 });
+
 
 
 /* Superfish */
@@ -307,7 +454,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		draggable: true,
 		dragAutoSnap: true,
 		autoplayVideos: false,
-		descriptionLength: 10000,
+		descriptionLength: 0,
 		descPosition: 'bottom'
 	});
 

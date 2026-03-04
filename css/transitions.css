@@ -5,24 +5,20 @@
 @keyframes pageEnter {
     from {
         opacity: 0;
-        transform: translateX(50vw);
     }
 
     to {
         opacity: 1;
-        transform: translateX(0);
     }
 }
 
 @keyframes pageLeave {
     from {
         opacity: 1;
-        transform: translateX(0);
     }
 
     to {
         opacity: 0;
-        transform: translateX(-50vw);
     }
 }
 
@@ -48,6 +44,7 @@
 
 /* Apply leave animation to the #home hero or .subpage-main when leaving */
 body.page-leaving .subpage-main,
+body.page-leaving .about-page,
 body.page-leaving .contact-content {
     animation: pageLeave 0.4s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards;
 }
@@ -56,13 +53,30 @@ body.page-leaving #home {
     animation: homeLeave 0.4s ease forwards;
 }
 
-/* Apply enter animation on load */
+/* Apply enter animation on load — longer, softer ease for a polished feel */
 body.page-entering .subpage-main,
+body.page-entering .about-page,
 body.page-entering .contact-content {
-    animation: pageEnter 1.5s cubic-bezier(0.075, 0.82, 0.165, 1) forwards;
+    animation: pageEnter 2s cubic-bezier(0.075, 0.82, 0.165, 1) forwards;
 }
 
 body.page-entering #home {
-    /* Same timing as dot click usually (often 0.6s to 1s) */
-    animation: homeEnter 1s ease forwards;
+    animation: homeEnter 1.2s ease forwards;
+}
+
+/* ----------------------------------------------------------------------------------- */
+/* ACCESSIBILITY: Disable transitions for users who prefer reduced motion 
+/* ----------------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+
+    body.page-leaving .subpage-main,
+    body.page-leaving .about-page,
+    body.page-leaving .contact-content,
+    body.page-leaving #home,
+    body.page-entering .subpage-main,
+    body.page-entering .about-page,
+    body.page-entering .contact-content,
+    body.page-entering #home {
+        animation: none !important;
+    }
 }

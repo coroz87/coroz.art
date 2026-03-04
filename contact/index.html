@@ -4,10 +4,28 @@
 <head>
 
     <meta charset="utf-8">
-    <title>Coroz | About & Contact</title>
+    <title>Contact | Coroz – About Carlos Orozco – Art & Design Services in Montreal</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="description"
+        content="Get in touch with Coroz (Carlos Orozco), a Colombian-born art and design professional based in Montreal. Experienced in 3D modelling, illustration, graphic design, and fine arts.">
+    <meta name="keywords"
+        content="Coroz, Carlos Orozco, Contact, About, Art Services, Design Services, Montreal, Commission, Portfolio">
+    <meta name="author" content="Carlos Orozco">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://coroz.art/contact/">
+    <!-- Open Graph / Social Sharing -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://coroz.art/contact/">
+    <meta property="og:title" content="Contact | Coroz – Art & Design Services in Montreal">
+    <meta property="og:description"
+        content="Contact Carlos Orozco (Coroz), Montreal-based artist and designer, for commissions and collaborations.">
+    <meta property="og:image" content="https://coroz.art/images/works/1.jpg">
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Contact | Coroz – Art & Design Services">
+    <meta name="twitter:description"
+        content="Get in touch with Carlos Orozco (Coroz), Montreal-based artist and designer.">
+    <meta name="twitter:image" content="https://coroz.art/images/works/1.jpg">
 
     <link rel="shortcut icon" href="../images/favicon.ico">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
@@ -28,17 +46,24 @@
     <script src="../js/myscript.js" type="text/javascript"></script>
 
     <style>
+        html {
+            background-color: #1a1a1a;
+        }
+
         body {
             overflow-y: auto;
             overflow-x: hidden;
-            background: url(../images/dark_bg.jpg) center center / cover fixed;
+            background-color: #1a1a1a;
+            /* Instant dark fallback before image loads */
+            background: #1a1a1a url(../images/dark_bg.jpg) center center / cover fixed;
         }
 
         @media (max-width: 768px) {
             body {
-                background: url("../images/dark_bg m.jpg") center center / cover fixed !important;
+                background: #1a1a1a url("../images/dark_bg m.jpg") center center / cover fixed !important;
             }
         }
+
 
         .about-page {
             margin-top: 60px;
@@ -47,6 +72,8 @@
             flex-direction: column;
             box-sizing: border-box;
             background: transparent;
+            opacity: 0;
+            /* Will be animated to 1 by page-entering class */
         }
 
         /* Stripe styling */
