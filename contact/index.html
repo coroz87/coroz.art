@@ -267,90 +267,6 @@
                 padding-bottom: 40px !important;
             }
         }
-
-        /* ── Map Modal ── */
-        #map-modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            z-index: 99999;
-            background: rgba(0, 0, 0, 0.75);
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(3px);
-            -webkit-backdrop-filter: blur(3px);
-            animation: mapFadeIn 0.2s ease;
-        }
-
-        #map-modal.open {
-            display: flex;
-        }
-
-        @keyframes mapFadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
-        }
-
-        #map-modal-box {
-            position: relative;
-            width: 90vw;
-            max-width: 720px;
-            background: #fff;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-            animation: mapBoxIn 0.25s ease;
-        }
-
-        @keyframes mapBoxIn {
-            from {
-                transform: scale(0.92);
-                opacity: 0;
-            }
-
-            to {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-
-        #map-modal-box iframe {
-            display: block;
-            width: 100%;
-            height: 55vw;
-            max-height: 450px;
-            min-height: 250px;
-            border: 0;
-        }
-
-        #map-modal-close {
-            position: absolute;
-            top: 10px;
-            right: 12px;
-            z-index: 10;
-            width: 36px;
-            height: 36px;
-            border: none;
-            border-radius: 50%;
-            background: rgba(0, 0, 0, 0.55);
-            color: #fff;
-            font-size: 22px;
-            line-height: 1;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.2s;
-        }
-
-        #map-modal-close:hover {
-            background: rgba(0, 0, 0, 0.85);
-        }
     </style>
 
 </head>
@@ -376,17 +292,17 @@
                     <ul>
                         <li class="first scroll_btn"><a href="../home/">HOME</a></li>
                         <li class="sub-menu">
-                            <a href="../2dprojects/">2D PROJECTS</a>
+                            <a href="../2dprojects/#illustrations">2D PROJECTS</a>
                             <ul>
-                                <li><a href="../illustrations/">Illustrations &amp; Sketches</a></li>
-                                <li><a href="../graphicdesign/">Graphic Design</a></li>
+                                <li><a href="../2dprojects/#illustrations">Illustrations &amp; Sketches</a></li>
+                                <li><a href="../2dprojects/#graphic_design">Graphic Design</a></li>
                             </ul>
                         </li>
                         <li class="sub-menu">
-                            <a href="../3dprojects/">3D PROJECTS</a>
+                            <a href="../3dprojects/#3d_design">3D PROJECTS</a>
                             <ul>
-                                <li><a href="../3ddesign/">3D Design</a></li>
-                                <li><a href="../3dart/">3D Art</a></li>
+                                <li><a href="../3dprojects/#3d_design">3D Design</a></li>
+                                <li><a href="../3dprojects/#3d_art">3D Art</a></li>
                             </ul>
                         </li>
                         <li class="scroll_btn"><a href="../arts/">ARTWORK</a></li>
@@ -405,17 +321,6 @@
             </div><!-- //MENU -->
         </div><!-- //MENU BLOCK -->
     </div><!-- //CONTAINER -->
-
-    <!-- MAP MODAL OVERLAY -->
-    <div id="map-modal" role="dialog" aria-modal="true" aria-label="Location map">
-        <div id="map-modal-box">
-            <button id="map-modal-close" aria-label="Close map">&times;</button>
-            <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d89511.19214671678!2d-73.66400158935447!3d45.485463994960575!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4cc910fa9cbdea19%3A0x57f86e154e8da1ed!2s6759%20Bd%20Monk%2C%20Montr%C3%A9al%2C%20QC%20H4E%203J2!5e0!3m2!1sen!2sca!4v1772732239269!5m2!1sen!2sca""
-                width=" 600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade"></iframe>
-        </div>
-    </div>
 
     <div id="pjax-container">
         <div class="about-page">
@@ -488,21 +393,101 @@
 
     </div><!-- //pjax-container -->
 
-    <!-- MAP MODAL SCRIPT (self-contained) -->
+    <!-- ====================================================
+     MAP OVERLAY MODAL (lives in body, outside everything)
+     ==================================================== -->
+    <style>
+        #coroz-map-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            background: rgba(0, 0, 0, 0.78);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        #coroz-map-overlay.open {
+            display: flex;
+        }
+
+        #coroz-map-card {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            background: #111;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 12px 50px rgba(0, 0, 0, 0.7);
+        }
+
+        #coroz-map-card iframe {
+            display: block;
+            width: 100%;
+            height: min(60vh, 450px);
+            border: 0;
+        }
+
+        #coroz-map-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(255, 255, 255, 0.95);
+            color: #222;
+            font-size: 20px;
+            line-height: 36px;
+            text-align: center;
+            cursor: pointer;
+            z-index: 10;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+            padding: 0;
+            transition: background 0.2s;
+        }
+
+        #coroz-map-close:hover {
+            background: #fff;
+        }
+    </style>
+
+    <div id="coroz-map-overlay">
+        <div id="coroz-map-card">
+            <button id="coroz-map-close" aria-label="Close map">&times;</button>
+            <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d106430.69934190671!2d-73.68542392287961!3d45.49439881902505!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4cc910fa9cbdea19%3A0x57f86e154e8da1ed!2s6759%20Bd%20Monk%2C%20Montr%C3%A9al%2C%20QC%20H4E%203J2!5e0!3m2!1sen!2sca!4v1772742001145!5m2!1sen!2sca"
+                allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
+    </div>
+
     <script>
-        (function initMapModal() {
-            var modal = document.getElementById('map-modal');
-            var iconBtn = document.getElementById('map-icon-btn');
-            var closeBtn = document.getElementById('map-modal-close');
-            if (!modal || !iconBtn) return;
+        (function () {
+            var overlay = document.getElementById('coroz-map-overlay');
+            var closeBtn = document.getElementById('coroz-map-close');
 
-            function openMap(e) { e.preventDefault(); e.stopPropagation(); modal.classList.add('open'); document.body.style.overflow = 'hidden'; }
-            function closeMap() { modal.classList.remove('open'); document.body.style.overflow = ''; }
+            function openMap() { overlay.classList.add('open'); }
+            function closeMap() { overlay.classList.remove('open'); }
 
-            iconBtn.addEventListener('click', openMap);
-            if (closeBtn) closeBtn.addEventListener('click', closeMap);
-            modal.addEventListener('click', function (e) { if (e.target === modal) closeMap(); });
-            document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeMap(); });
+            // Delegate so it works after PJAX reloads the contact page content
+            document.addEventListener('click', function (e) {
+                var btn = e.target.closest('#map-icon-btn');
+                if (btn) { e.preventDefault(); openMap(); }
+            });
+
+            closeBtn.addEventListener('click', closeMap);
+
+            overlay.addEventListener('click', function (e) {
+                if (e.target === overlay) closeMap();
+            });
+
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape') closeMap();
+            });
         })();
     </script>
 
