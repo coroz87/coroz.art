@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <title>404 – Page Not Found | Coroz</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="The page you were looking for could not be found. Return to Coroz – Art & Design Studio.">
+    <meta name="robots" content="noindex, follow">
+
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="css/style.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet"
+        type="text/css">
+
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #1a1a1a;
+            background: #1a1a1a url(images/dark_bg.jpg) center center / cover fixed;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        @media (max-width: 768px) {
+
+            html,
+            body {
+                background: #1a1a1a url(images/dark_bg\ m.jpg) center center / cover fixed;
+            }
+        }
+
+        /* ── Header ── */
+        .menu_block {
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            right: 0;
+            height: 60px;
+            width: 100%;
+            background-color: #fff;
+            box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo a {
+            line-height: 60px;
+            font-size: 26px;
+            color: #333;
+            text-decoration: none;
+        }
+
+        .logo a span {
+            display: inline-block;
+            padding-right: 18px;
+        }
+
+        .logo a span.b1 {
+            font-weight: 900;
+        }
+
+        .logo a span.b3 {
+            font-weight: 400;
+        }
+
+        .logo a span.b4 {
+            font-weight: 300;
+        }
+
+        /* ── 404 Content ── */
+        .not-found-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 80px 20px 40px;
+            box-sizing: border-box;
+            animation: fadeInPage 1.8s cubic-bezier(0.075, 0.82, 0.165, 1) forwards;
+        }
+
+        @keyframes fadeInPage {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .not-found-inner {
+            max-width: 480px;
+        }
+
+        /* Big favicon-style "C" logo */
+        .not-found-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #000;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 32px;
+            box-shadow:
+                0 0 18px 6px rgba(255, 255, 255, 0.35),
+                0 0 44px 16px rgba(255, 255, 255, 0.12),
+                0 4px 20px rgba(0, 0, 0, 0.6);
+        }
+
+        .not-found-icon img {
+            width: 44px;
+            height: 44px;
+            object-fit: contain;
+            display: block;
+        }
+
+        .not-found-code {
+            font-family: 'Roboto', sans-serif;
+            font-weight: 100;
+            font-size: 120px;
+            line-height: 1;
+            color: rgba(255, 255, 255, 0.12);
+            letter-spacing: -4px;
+            margin: 0 0 -10px;
+            /* 10px more separation from title below */
+            user-select: none;
+        }
+
+        .not-found-title {
+            font-family: 'Roboto', sans-serif;
+            font-weight: 700;
+            font-size: 22px;
+            color: #fff;
+            margin: 0 0 14px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .not-found-sub {
+            font-family: 'Roboto', sans-serif;
+            font-weight: 300;
+            font-size: 15px;
+            color: rgba(255, 255, 255, 0.55);
+            line-height: 1.7;
+            margin: 0 0 40px;
+        }
+
+        .not-found-btn {
+            display: inline-block;
+            padding: 13px 36px;
+            background: #fff;
+            color: #333;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 700;
+            font-size: 13px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .not-found-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+        }
+
+        .not-found-divider {
+            width: 40px;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.25);
+            margin: 40px auto;
+        }
+
+        .not-found-nav {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .not-found-nav a {
+            font-family: 'Roboto', sans-serif;
+            font-weight: 400;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.45);
+            text-decoration: none;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: color 0.25s ease;
+        }
+
+        .not-found-nav a:hover {
+            color: #fff;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <div class="menu_block">
+        <div class="container clearfix">
+            <div class="logo pull-left">
+                <a href="/home/"><span class="b1">COROZ</span><span class="b3">|</span><span class="b4">Arts &amp;
+                        Design</span></a>
+            </div>
+            <a class="menu_toggler" href="javascript:void(0);"><i class="fa fa-bars"></i></a>
+            <!-- MENU -->
+            <div class="pull-right">
+                <nav class="navmenu center">
+                    <ul>
+                        <li class="scroll_btn"><a href="/home/">HOME</a></li>
+                        <li class="sub-menu">
+                            <a href="/2dprojects/">2D PROJECTS</a>
+                            <ul>
+                                <li><a href="/2dprojects/#illustrations">Illustrations &amp; Sketches</a></li>
+                                <li><a href="/2dprojects/#graphic_design">Graphic Design</a></li>
+                            </ul>
+                        <li class="sub-menu">
+                            <a href="/3dprojects/">3D PROJECTS</a>
+                            <ul>
+                                <li><a href="/3dprojects/#3d_design">3D Design</a></li>
+                                <li><a href="/3dprojects/#3d_art">3D Art</a></li>
+                            </ul>
+                        <li class="scroll_btn"><a href="/arts/">ARTWORK</a></li>
+                        <li class="scroll_btn"><a href="/contact/">CONTACT</a></li>
+                        <li class="theme-switch-wrapper">
+                            <label class="theme-switch" for="themeToggle404">
+                                <input type="checkbox" id="themeToggle404" />
+                                <div class="slider round">
+                                    <i class="fas fa-sun"></i>
+                                    <i class="fas fa-moon"></i>
+                                </div>
+                            </label>
+                        </li>
+                    </ul>
+                </nav>
+            </div><!-- //MENU -->
+        </div>
+    </div>
+
+    <!-- 404 CONTENT -->
+    <div class="not-found-page">
+        <div class="not-found-inner">
+
+            <!-- Favicon C icon in a white circle -->
+            <div class="not-found-icon">
+                <img src="images/icon.png" alt="Coroz logo" />
+            </div>
+
+            <div class="not-found-code">404</div>
+
+            <h1 class="not-found-title">Page Not Found</h1>
+            <p class="not-found-sub">
+                The page you're looking for doesn't exist or has been moved.<br>
+                Let's get you back to the good stuff.
+            </p>
+
+            <a href="/home/" class="not-found-btn">Back to Home</a>
+
+            <div class="not-found-divider"></div>
+
+            <!-- Quick nav links -->
+            <nav class="not-found-nav">
+                <a href="/arts/">Artwork</a>
+                <a href="/2dprojects/">2D Projects</a>
+                <a href="/3dprojects/">3D Projects</a>
+                <a href="/contact/">Contact</a>
+            </nav>
+
+        </div>
+    </div>
+
+</body>
+
+</html>
