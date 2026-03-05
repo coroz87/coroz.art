@@ -166,16 +166,14 @@ document.addEventListener('DOMContentLoaded', function () {
 				document.body.classList.remove('page-leaving');
 				document.body.classList.add('page-entering');
 
-				// Re-initialize page-specific scripts on the new content
-				window.dispatchEvent(new Event('pjax:complete'));
-				window.dispatchEvent(new Event('resize'));
-
-				// Re-bind superfish nav and mobile toggler in case they've detached
-				if (window.jQuery && window.$.fn.superfish) {
-					if ($(window).width() >= 992) {
-						$('.navmenu ul').superfish();
-					}
-				}
+				// Wait for two animation frames so the browser fully paints and lays out the new DOM
+				// before re-initialising any scripts (otherwise homeHeight, Swiper widths etc get wrong values)
+				requestAnimationFrame(function () {
+					requestAnimationFrame(function () {
+						window.dispatchEvent(new Event('pjax:complete'));
+						window.dispatchEvent(new Event('resize'));
+					});
+				});
 
 				// Handle hash scroll after PJAX swap
 				var hash = new URL(dest, window.location.href).hash;
@@ -260,6 +258,13 @@ window.initCorozScripts = function () {
 	$(document).off('click', '.navmenu a').on('click', '.navmenu a', function () {
 		if ($(window).width() < 992) {
 			$('.navmenu').slideUp(200);
+		}
+	});
+
+	// Auto-close mobile menu when the dark/light toggle is used
+	$(document).off('change', '.navmenu .theme-switch input').on('change', '.navmenu .theme-switch input', function () {
+		if ($(window).width() < 992) {
+			setTimeout(function () { $('.navmenu').slideUp(200); }, 300); // tiny delay so toggle visually registers first
 		}
 	});
 
@@ -352,7 +357,7 @@ window.initCorozScripts = function () {
 
 	homeHeight();
 
-	$(window).resize(function () {
+	$(window).off('resize.corozHome').on('resize.corozHome', function () {
 		homeHeight();
 	});
 

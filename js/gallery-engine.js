@@ -635,5 +635,8 @@ window.addEventListener('pjax:complete', function () {
         });
     }
     window._gridInstances = [];
-    window.initGalleryEngine();
+    // Use rAF so gallery measure runs after the browser has painted the new content
+    requestAnimationFrame(function () {
+        window.initGalleryEngine();
+    });
 });
