@@ -278,94 +278,96 @@ window.initCorozScripts = function () {
 	/*-----------------------------------------------------------------------------------*/
 	/*	FLEXSLIDER
 	/*-----------------------------------------------------------------------------------*/
-	// Clean up existing instances before re-init if PJAX fired
-	if ($('.flexslider.top_slider').length && $('.flexslider.top_slider').data('flexslider')) {
-		$('.flexslider.top_slider').flexslider('destroy');
-	}
-	//Top Slider
-	$('.flexslider.top_slider').flexslider({
-		animation: "fade",
-		controlNav: true,
-		directionNav: false,
-		animationLoop: true,
-		slideshow: true,
-		slideshowSpeed: 6000, /* Start at 6s for the first slide */
-		animationSpeed: 1500,
-		pauseOnAction: false,
-		useCSS: true,
-		prevText: "",
-		nextText: "",
-		before: function (slider) {
-			var masterBtn = document.getElementById('master_slide_btn');
-			if (!masterBtn) return;
+	try {
+		// Clean up existing instances before re-init if PJAX fired
+		if ($('.flexslider.top_slider').length && $('.flexslider.top_slider').data('flexslider')) {
+			$('.flexslider.top_slider').flexslider('destroy');
+		}
+		//Top Slider
+		$('.flexslider.top_slider').flexslider({
+			animation: "fade",
+			controlNav: true,
+			directionNav: false,
+			animationLoop: true,
+			slideshow: true,
+			slideshowSpeed: 6000, /* Start at 6s for the first slide */
+			animationSpeed: 1500,
+			pauseOnAction: false,
+			useCSS: true,
+			prevText: "",
+			nextText: "",
+			before: function (slider) {
+				var masterBtn = document.getElementById('master_slide_btn');
+				if (!masterBtn) return;
 
-			var nextSlide = slider.animatingTo;
+				var nextSlide = slider.animatingTo;
 
-			// Slide 0 (Arts & Design): No button, fade it out instantly
-			if (nextSlide === 0) {
-				masterBtn.style.transition = 'opacity 0.5s ease';
-				masterBtn.style.opacity = '0';
-				masterBtn.style.pointerEvents = 'none';
-			}
-			// Slide 1 (2D): Fade in slowly AFTER all text is done (2.0s delay)
-			else if (nextSlide === 1) {
-				masterBtn.href = '../2dprojects/';
-				masterBtn.style.transition = 'opacity 2.0s ease 2.0s';
-				masterBtn.style.opacity = '1';
-				masterBtn.style.pointerEvents = 'auto';
-			}
-			// Slide 2 (3D) & Slide 3 (Arts): Keep persistent, switch links instantly
-			else if (nextSlide === 2 || nextSlide === 3) {
-				masterBtn.href = (nextSlide === 2) ? '../3dprojects/' : '../arts/';
-				masterBtn.style.transition = 'none'; // Don't fade out/in, stay solid during transition
-				masterBtn.style.opacity = '1';
-				masterBtn.style.pointerEvents = 'auto';
-			}
-		},
-		after: function (slider) {
-			// If we just transitioned TO slide 0 (the first slide), set the next wait to 6s.
-			// Otherwise (slide 1, 2, or 3), set next wait to 7s.
-			var speed = (slider.currentSlide === 0) ? 6000 : 7000;
+				// Slide 0 (Arts & Design): No button, fade it out instantly
+				if (nextSlide === 0) {
+					masterBtn.style.transition = 'opacity 0.5s ease';
+					masterBtn.style.opacity = '0';
+					masterBtn.style.pointerEvents = 'none';
+				}
+				// Slide 1 (2D): Fade in slowly AFTER all text is done (2.0s delay)
+				else if (nextSlide === 1) {
+					masterBtn.href = '../2dprojects/';
+					masterBtn.style.transition = 'opacity 2.0s ease 2.0s';
+					masterBtn.style.opacity = '1';
+					masterBtn.style.pointerEvents = 'auto';
+				}
+				// Slide 2 (3D) & Slide 3 (Arts): Keep persistent, switch links instantly
+				else if (nextSlide === 2 || nextSlide === 3) {
+					masterBtn.href = (nextSlide === 2) ? '../3dprojects/' : '../arts/';
+					masterBtn.style.transition = 'none'; // Don't fade out/in, stay solid during transition
+					masterBtn.style.opacity = '1';
+					masterBtn.style.pointerEvents = 'auto';
+				}
+			},
+			after: function (slider) {
+				// If we just transitioned TO slide 0 (the first slide), set the next wait to 6s.
+				// Otherwise (slide 1, 2, or 3), set next wait to 7s.
+				var speed = (slider.currentSlide === 0) ? 6000 : 7000;
 
-			if (slider.vars.slideshowSpeed !== speed) {
-				slider.vars.slideshowSpeed = speed;
+				if (slider.vars.slideshowSpeed !== speed) {
+					slider.vars.slideshowSpeed = speed;
 
-				// Flexslider doesn't update its internal interval dynamically, so we must 
-				// pause and play manually to lock in the new delay interval on the fly
-				if (slider.playing) {
-					slider.pause();
-					slider.play();
+					// Flexslider doesn't update its internal interval dynamically, so we must 
+					// pause and play manually to lock in the new delay interval on the fly
+					if (slider.playing) {
+						slider.pause();
+						slider.play();
+					}
 				}
 			}
-		}
-	});
+		});
 
-	homeHeight();
-
-
-	jQuery('.flexslider.top_slider .flex-direction-nav').addClass('container');
-
-
-	//Vision Slider
-	$('.flexslider.portfolio_single_slider').flexslider({
-		animation: "fade",
-		controlNav: true,
-		directionNav: true,
-		animationLoop: false,
-		slideshow: false,
-	});
-
-	homeHeight();
-
-	$(window).off('resize.corozHome').on('resize.corozHome', function () {
 		homeHeight();
-	});
 
-	function homeHeight() {
-		var wh = jQuery(window).height() - 60;
-		jQuery('.top_slider, .top_slider .slides li').css('height', wh);
-		jQuery('#home').css('height', wh);
-	}
+
+		jQuery('.flexslider.top_slider .flex-direction-nav').addClass('container');
+
+
+		//Vision Slider
+		$('.flexslider.portfolio_single_slider').flexslider({
+			animation: "fade",
+			controlNav: true,
+			directionNav: true,
+			animationLoop: false,
+			slideshow: false,
+		});
+
+		homeHeight();
+
+		$(window).off('resize.corozHome').on('resize.corozHome', function () {
+			homeHeight();
+		});
+
+		function homeHeight() {
+			var wh = jQuery(window).height() - 60;
+			jQuery('.top_slider, .top_slider .slides li').css('height', wh);
+			jQuery('#home').css('height', wh);
+		}
+	} catch (e) { console.warn("FlexSlider Init Warning:", e); }
 
 
 
@@ -378,19 +380,22 @@ window.initCorozScripts = function () {
 	/*-----------------------------------------------------------------------------------*/
 	/*	BLACK AND WHITE
 	/*-----------------------------------------------------------------------------------*/
-	if ($('.client_img').length && $.fn.BlackAndWhite) {
-		$('.client_img').BlackAndWhite({
-			hoverEffect: true,
-			webworkerPath: false,
-			responsive: true,
-			invertHoverEffect: false,
-			intensity: 1,
-			speed: {
-				fadeIn: 200,
-				fadeOut: 800
-			}
-		});
-	}
+	try {
+		if ($('.client_img').length && $.fn.BlackAndWhite) {
+			$('.client_img').BlackAndWhite({
+				hoverEffect: true,
+				webworkerPath: false,
+				responsive: true,
+				invertHoverEffect: false,
+				intensity: 1,
+				speed: {
+					fadeIn: 200,
+					fadeOut: 800
+				}
+			});
+		}
+	} catch (e) { console.warn("BlackAndWhite Init Warning:", e); }
+
 
 	/*-----------------------------------------------------------------------------------*/
 	/*	IFRAME TRANSPARENT
@@ -430,46 +435,6 @@ window.initCorozScripts = function () {
 
 
 	/*-----------------------------------------------------------------------------------*/
-	/*  CONTACT FORM AJAX SUBMIT
-	/*-----------------------------------------------------------------------------------*/
-	$(document).ready(function () {
-
-		$('#contact-form-face').on('submit', function (e) {
-			e.preventDefault(); // prevent page reload
-
-			var form = $(this);
-
-			$.ajax({
-				url: "https://formsubmit.co/ajax/coroz.art@gmail.com",
-				method: "POST",
-				data: form.serialize(),
-				dataType: "json",
-				success: function () {
-
-					$('#note').html(
-						'<div class="success_message">Thank you! Your message has been sent.</div>'
-					).fadeIn();
-
-					form.trigger("reset");
-
-					setTimeout(function () {
-						$('#note').fadeOut();
-					}, 4000);
-				},
-				error: function () {
-					$('#note').html(
-						'<div class="notification_error">Oops! Something went wrong.</div>'
-					).fadeIn();
-				}
-			});
-		});
-
-	});
-
-
-
-
-	/*-----------------------------------------------------------------------------------*/
 	/*	MAGNIFIC POPUP / GLIGHTBOX
 	/*-----------------------------------------------------------------------------------*/
 	// Destroy any existing glightbox instances left over from previous page to prevent duplicate overlays breaking swipes
@@ -484,7 +449,8 @@ window.initCorozScripts = function () {
 		dragToleranceX: 40,
 		dragToleranceY: 150,
 		zoomable: true,
-		draggable: true
+		draggable: true,
+		moreLength: 0 // 0 disables the "See more" truncation completely
 	});
 
 	// Native Mouse Wheel to switch Images within Lightbox (Globally applied to all GLightbox instances)
@@ -541,72 +507,98 @@ window.initCorozScripts = function () {
 
 
 
-	// Map Modal (Contact page)
-	var modal = document.getElementById('map-modal');
-	var mapBtn = document.getElementById('map-icon-btn');
-	var mapClose = document.getElementById('map-close');
-	if (modal && mapBtn && mapClose) {
-		mapBtn.addEventListener('click', function () { modal.style.display = 'flex'; });
-		mapClose.addEventListener('click', function () { modal.style.display = 'none'; });
-		modal.addEventListener('click', function (e) {
-			if (e.target === modal) modal.style.display = 'none';
-		});
-	}
+	// Map Modal (Contact page) - using event delegation for PJAX safety
+	$(document).off('click.mapModalOpen').on('click.mapModalOpen', '#map-icon-btn', function () {
+		$('#map-modal').css('display', 'flex');
+	});
+	$(document).off('click.mapModalClose').on('click.mapModalClose', '#map-close', function () {
+		$('#map-modal').css('display', 'none');
+	});
+	$(document).off('click.mapModalBg').on('click.mapModalBg', '#map-modal', function (e) {
+		if (e.target === this) {
+			$(this).css('display', 'none');
+		}
+	});
 
 	/*-----------------------------------------------------------------------------------*/
 	/*	SWIPER SLIDERS
 	/*-----------------------------------------------------------------------------------*/
-	const sliders = document.querySelectorAll('.team_slider, .news_slider');
+	try {
+		const sliders = document.querySelectorAll('.team_slider, .news_slider');
 
-	sliders.forEach(function (slider) {
-		// Prevent double-init
-		if (slider.swiper) slider.swiper.destroy(true, true);
+		sliders.forEach(function (slider) {
+			// Prevent double-init
+			if (slider.swiper) slider.swiper.destroy(true, true);
 
-		const swiper = new Swiper(slider, {
-			loop: true,
-			slidesPerView: "auto",
-			spaceBetween: 0,
-			speed: 8000,
-			allowTouchMove: true,
-			grabCursor: true,
-			loopedSlides: 15, // Provide massive amount of cloned slides so rapid reverse dragging/scrolling never hits the edge
-			autoplay: {
-				delay: 0,
-				disableOnInteraction: false,
-			},
-			on: {
-				init: function () {
-					// Add loaded class to trigger CSS fade-in
-					this.el.classList.add('loaded');
+			const swiper = new Swiper(slider, {
+				loop: true,
+				slidesPerView: "auto",
+				spaceBetween: 0,
+				speed: 8000,
+				allowTouchMove: true,
+				grabCursor: true,
+				loopedSlides: 15, // Provide massive amount of cloned slides so rapid reverse dragging/scrolling never hits the edge
+				autoplay: {
+					delay: 0,
+					disableOnInteraction: false,
+				},
+				on: {
+					init: function () {
+						// Add loaded class to trigger CSS fade-in
+						this.el.classList.add('loaded');
+					}
 				}
-			}
-		});
+			});
 
-		// Force linear motion
-		swiper.wrapperEl.style.transitionTimingFunction = 'linear';
+			// Force linear motion
+			swiper.wrapperEl.style.transitionTimingFunction = 'linear';
 
-		// Custom Mouse Wheel Navigation (Reversed natural scroll to match gallery)
-		slider.addEventListener('wheel', (e) => {
-			if (e.deltaY !== 0) {
-				e.preventDefault();
+			// Custom Mouse Wheel Navigation (Reversed natural scroll to match gallery)
+			slider.addEventListener('wheel', (e) => {
+				if (e.deltaY !== 0) {
+					e.preventDefault();
 
-				// Momentarily pause the autoplay animation to allow manual scroll
+					// Momentarily pause the autoplay animation to allow manual scroll
+					swiper.autoplay.stop();
+
+					// To move seamlessly in reverse while respecting Swiper's internal loop bounds:
+					swiper.setTransition(0);
+					// Minus deltaY reverses the scroll input direction
+					swiper.setTranslate(swiper.getTranslate() - e.deltaY);
+
+					// Force Swiper to recalculate loop boundaries if we scroll outside them
+					if (swiper.isBeginning || swiper.isEnd) {
+						swiper.loopFix();
+					}
+
+					// Re-engage auto-play motion fluidly after manual wheel
+					clearTimeout(slider.wheelTimeout);
+					slider.wheelTimeout = setTimeout(() => {
+						// We must calculate the remaining distance of the current slide to resume the exact speed linear animation
+						let resumeSpeed = swiper.params.speed;
+						try {
+							const translate = Math.abs(swiper.getTranslate());
+							const slideWidth = (swiper.slides && swiper.slides.length > 0)
+								? swiper.slides[0].offsetWidth
+								: (swiper.width / swiper.params.slidesPerView);
+
+							if (slideWidth > 0) {
+								const remainingDistance = slideWidth - (translate % slideWidth);
+								resumeSpeed = (remainingDistance / slideWidth) * swiper.params.speed;
+							}
+						} catch (mathErr) { }
+
+						swiper.setTransition(resumeSpeed);
+						swiper.slideNext(resumeSpeed);
+						swiper.autoplay.start();
+					}, 100);
+				}
+			}, { passive: false });
+
+			// Listen to touch/drag events to also resume autoplay correctly instead of it stalling
+			swiper.on('touchEnd', () => {
 				swiper.autoplay.stop();
-
-				// To move seamlessly in reverse while respecting Swiper's internal loop bounds:
-				swiper.setTransition(0);
-				// Minus deltaY reverses the scroll input direction
-				swiper.setTranslate(swiper.getTranslate() - e.deltaY);
-
-				// Force Swiper to recalculate loop boundaries if we scroll outside them
-				if (swiper.isBeginning || swiper.isEnd) {
-					swiper.loopFix();
-				}
-
-				// Re-engage auto-play motion fluidly after manual wheel
-				clearTimeout(slider.wheelTimeout);
-				slider.wheelTimeout = setTimeout(() => {
-					// We must calculate the remaining distance of the current slide to resume the exact speed linear animation
+				setTimeout(() => {
 					let resumeSpeed = swiper.params.speed;
 					try {
 						const translate = Math.abs(swiper.getTranslate());
@@ -624,83 +616,72 @@ window.initCorozScripts = function () {
 					swiper.slideNext(resumeSpeed);
 					swiper.autoplay.start();
 				}, 100);
-			}
-		}, { passive: false });
-
-		// Listen to touch/drag events to also resume autoplay correctly instead of it stalling
-		swiper.on('touchEnd', () => {
-			swiper.autoplay.stop();
-			setTimeout(() => {
-				let resumeSpeed = swiper.params.speed;
-				try {
-					const translate = Math.abs(swiper.getTranslate());
-					const slideWidth = (swiper.slides && swiper.slides.length > 0)
-						? swiper.slides[0].offsetWidth
-						: (swiper.width / swiper.params.slidesPerView);
-
-					if (slideWidth > 0) {
-						const remainingDistance = slideWidth - (translate % slideWidth);
-						resumeSpeed = (remainingDistance / slideWidth) * swiper.params.speed;
-					}
-				} catch (mathErr) { }
-
-				swiper.setTransition(resumeSpeed);
-				swiper.slideNext(resumeSpeed);
-				swiper.autoplay.start();
-			}, 100);
+			});
 		});
-	});
-
-	/*-----------------------------------------------------------------------------------*/
-	/*	HEADER SCROLL NAVIGATION
-	/*-----------------------------------------------------------------------------------*/
-	const pages = [
-		'home',
-		'2dprojects',
-		'3dprojects',
-		'arts',
-		'contact'
-	];
-
-	const headerSelector = document.querySelector('.menu_block');
-	if (headerSelector) {
-		let isNavigating = false;
-		headerSelector.addEventListener('wheel', function (e) {
-			if (isNavigating) return;
-
-			// Get the current section name from the URL path
-			let pathParts = window.location.pathname.split('/').filter(p => p !== '');
-			let currentSection = pathParts[pathParts.length - 1] || 'home';
-
-			// Detect if we are in index.html and if it shifted the path
-			if (currentSection === 'index.html') {
-				currentSection = pathParts[pathParts.length - 2] || 'home';
-			}
-
-			let currentIndex = pages.indexOf(currentSection);
-			if (currentIndex === -1) currentIndex = 0; // Fallback to home
-
-			let targetIndex = currentIndex;
-			if (e.deltaY > 0) {
-				targetIndex = (currentIndex - 1 + pages.length) % pages.length;
-			} else if (e.deltaY < 0) {
-				targetIndex = (currentIndex + 1) % pages.length;
-			}
-
-			if (targetIndex !== currentIndex) {
-				e.preventDefault();
-				isNavigating = true;
-
-				document.body.classList.add('page-leaving');
-				setTimeout(function () {
-					let suffix = window.location.protocol === 'file:' ? 'index.html' : '';
-					window.location.href = '../' + pages[targetIndex] + '/' + suffix;
-				}, 400);
-			}
-		}, { passive: false });
+	} catch (e) {
+		console.warn("Swiper Init Warning:", e);
 	}
 
 } // <-- END of window.initCorozScripts = function()
+
+/*-----------------------------------------------------------------------------------*/
+/*	HEADER SCROLL NAVIGATION (Runs ONCE per session because header is persistent)
+/*-----------------------------------------------------------------------------------*/
+const pages = [
+	'home',
+	'2dprojects',
+	'3dprojects',
+	'arts',
+	'contact'
+];
+
+const headerSelector = document.querySelector('.menu_block');
+if (headerSelector) {
+	let isNavigating = false;
+	headerSelector.addEventListener('wheel', function (e) {
+		if (isNavigating) return;
+
+		// Get the current section name from the URL path
+		let pathParts = window.location.pathname.split('/').filter(p => p !== '');
+		let currentSection = pathParts[pathParts.length - 1] || 'home';
+
+		// Detect if we are in index.html and if it shifted the path
+		if (currentSection === 'index.html') {
+			currentSection = pathParts[pathParts.length - 2] || 'home';
+		}
+
+		let currentIndex = pages.indexOf(currentSection);
+		if (currentIndex === -1) currentIndex = 0; // Fallback to home
+
+		let targetIndex = currentIndex;
+		if (e.deltaY > 0) {
+			targetIndex = (currentIndex - 1 + pages.length) % pages.length;
+		} else if (e.deltaY < 0) {
+			targetIndex = (currentIndex + 1) % pages.length;
+		}
+
+		if (targetIndex !== currentIndex) {
+			e.preventDefault();
+			isNavigating = true;
+
+			document.body.classList.add('page-leaving');
+			setTimeout(function () {
+				let suffix = window.location.protocol === 'file:' ? 'index.html' : '';
+				// Allow re-navigation after transition duration
+				setTimeout(() => { isNavigating = false; }, 1000);
+
+				// Ensure smooth transition regardless of pushState
+				let targetUrl = '../' + pages[targetIndex] + '/' + suffix;
+				// Dispatch click to trigger our robust PJAX interceptor instead of hard redirect
+				let tempLink = document.createElement('a');
+				tempLink.href = targetUrl;
+				document.body.appendChild(tempLink);
+				tempLink.click();
+				tempLink.remove();
+			}, 400);
+		}
+	}, { passive: false });
+}
 
 // === BIND MASTER SCRIPT INITIALIZER ===
 // Fire on initial page load
