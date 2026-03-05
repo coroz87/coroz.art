@@ -24,6 +24,11 @@ document.addEventListener('DOMContentLoaded', function () {
 	// Mark page as entering for the CSS fade-in animation
 	document.body.classList.add('page-entering');
 
+	// Tag any original <style> blocks in the head so PJAX knows to clean them up
+	document.querySelectorAll('head > style').forEach(function (s, i) {
+		if (!s.id) s.id = 'pjax-original-style-' + i;
+	});
+
 	// --- DARK MODE THEME LOGIC ---
 	// 1. Check local storage on load
 	const savedTheme = localStorage.getItem('coroz_theme');
@@ -123,8 +128,9 @@ document.addEventListener('DOMContentLoaded', function () {
 				}
 
 				// Swap per-page inline styles (replace existing pjax style tag)
-				var oldPjaxStyle = document.getElementById('pjax-page-style');
-				if (oldPjaxStyle) oldPjaxStyle.remove();
+				document.querySelectorAll('style[id^="pjax-page-style"], style[id^="pjax-original-style"]').forEach(function (s) {
+					s.remove();
+				});
 				if (newStyles) {
 					var styleTag = document.createElement('style');
 					styleTag.id = 'pjax-page-style';
@@ -232,6 +238,17 @@ window.initCorozScripts = function () {
 	/* Superfish */
 	if ($(window).width() >= 992) {
 		$('.navmenu ul').superfish();
+	}
+
+	// Forcibly close any dropdowns that may have stayed open across PJAX navigations
+	$('.navmenu ul li').removeClass('sfHover');
+	$('.navmenu ul ul').css('display', 'none');
+
+	// Close mobile menu on navigation (desktop nav always stays visible)
+	if ($(window).width() < 992) {
+		$('.navmenu').slideUp(0);
+	} else {
+		$('.navmenu').css('display', ''); // ensure desktop nav is always visible
 	}
 
 	// Mobile Menu Toggler
@@ -448,21 +465,22 @@ window.initCorozScripts = function () {
 
 
 	/*-----------------------------------------------------------------------------------*/
-	/*	GLIGHTBOX
+	/*	MAGNIFIC POPUP / GLIGHTBOX
 	/*-----------------------------------------------------------------------------------*/
-	if (typeof GLightbox !== 'undefined') {
-		const lightbox = GLightbox({
-			selector: '.glightbox',
-			touchNavigation: true,
-			loop: true,
-			zoomable: true,
-			draggable: true,
-			dragAutoSnap: true,
-			autoplayVideos: false,
-			descriptionLength: 0,
-			descPosition: 'bottom'
-		});
+	// Destroy any existing glightbox instances left over from previous page to prevent duplicate overlays breaking swipes
+	if (window.corozLightbox) {
+		try { window.corozLightbox.destroy(); } catch (e) { }
 	}
+	window.corozLightbox = GLightbox({
+		selector: '.glightbox, .zoom',
+		touchNavigation: true,
+		loop: true,
+		autoplayVideos: true,
+		dragToleranceX: 40,
+		dragToleranceY: 150,
+		zoomable: true,
+		draggable: true
+	});
 
 	// Native Mouse Wheel to switch Images within Lightbox (Globally applied to all GLightbox instances)
 	window.addEventListener('wheel', (e) => {
@@ -495,12 +513,40 @@ window.initCorozScripts = function () {
 		}
 	}, { passive: false });
 
+	// Contact Form AJAX Submit (Delegated so it works on PJAX)
+	$('#contact-form-face').off('submit').on('submit', function (e) {
+		e.preventDefault();
+		var form = $(this);
+		$.ajax({
+			url: "https://formsubmit.co/ajax/coroz.art@gmail.com",
+			method: "POST",
+			data: form.serialize(),
+			dataType: "json",
+			success: function (response) {
+				$('#note').html('<div class="notification_ok">Thank you! Your message has been sent.</div>');
+				form.trigger('reset');
+			},
+			error: function (err) {
+				$('#note').html('<div class="notification_error">There was an error sending your message. Please try again later.</div>');
+			}
+		});
+	});
 
 
 
 
 
-
+	// Map Modal (Contact page)
+	var modal = document.getElementById('map-modal');
+	var mapBtn = document.getElementById('map-icon-btn');
+	var mapClose = document.getElementById('map-close');
+	if (modal && mapBtn && mapClose) {
+		mapBtn.addEventListener('click', function () { modal.style.display = 'flex'; });
+		mapClose.addEventListener('click', function () { modal.style.display = 'none'; });
+		modal.addEventListener('click', function (e) {
+			if (e.target === modal) modal.style.display = 'none';
+		});
+	}
 
 	/*-----------------------------------------------------------------------------------*/
 	/*	SWIPER SLIDERS

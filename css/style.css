@@ -3569,14 +3569,19 @@ html {
 /* DARK MODE
 /* ----------------------------------------------------------------------------------- */
 body.dark-mode {
-	background-color: #141414 !important;
+	background-color: #1a1a1a !important;
 	color: #e0e0e0 !important;
 }
 
-body.dark-mode .menu_block,
+body.dark-mode .menu_block {
+	background-color: #1a1a1a !important;
+	box-shadow: 0 4px 8px -2px rgba(0, 0, 0, 0.9);
+	/* bottom-only, black */
+}
+
 body.dark-mode .navmenu {
-	background-color: #141414 !important;
-	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+	background-color: #1a1a1a !important;
+	box-shadow: none !important;
 }
 
 body.dark-mode .logo a,
@@ -3599,7 +3604,9 @@ body.dark-mode .menu_toggler i {
 }
 
 body.dark-mode .sub-menu ul {
-	background-color: #1f1f1f !important;
+	background-color: #222 !important;
+	border-top: 1px solid #333;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
 }
 
 body.dark-mode .sub-menu ul li a {
@@ -3629,6 +3636,12 @@ body.dark-mode p,
 body.dark-mode span,
 body.dark-mode .contact-content footer p {
 	color: #d0d0d0 !important;
+}
+
+/* Home slider titles and descriptions stay white in dark mode */
+body.dark-mode .flex_caption1 p,
+body.dark-mode .flex_caption1 span {
+	color: #ffffff !important;
 }
 
 body.dark-mode a {

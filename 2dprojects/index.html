@@ -882,29 +882,6 @@
         </div>
     </main>
 
-    <!-- GALLERY ARROW SCROLL SCRIPT -->
-    <script>
-        (function () {
-            var SCROLL_STEP = 420;
-            var btnLeft = document.getElementById('gallery-arrow-left');
-            var btnRight = document.getElementById('gallery-arrow-right');
-
-            function activeGrid() {
-                return document.querySelector('.gallery-grid.active');
-            }
-
-            function smoothScroll(grid, delta) {
-                grid.scrollBy({ left: delta, behavior: 'smooth' });
-            }
-
-            btnLeft.addEventListener('click', function () {
-                var g = activeGrid(); if (g) smoothScroll(g, -SCROLL_STEP);
-            });
-            btnRight.addEventListener('click', function () {
-                var g = activeGrid(); if (g) smoothScroll(g, SCROLL_STEP);
-            });
-        })();
-    </script>
 
     <!-- TAB SWITCHING SCRIPT -->
     <script src="../js/gallery-engine.js"></script>

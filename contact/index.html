@@ -79,6 +79,10 @@
         /* Stripe styling */
         .clients-stripe {
             flex-shrink: 0;
+            position: sticky;
+            top: 60px;
+            /* = height of .menu_block header */
+            z-index: 10;
             background: #ffffff;
             border-bottom: 1px solid #e8e8e8;
             margin-bottom: 30px;
@@ -389,29 +393,8 @@
 
     </div>
 
-    <script>
-        // AJAX form submit for contact page
-        $(document).ready(function () {
-            $('#contact-form-face').on('submit', function (e) {
-                e.preventDefault();
-                var form = $(this);
-                $.ajax({
-                    url: "https://formsubmit.co/ajax/coroz.art@gmail.com",
-                    method: "POST",
-                    data: form.serialize(),
-                    dataType: "json",
-                    success: function () {
-                        $('#note').html('<div class="success_message">Thank you! Your message has been sent.</div>').fadeIn();
-                        form.trigger("reset");
-                        setTimeout(function () { $('#note').fadeOut(); }, 4000);
-                    },
-                    error: function () {
-                        $('#note').html('<div class="notification_error">Oops! Something went wrong.</div>').fadeIn();
-                    }
-                });
-            });
-        });
-    </script>
+
+
 
     <!-- MAP MODAL -->
     <div id="map-modal" style="
@@ -451,20 +434,8 @@
         </div>
     </div>
 
-    <script>
-        (function () {
-            var modal = document.getElementById('map-modal');
-            var btn = document.getElementById('map-icon-btn');
-            var close = document.getElementById('map-close');
-            function openMap() { modal.style.display = 'flex'; }
-            function closeMap() { modal.style.display = 'none'; }
-            btn.addEventListener('click', openMap);
-            close.addEventListener('click', closeMap);
-            modal.addEventListener('click', function (e) {
-                if (e.target === modal) closeMap();
-            });
-        })();
-    </script>
+
+
 
 </body>
 

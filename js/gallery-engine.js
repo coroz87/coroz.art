@@ -38,6 +38,23 @@ window.initGalleryEngine = function () {
     // Trigger immediately if a user arrives via a hash link
     activateTabFromHash();
 
+    // --- Gallery Arrow Scroll Logic ---
+    const btnLeft = document.getElementById('gallery-arrow-left');
+    const btnRight = document.getElementById('gallery-arrow-right');
+    const SCROLL_STEP = 420;
+
+    if (btnLeft && btnRight) {
+        const activeGrid = () => document.querySelector('.gallery-grid.active');
+        const smoothScroll = (grid, delta) => grid.scrollBy({ left: delta, behavior: 'smooth' });
+
+        btnLeft.addEventListener('click', () => {
+            const g = activeGrid(); if (g) smoothScroll(g, -SCROLL_STEP);
+        });
+        btnRight.addEventListener('click', () => {
+            const g = activeGrid(); if (g) smoothScroll(g, SCROLL_STEP);
+        });
+    }
+
     // Responsive Infinite Scrolling (Desktop horizontal / Mobile vertical)
     class InfiniteGrid {
         constructor(grid) {
@@ -134,17 +151,7 @@ window.initGalleryEngine = function () {
             this.grid.addEventListener('touchend', this.onTouchEnd);
 
             setTimeout(() => {
-                if (typeof GLightbox !== 'undefined') {
-                    GLightbox({
-                        selector: '.glightbox',
-                        touchNavigation: true,
-                        dragToleranceX: 40,
-                        dragToleranceY: 150,
-                        dragAutoSnap: true,
-                        zoomable: true,
-                        draggable: true
-                    });
-                }
+                // GLightbox is now managed as a singleton globally in myscript.js
 
                 // Wait for images to load before fading in to avoid grey rectangle flashes
                 const images = this.grid.querySelectorAll('img');
