@@ -24,6 +24,35 @@ document.addEventListener('DOMContentLoaded', function () {
 	// Mark page as entering for the CSS fade-in animation
 	document.body.classList.add('page-entering');
 
+	// --- DARK MODE THEME LOGIC ---
+	// 1. Check local storage on load
+	const savedTheme = localStorage.getItem('coroz_theme');
+	if (savedTheme === 'dark') {
+		document.body.classList.add('dark-mode');
+		// Set the toggle switch to checked if we're in dark mode
+		const themeSwitches = document.querySelectorAll('.theme-switch input');
+		themeSwitches.forEach(sw => sw.checked = true);
+	}
+
+	// 2. Listen for clicks on the theme switch
+	document.body.addEventListener('change', function (e) {
+		if (e.target.matches('.theme-switch input')) {
+			// Toggle dark mode class on body
+			if (e.target.checked) {
+				document.body.classList.add('dark-mode');
+				localStorage.setItem('coroz_theme', 'dark');
+			} else {
+				document.body.classList.remove('dark-mode');
+				localStorage.setItem('coroz_theme', 'light');
+			}
+
+			// Keep all switches (e.g. if multiple exist) in sync
+			document.querySelectorAll('.theme-switch input').forEach(sw => {
+				sw.checked = e.target.checked;
+			});
+		}
+	});
+
 	function getContentFromDoc(doc) {
 		// Try each known page content container in priority order
 		return doc.querySelector('.subpage-main')
@@ -150,6 +179,8 @@ document.addEventListener('DOMContentLoaded', function () {
 					if (target && typeof target.click === 'function') {
 						setTimeout(function () { target.click(); }, 100);
 					}
+				} else {
+					window.scrollTo(0, 0);
 				}
 			})
 			.catch(function (err) {
@@ -196,28 +227,39 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-/* Superfish */
-jQuery(document).ready(function () {
+/* Coroz Master Script Initializer */
+window.initCorozScripts = function () {
+	/* Superfish */
 	if ($(window).width() >= 992) {
 		$('.navmenu ul').superfish();
 	}
 
 	// Mobile Menu Toggler
-	$('.menu_toggler').click(function () {
+	$('.menu_toggler').off('click').on('click', function () {
 		$('.navmenu').slideToggle();
 	});
-});
 
-jQuery(window).resize(function () {
-	if ($(window).width() > 991) {
-		$('.navmenu').css('display', '');
+	// Auto-close mobile menu when any nav link is tapped
+	$(document).off('click', '.navmenu a').on('click', '.navmenu a', function () {
+		if ($(window).width() < 992) {
+			$('.navmenu').slideUp(200);
+		}
+	});
+
+	// Re-bind window resize
+	$(window).off('resize.corozNav').on('resize.corozNav', function () {
+		if ($(window).width() > 991) {
+			$('.navmenu').css('display', '');
+		}
+	});
+
+	/*-----------------------------------------------------------------------------------*/
+	/*	FLEXSLIDER
+	/*-----------------------------------------------------------------------------------*/
+	// Clean up existing instances before re-init if PJAX fired
+	if ($('.flexslider.top_slider').length && $('.flexslider.top_slider').data('flexslider')) {
+		$('.flexslider.top_slider').flexslider('destroy');
 	}
-});
-
-/*-----------------------------------------------------------------------------------*/
-/*	FLEXSLIDER
-/*-----------------------------------------------------------------------------------*/
-jQuery(window).load(function () {
 	//Top Slider
 	$('.flexslider.top_slider').flexslider({
 		animation: "fade",
@@ -291,24 +333,17 @@ jQuery(window).load(function () {
 		slideshow: false,
 	});
 
-
-});
-
-jQuery(window).resize(function () {
 	homeHeight();
 
-});
+	$(window).resize(function () {
+		homeHeight();
+	});
 
-jQuery(document).ready(function () {
-	homeHeight();
-
-});
-
-function homeHeight() {
-	var wh = jQuery(window).height() - 60;
-	jQuery('.top_slider, .top_slider .slides li').css('height', wh);
-	jQuery('#home').css('height', wh);
-}
+	function homeHeight() {
+		var wh = jQuery(window).height() - 60;
+		jQuery('.top_slider, .top_slider .slides li').css('height', wh);
+		jQuery('#home').css('height', wh);
+	}
 
 
 
@@ -318,178 +353,147 @@ function homeHeight() {
 
 
 
-/*-----------------------------------------------------------------------------------*/
-/*	IFRAME TRANSPARENT
-/*-----------------------------------------------------------------------------------*/
-jQuery(document).ready(function () {
+	/*-----------------------------------------------------------------------------------*/
+	/*	BLACK AND WHITE
+	/*-----------------------------------------------------------------------------------*/
+	if ($('.client_img').length && $.fn.BlackAndWhite) {
+		$('.client_img').BlackAndWhite({
+			hoverEffect: true,
+			webworkerPath: false,
+			responsive: true,
+			invertHoverEffect: false,
+			intensity: 1,
+			speed: {
+				fadeIn: 200,
+				fadeOut: 800
+			}
+		});
+	}
+
+	/*-----------------------------------------------------------------------------------*/
+	/*	IFRAME TRANSPARENT
+	/*-----------------------------------------------------------------------------------*/
 	$("iframe").each(function () {
 		var ifr_source = $(this).attr('src');
 		var wmode = "wmode=transparent";
-		if (ifr_source.indexOf('?') != -1) {
+		if (ifr_source && ifr_source.indexOf('?') != -1) {
 			var getQString = ifr_source.split('?');
 			var oldString = getQString[1];
 			var newString = getQString[0];
 			$(this).attr('src', newString + '?' + wmode + '&' + oldString);
 		}
-		else $(this).attr('src', ifr_source + '?' + wmode);
+		else if (ifr_source) $(this).attr('src', ifr_source + '?' + wmode);
 	});
-});
 
-
-
-
-
-
-
-/*-----------------------------------------------------------------------------------*/
-/*	BLOG MIN HEIGHT
-/*-----------------------------------------------------------------------------------*/
-jQuery(document).ready(function () {
+	/*-----------------------------------------------------------------------------------*/
+	/*	BLOG MIN HEIGHT
+	/*-----------------------------------------------------------------------------------*/
 	blogHeight();
-});
 
-jQuery(window).resize(function () {
-	blogHeight();
-});
-
-function blogHeight() {
-	if ($(window).width() > 991) {
-		var wh = jQuery(window).height() - 60;
-		jQuery('#blog').css('min-height', wh);
-	}
-
-}
-
-
-
-
-
-
-
-/*-----------------------------------------------------------------------------------*/
-/*	FOOTER HEIGHT
-/*-----------------------------------------------------------------------------------*/
-jQuery(document).ready(function () {
+	/*-----------------------------------------------------------------------------------*/
+	/*	FOOTER HEIGHT
+	/*-----------------------------------------------------------------------------------*/
 	contactHeight();
-});
 
-jQuery(window).resize(function () {
-	contactHeight();
-});
-
-function contactHeight() {
-	if ($(window).width() > 991) {
-		var wh = jQuery('footer').height() + 70;
-		jQuery('#contacts').css('min-height', wh);
-	}
-
-
-}
-
-
-
-
-
-/*-----------------------------------------------------------------------------------*/
-/*	FOOTER MAP
-/*-----------------------------------------------------------------------------------*/
-jQuery(document).ready(function () {
-	jQuery('.map_show').click(function () {
-		jQuery('#map').addClass('showed');
+	/*-----------------------------------------------------------------------------------*/
+	/*	FOOTER MAP
+	/*-----------------------------------------------------------------------------------*/
+	$('.map_show').off('click').on('click', function () {
+		$('#map').addClass('showed');
 	});
 
-	jQuery('.map_hide').click(function () {
-		jQuery('#map').removeClass('showed');
+	$('.map_hide').off('click').on('click', function () {
+		$('#map').removeClass('showed');
 	});
-});
 
 
-/*-----------------------------------------------------------------------------------*/
-/*  CONTACT FORM AJAX SUBMIT
-/*-----------------------------------------------------------------------------------*/
-$(document).ready(function () {
+	/*-----------------------------------------------------------------------------------*/
+	/*  CONTACT FORM AJAX SUBMIT
+	/*-----------------------------------------------------------------------------------*/
+	$(document).ready(function () {
 
-	$('#contact-form-face').on('submit', function (e) {
-		e.preventDefault(); // prevent page reload
+		$('#contact-form-face').on('submit', function (e) {
+			e.preventDefault(); // prevent page reload
 
-		var form = $(this);
+			var form = $(this);
 
-		$.ajax({
-			url: "https://formsubmit.co/ajax/coroz.art@gmail.com",
-			method: "POST",
-			data: form.serialize(),
-			dataType: "json",
-			success: function () {
+			$.ajax({
+				url: "https://formsubmit.co/ajax/coroz.art@gmail.com",
+				method: "POST",
+				data: form.serialize(),
+				dataType: "json",
+				success: function () {
 
-				$('#note').html(
-					'<div class="success_message">Thank you! Your message has been sent.</div>'
-				).fadeIn();
+					$('#note').html(
+						'<div class="success_message">Thank you! Your message has been sent.</div>'
+					).fadeIn();
 
-				form.trigger("reset");
+					form.trigger("reset");
 
-				setTimeout(function () {
-					$('#note').fadeOut();
-				}, 4000);
-			},
-			error: function () {
-				$('#note').html(
-					'<div class="notification_error">Oops! Something went wrong.</div>'
-				).fadeIn();
-			}
+					setTimeout(function () {
+						$('#note').fadeOut();
+					}, 4000);
+				},
+				error: function () {
+					$('#note').html(
+						'<div class="notification_error">Oops! Something went wrong.</div>'
+					).fadeIn();
+				}
+			});
 		});
+
 	});
 
-});
 
 
 
+	/*-----------------------------------------------------------------------------------*/
+	/*	GLIGHTBOX
+	/*-----------------------------------------------------------------------------------*/
+	if (typeof GLightbox !== 'undefined') {
+		const lightbox = GLightbox({
+			selector: '.glightbox',
+			touchNavigation: true,
+			loop: true,
+			zoomable: true,
+			draggable: true,
+			dragAutoSnap: true,
+			autoplayVideos: false,
+			descriptionLength: 0,
+			descPosition: 'bottom'
+		});
+	}
 
-document.addEventListener('DOMContentLoaded', function () {
-	if (typeof GLightbox === 'undefined') return;
-	const lightbox = GLightbox({
-		selector: '.glightbox',
-		touchNavigation: true,
-		loop: true,
-		zoomable: true,
-		draggable: true,
-		dragAutoSnap: true,
-		autoplayVideos: false,
-		descriptionLength: 0,
-		descPosition: 'bottom'
-	});
+	// Native Mouse Wheel to switch Images within Lightbox (Globally applied to all GLightbox instances)
+	window.addEventListener('wheel', (e) => {
+		const lightboxContainer = document.querySelector('.glightbox-container');
+		const bodyHasOpenClass = document.body.classList.contains('glightbox-open');
 
-});
+		// If the lightbox is open globally
+		if (lightboxContainer && bodyHasOpenClass) {
+			const nextBtn = document.querySelector('.gnext');
+			const prevBtn = document.querySelector('.gprev');
 
-// Native Mouse Wheel to switch Images within Lightbox (Globally applied to all GLightbox instances)
-window.addEventListener('wheel', (e) => {
-	const lightboxContainer = document.querySelector('.glightbox-container');
-	const bodyHasOpenClass = document.body.classList.contains('glightbox-open');
+			if (nextBtn && prevBtn) {
+				e.preventDefault(); // Prevent page scroll
 
-	// If the lightbox is open globally
-	if (lightboxContainer && bodyHasOpenClass) {
-		const nextBtn = document.querySelector('.gnext');
-		const prevBtn = document.querySelector('.gprev');
+				// Add a small debounce buffer to prevent rapid fire skipping
+				if (window.glightboxWheelTimer) return;
 
-		if (nextBtn && prevBtn) {
-			e.preventDefault(); // Prevent page scroll
+				window.glightboxWheelTimer = setTimeout(() => {
+					window.glightboxWheelTimer = null;
+				}, 300);
 
-			// Add a small debounce buffer to prevent rapid fire skipping
-			if (window.glightboxWheelTimer) return;
-
-			window.glightboxWheelTimer = setTimeout(() => {
-				window.glightboxWheelTimer = null;
-			}, 300);
-
-			if (e.deltaY > 0) {
-				// Reverse for mobile: Scroll down (push up) -> Prev image 
-				prevBtn.click();
-			} else if (e.deltaY < 0) {
-				// Scroll up (pull down) -> Next image
-				nextBtn.click();
+				if (e.deltaY > 0) {
+					// Reverse for mobile: Scroll down (push up) -> Prev image 
+					prevBtn.click();
+				} else if (e.deltaY < 0) {
+					// Scroll up (pull down) -> Next image
+					nextBtn.click();
+				}
 			}
 		}
-	}
-}, { passive: false });
+	}, { passive: false });
 
 
 
@@ -498,11 +502,14 @@ window.addEventListener('wheel', (e) => {
 
 
 
-document.addEventListener('DOMContentLoaded', function () {
-
+	/*-----------------------------------------------------------------------------------*/
+	/*	SWIPER SLIDERS
+	/*-----------------------------------------------------------------------------------*/
 	const sliders = document.querySelectorAll('.team_slider, .news_slider');
 
 	sliders.forEach(function (slider) {
+		// Prevent double-init
+		if (slider.swiper) slider.swiper.destroy(true, true);
 
 		const swiper = new Swiper(slider, {
 			loop: true,
@@ -515,6 +522,12 @@ document.addEventListener('DOMContentLoaded', function () {
 			autoplay: {
 				delay: 0,
 				disableOnInteraction: false,
+			},
+			on: {
+				init: function () {
+					// Add loaded class to trigger CSS fade-in
+					this.el.classList.add('loaded');
+				}
 			}
 		});
 
@@ -585,15 +598,11 @@ document.addEventListener('DOMContentLoaded', function () {
 				swiper.autoplay.start();
 			}, 100);
 		});
-
 	});
 
-});
-
-/*-----------------------------------------------------------------------------------*/
-/*	HEADER SCROLL NAVIGATION
-/*-----------------------------------------------------------------------------------*/
-document.addEventListener('DOMContentLoaded', function () {
+	/*-----------------------------------------------------------------------------------*/
+	/*	HEADER SCROLL NAVIGATION
+	/*-----------------------------------------------------------------------------------*/
 	const pages = [
 		'home',
 		'2dprojects',
@@ -639,7 +648,20 @@ document.addEventListener('DOMContentLoaded', function () {
 			}
 		}, { passive: false });
 	}
+
+} // <-- END of window.initCorozScripts = function()
+
+// === BIND MASTER SCRIPT INITIALIZER ===
+// Fire on initial page load
+document.addEventListener('DOMContentLoaded', function () {
+	if (window.initCorozScripts) {
+		window.initCorozScripts();
+	}
 });
 
-
-
+// Fire strictly whenever PJAX finishes swapping the DOM payload
+window.addEventListener('pjax:complete', function () {
+	if (window.initCorozScripts) {
+		window.initCorozScripts();
+	}
+});

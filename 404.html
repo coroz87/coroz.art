@@ -104,13 +104,15 @@
             width: 80px;
             height: 80px;
             border-radius: 50%;
-            background: #fff;
+            background: #000;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             margin-bottom: 32px;
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
-            overflow: hidden;
+            box-shadow:
+                0 0 18px 6px rgba(255, 255, 255, 0.35),
+                0 0 44px 16px rgba(255, 255, 255, 0.12),
+                0 4px 20px rgba(0, 0, 0, 0.6);
         }
 
         .not-found-icon img {
@@ -127,7 +129,8 @@
             line-height: 1;
             color: rgba(255, 255, 255, 0.12);
             letter-spacing: -4px;
-            margin: 0 0 -20px;
+            margin: 0 0 -10px;
+            /* 10px more separation from title below */
             user-select: none;
         }
 
@@ -208,9 +211,41 @@
     <div class="menu_block">
         <div class="container clearfix">
             <div class="logo pull-left">
-                <a href="home/"><span class="b1">COROZ</span><span class="b3">|</span><span class="b4">Arts &amp;
+                <a href="/home/"><span class="b1">COROZ</span><span class="b3">|</span><span class="b4">Arts &amp;
                         Design</span></a>
             </div>
+            <a class="menu_toggler" href="javascript:void(0);"><i class="fa fa-bars"></i></a>
+            <!-- MENU -->
+            <div class="pull-right">
+                <nav class="navmenu center">
+                    <ul>
+                        <li class="scroll_btn"><a href="/home/">HOME</a></li>
+                        <li class="sub-menu">
+                            <a href="/2dprojects/">2D PROJECTS</a>
+                            <ul>
+                                <li><a href="/2dprojects/#ill">Illustrations &amp; Sketches</a></li>
+                                <li><a href="/2dprojects/#graphic">Graphic Design</a></li>
+                            </ul>
+                        <li class="sub-menu">
+                            <a href="/3dprojects/">3D PROJECTS</a>
+                            <ul>
+                                <li><a href="/3dprojects/#3ddesign">3D Design</a></li>
+                                <li><a href="/3dprojects/#3dart">3D Art</a></li>
+                            </ul>
+                        <li class="scroll_btn"><a href="/arts/">ARTWORK</a></li>
+                        <li class="scroll_btn"><a href="/contact/">CONTACT</a></li>
+                        <li class="theme-switch-wrapper">
+                            <label class="theme-switch" for="themeToggle404">
+                                <input type="checkbox" id="themeToggle404" />
+                                <div class="slider round">
+                                    <i class="fas fa-sun"></i>
+                                    <i class="fas fa-moon"></i>
+                                </div>
+                            </label>
+                        </li>
+                    </ul>
+                </nav>
+            </div><!-- //MENU -->
         </div>
     </div>
 
@@ -220,7 +255,7 @@
 
             <!-- Favicon C icon in a white circle -->
             <div class="not-found-icon">
-                <img src="images/favicon.ico" alt="Coroz logo" />
+                <img src="images/icon.png" alt="Coroz logo" />
             </div>
 
             <div class="not-found-code">404</div>
@@ -231,16 +266,16 @@
                 Let's get you back to the good stuff.
             </p>
 
-            <a href="home/" class="not-found-btn">Back to Home</a>
+            <a href="/home/" class="not-found-btn">Back to Home</a>
 
             <div class="not-found-divider"></div>
 
             <!-- Quick nav links -->
             <nav class="not-found-nav">
-                <a href="arts/">Artwork</a>
-                <a href="2dprojects/">2D Projects</a>
-                <a href="3dprojects/">3D Projects</a>
-                <a href="contact/">Contact</a>
+                <a href="/arts/">Artwork</a>
+                <a href="/2dprojects/">2D Projects</a>
+                <a href="/3dprojects/">3D Projects</a>
+                <a href="/contact/">Contact</a>
             </nav>
 
         </div>

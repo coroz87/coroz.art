@@ -578,12 +578,12 @@ window.initGalleryEngine = function () {
                     }
                 }, { passive: false });
 
-            }; // End initializeSlider
+                // Add fade-in class securely AFTER math is initialized and images are loaded
+                setTimeout(() => {
+                    bottomTrack.classList.add('grid-loaded');
+                }, 50);
 
-            // Add fade-in class securely after track logic finishes building
-            setTimeout(() => {
-                bottomTrack.classList.add('grid-loaded');
-            }, 50);
+            }; // End initializeSlider
 
             images.forEach(img => {
                 if (img.complete) {
@@ -592,14 +592,23 @@ window.initGalleryEngine = function () {
                     img.addEventListener('load', () => {
                         imagesLoaded++;
                         if (imagesLoaded === images.length) initializeSlider();
-                    });
+                    }, { once: true });
+                    img.addEventListener('error', () => {
+                        imagesLoaded++;
+                        if (imagesLoaded === images.length) initializeSlider();
+                    }, { once: true });
                 }
             });
 
             if (imagesLoaded === images.length) {
                 initializeSlider();
             } else {
-                setTimeout(initializeSlider, 300);
+                // Wait up to 800ms for images to load, otherwise force initialize (failsafe)
+                setTimeout(() => {
+                    if (!bottomTrack.classList.contains('grid-loaded')) {
+                        initializeSlider();
+                    }
+                }, 800);
             }
 
         }, 100);
