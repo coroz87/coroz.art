@@ -19,6 +19,7 @@ window.initGalleryEngine = function () {
             tabs.forEach(t => t.classList.remove('active'));
             grids.forEach(g => g.classList.remove('active'));
 
+
             // Add active to targeted tab & grid
             tab.classList.add('active');
             const targetId = tab.getAttribute('data-target');
@@ -29,8 +30,12 @@ window.initGalleryEngine = function () {
 
             // Force grids to recalculate layout if they were hidden
             window.dispatchEvent(new Event('resize'));
+
+            // Notify active grid to physically reset to first image
+            window.dispatchEvent(new CustomEvent('gallery-tab-changed', { detail: { targetId } }));
         });
     });
+
 
     // Listen to browser forward/back or cross-page hash changes
     window.addEventListener('hashchange', activateTabFromHash);
@@ -86,22 +91,40 @@ window.initGalleryEngine = function () {
             this.onWheel = this.handleWheel.bind(this);
             this.onClick = this.handleClick.bind(this);
             this.onTouchStart = this.handleTouchStart.bind(this);
-            this.onTouchMove = this.handleTouchMove.bind(this);
+
             this.onTouchEnd = this.handleTouchEnd.bind(this);
+
+
+            // Listen for tab changes so we can perfectly reset the geometry
+            this.onTabChange = (e) => {
+                if (e.detail.targetId === this.grid.id && this.initialized) {
+                    if (this.isDesktop && this.grid.scrollWidth > 0) {
+                        // Force a mathematically perfect reset to the first image of block 3
+                        this.boundSize = this.grid.scrollWidth / 5;
+                        this.grid.scrollLeft = this.boundSize * 2;
+                        this.exactScroll = this.grid.scrollLeft;
+                        this.scrollStart = this.exactScroll;
+                    } else if (!this.isDesktop && this.grid.scrollHeight > 0) {
+                        // Math perfect reset to the top of the second mobile repeat block
+                        const targetNode = this.grid.children[this.mobileBlockItems];
+                        if (targetNode) {
+                            this.boundSize = targetNode.offsetTop - 3;
+                            this.grid.scrollTop = this.boundSize;
+                        }
+                    }
+                }
+            };
+            window.addEventListener('gallery-tab-changed', this.onTabChange);
 
             this.init();
 
             // Add ResizeObserver to dynamically update metrics if images load out of band
+
             this.resizeObserver = new ResizeObserver(() => {
                 if (this.initialized) {
+
                     if (this.isDesktop) {
-                        let newBound = this.boundSize;
-                        const targetChild = this.grid.children[this.baseCount * 3];
-                        if (targetChild && targetChild.offsetLeft > 0) {
-                            newBound = targetChild.offsetLeft;
-                        } else {
-                            newBound = this.grid.scrollWidth / 5;
-                        }
+                        let newBound = this.grid.scrollWidth / 5;
                         if (newBound > 0 && Math.abs(this.boundSize - newBound) > 2) {
                             const factor = this.exactScroll / this.boundSize;
                             this.boundSize = newBound;
@@ -110,6 +133,7 @@ window.initGalleryEngine = function () {
                             this.scrollStart = this.exactScroll;
                         }
                     } else {
+
                         const targetNode = this.grid.children[this.mobileBlockItems];
                         if (targetNode) {
                             this.boundSize = targetNode.offsetTop - 3;
@@ -198,6 +222,7 @@ window.initGalleryEngine = function () {
             if (this.rafId) cancelAnimationFrame(this.rafId);
             this.grid.innerHTML = this.originalContent; // Remove clones
 
+
             this.grid.removeEventListener('dragstart', this.onDragStart);
             this.grid.removeEventListener('click', this.onClick, true);
             this.grid.removeEventListener('mousedown', this.onMouseDown);
@@ -209,7 +234,12 @@ window.initGalleryEngine = function () {
             this.grid.removeEventListener('touchstart', this.onTouchStart);
             this.grid.removeEventListener('touchmove', this.onTouchMove);
             this.grid.removeEventListener('touchend', this.onTouchEnd);
+
+            if (this.onTabChange) {
+                window.removeEventListener('gallery-tab-changed', this.onTabChange);
+            }
         }
+
 
         // --- DESKTOP LOGIC (Horizontal Grid Math Alignment) ---
         initDesktop() {
@@ -229,26 +259,22 @@ window.initGalleryEngine = function () {
             }, 100);
         }
 
+
         tryInitDesktopGeometry() {
-            if (this.boundSize === 0 && this.grid.children.length > this.baseCount) {
-                // The exact physical pixel width of one perfect geometry block
-                const targetChild = this.grid.children[this.baseCount * 3]; // 3 repeats = 1 perfect block
-                if (targetChild && targetChild.offsetLeft > 0) {
-                    this.boundSize = targetChild.offsetLeft;
-                    this.grid.scrollLeft = this.boundSize * 2;
-                    this.exactScroll = this.grid.scrollLeft;
-                    this.scrollStart = this.exactScroll;
-                    this.initialized = true;
-                } else if (this.grid.scrollWidth > 0) {
-                    // Fallback
-                    this.boundSize = this.grid.scrollWidth / 5;
-                    this.grid.scrollLeft = this.boundSize * 2;
-                    this.exactScroll = this.grid.scrollLeft;
-                    this.scrollStart = this.exactScroll;
-                    this.initialized = true;
-                }
+            if (this.boundSize === 0 && this.grid.scrollWidth > 0 && this.grid.children.length > this.baseCount) {
+                // Since we explicitly multiplied the content by exactly 5, 
+                // the mathematically perfect width of 1 block is exactly scrollWidth / 5.
+                // This completely avoids subpixel layout and CSS gap rounding errors.
+                this.boundSize = this.grid.scrollWidth / 5;
+
+                // Jump to the start of block 3 (index 2) so we have 2 full blocks of runway in both directions.
+                this.grid.scrollLeft = this.boundSize * 2;
+                this.exactScroll = this.grid.scrollLeft;
+                this.scrollStart = this.exactScroll;
+                this.initialized = true;
             }
         }
+
 
         loopDesktop() {
             if (!this.isActive) return;

@@ -42,6 +42,14 @@
     }
 }
 
+/* Hide content by default so it waits for window.load to fade in perfectly formed */
+.subpage-main,
+.about-page,
+.contact-content,
+#home {
+    opacity: 0;
+}
+
 /* Apply leave animation to the #home hero or .subpage-main when leaving */
 body.page-leaving .subpage-main,
 body.page-leaving .about-page,
@@ -72,11 +80,16 @@ body.page-entering #home {
     body.page-leaving .subpage-main,
     body.page-leaving .about-page,
     body.page-leaving .contact-content,
-    body.page-leaving #home,
+    body.page-leaving #home {
+        animation: none !important;
+        opacity: 0;
+    }
+
     body.page-entering .subpage-main,
     body.page-entering .about-page,
     body.page-entering .contact-content,
     body.page-entering #home {
         animation: none !important;
+        opacity: 1;
     }
 }

@@ -5,12 +5,26 @@ window.jQuery = window.$ = jQuery;
 /*-----------------------------------------------------------------------------------*/
 /*	PRELOADER
 /*-----------------------------------------------------------------------------------*/
-jQuery(window).load(function () {
-	//Preloader
-	setTimeout("jQuery('#preloader').animate({'opacity' : '0'},300,function(){jQuery('#preloader').hide()})", 800);
-	setTimeout("jQuery('.preloader_hide, .selector_open').animate({'opacity' : '1'},500)", 800);
-	setTimeout("jQuery('footer').animate({'opacity' : '1'},500)", 2000);
+window.addEventListener('load', function () {
+	// Preloader hide
+	setTimeout(function () {
+		jQuery('#preloader').animate({ 'opacity': '0' }, 300, function () { jQuery('#preloader').hide(); });
+	}, 800);
+	setTimeout(function () { jQuery('.preloader_hide, .selector_open').animate({ 'opacity': '1' }, 500); }, 800);
+	setTimeout(function () { jQuery('footer').animate({ 'opacity': '1' }, 500); }, 2000);
 
+	// Mark page as entering for the CSS fade-in animation ONLY after all images have fully loaded.
+	// This prevents masonry galleries from "jumping" as they establish dimensions.
+	document.body.classList.add('page-entering');
+});
+
+// Safari Cache Fix (bfcache): When users press the browser's "Back" button, Safari loads the 
+// exact frozen DOM state from memory. If the page was frozen in a "faded out" state during 
+// departure, it stays invisible. This forces Safari to un-fade the page on return.
+window.addEventListener('pageshow', function (e) {
+	if (e.persisted) {
+		document.body.classList.remove('page-leaving');
+	}
 });
 
 
@@ -19,8 +33,6 @@ jQuery(window).load(function () {
 /*	PAGE TRANSITIONS + NAVIGATION ROUTER
 /*-----------------------------------------------------------------------------------*/
 document.addEventListener('DOMContentLoaded', function () {
-	// Mark page as entering for the CSS fade-in animation
-	document.body.classList.add('page-entering');
 
 	// --- DARK MODE THEME LOGIC ---
 	// 1. Check local storage on load
