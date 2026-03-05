@@ -1,30 +1,28 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
 
     <meta charset="utf-8">
-    <title>2D Projects | Coroz – Illustrations, Sketches & Graphic Design – Montreal</title>
+    <title>Illustrations | Coroz – Digital Illustrations & Sketches – Montreal</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
-        content="Browse the 2D design portfolio of Coroz (Carlos Orozco) in Montreal. Illustrations, sketches, and graphic design work for print and digital media.">
+        content="Browse the illustrations and sketches portfolio of Coroz (Carlos Orozco) in Montreal. Digital portraits, character design, fantasy art and more.">
     <meta name="keywords"
-        content="Coroz, Carlos Orozco, 2D Art, Illustrations, Sketches, Graphic Design, Portfolio, Montreal">
+        content="Coroz, Carlos Orozco, Illustrations, Sketches, Digital Art, Character Design, Portfolio, Montreal">
     <meta name="author" content="Carlos Orozco">
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://coroz.art/2dprojects/">
+    <link rel="canonical" href="https://coroz.art/illustrations/">
     <!-- Open Graph / Social Sharing -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://coroz.art/2dprojects/">
-    <meta property="og:title" content="2D Projects | Coroz – Illustrations & Graphic Design">
-    <meta property="og:description"
-        content="Illustrations, sketches, and graphic design work by Carlos Orozco (Coroz) in Montreal.">
+    <meta property="og:url" content="https://coroz.art/illustrations/">
+    <meta property="og:title" content="Illustrations | Coroz – Digital Illustrations & Sketches">
+    <meta property="og:description" content="Digital illustrations and sketches by Carlos Orozco (Coroz) in Montreal.">
     <meta property="og:image" content="https://coroz.art/images/works/5.jpg">
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="2D Projects | Coroz – Illustrations & Graphic Design">
-    <meta name="twitter:description"
-        content="2D art portfolio: Illustrations, Sketches, and Graphic Design by Carlos Orozco.">
+    <meta name="twitter:title" content="Illustrations | Coroz – Digital Art">
+    <meta name="twitter:description" content="Illustrations and sketches portfolio by Carlos Orozco.">
     <meta name="twitter:image" content="https://coroz.art/images/works/5.jpg">
 
     <link rel="shortcut icon" href="../images/favicon.ico">
@@ -61,7 +59,6 @@
         .subpage-main {
             position: fixed;
             top: 60px;
-            /* Claim the adjusted 60px header space */
             left: 0;
             right: 0;
             bottom: 0;
@@ -69,7 +66,6 @@
             flex-direction: column;
             overflow: hidden;
             padding-bottom: 10px;
-            /* Padding for slider at the bottom */
             background: #fff;
         }
 
@@ -81,17 +77,14 @@
             text-align: left;
         }
 
-        /* Top Header Area (Title + Tabs) */
         .top-header-area {
             display: flex;
             align-items: baseline;
-            /* Align tabs onto same line as title */
             justify-content: space-between;
             padding: 38px 0 26px 0;
             width: 100%;
         }
 
-        /* Center Gallery Area */
         .gallery-area {
             flex: 1;
             display: flex;
@@ -99,16 +92,12 @@
             overflow: hidden;
             background: #fff;
             align-items: center;
-            /* Center the grid wrapper */
             justify-content: center;
-            /* Vertically center the square */
         }
 
-        /* Tabs styling */
         .gallery-tabs {
             display: flex;
             justify-content: flex-end;
-            /* Align right next to title */
             align-items: center;
             background: transparent;
         }
@@ -136,7 +125,6 @@
             margin: 0 5px;
         }
 
-        /* Clip wrapper */
         .galleries-clip {
             position: relative;
             flex: 1;
@@ -147,10 +135,8 @@
             margin: 0 auto 10px auto;
             padding: 10px 15px;
             box-sizing: border-box;
-            /* overflow removed for arrows */
         }
 
-        /* Scrollable Container */
         .galleries-container {
             flex: 1;
             position: relative;
@@ -161,10 +147,8 @@
             box-sizing: border-box;
         }
 
-        /* Gallery scroll arrows â€” GLightbox style */
         .gallery-arrow {
             display: none;
-            /* hidden on mobile */
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
@@ -222,22 +206,14 @@
             overflow-y: hidden;
             -webkit-overflow-scrolling: touch;
             padding: 0;
-
-            /* CSS Grid for predictable alternating masonry pattern */
             display: grid;
             grid-template-rows: repeat(2, calc(50% - 2.5px));
-            /* Force exactly 50% height rows minus half the 5px gap */
             grid-auto-flow: column;
-            /* Fill column by column left-to-right */
             grid-auto-columns: max-content;
-            /* Size column to fit explicit item widths */
             gap: 5px;
-            /* Tighter gap as requested */
-
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
-            /* Scrollbar styling for inner grid - Hidden */
             scrollbar-width: none;
             -ms-overflow-style: none;
         }
@@ -248,53 +224,20 @@
             z-index: 2;
         }
 
-        .gallery-grid:not(.active) {
-            opacity: 0 !important;
-            visibility: hidden !important;
-            z-index: 1;
-            pointer-events: none;
-            transition: opacity 0.8s ease, visibility 0.8s ease;
-        }
-
-        .gallery-grid::-webkit-scrollbar {
-            display: none;
-        }
-
-        .gallery-grid::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        .gallery-grid::-webkit-scrollbar-thumb {
-            background-color: #ccc;
-            border-radius: 10px;
-        }
-
-        /* Alternating grid masonry layout */
         .gallery-grid>a {
             display: flex;
-            box-sizing: border-box;
-            height: 100%;
-            width: 100%;
-            min-height: 0;
-            min-width: 0;
+            align-items: center;
+            justify-content: center;
+            aspect-ratio: 3/2;
             overflow: hidden;
             background: #f0f0f0;
-            /* neutral bg shows for letterboxed images */
         }
 
-        /* 
-           Pattern: 1 complete, 2 verticals 
-           3 items per cycle: 3n+1 is complete, 3n+2 and 3n+3 are verticals
-        */
-
-        /* 1 complete (spans 2 full rows, wide column) */
         .gallery-grid>a:nth-child(3n+1) {
             grid-row: span 2;
             width: auto;
-            /* Natural width from image aspect ratio at full cell height */
         }
 
-        /* Natural aspect ratio for full-height single images */
         .gallery-grid>a:nth-child(3n+1) img {
             width: auto;
             height: 100%;
@@ -319,15 +262,12 @@
         @media (hover: hover) {
             .gallery-grid img:hover {
                 transform: scale(1.05);
-                /* Magnify effect */
             }
         }
 
-        /* Bottom Slider wrapper */
         .subpage-main .projects-wrapper {
             flex-shrink: 0;
             height: 100px;
-            /* Restored to exactly 100px */
             overflow: hidden;
             display: flex;
             align-items: center;
@@ -338,65 +278,41 @@
         .bottom-gallery-track {
             display: flex;
             height: 100%;
-            width: 100%;
-            overflow-x: auto;
-            overflow-y: hidden;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-            /* Hide scrollbar */
-
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.8s ease, visibility 0.8s ease;
+            gap: 8px;
+            padding: 4px 0;
+            overflow: hidden;
         }
 
-        .bottom-gallery-track.grid-loaded {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .bottom-gallery-track::-webkit-scrollbar {
-            display: none;
-        }
-
-        /* Override global work_item height for this subpage */
-        .subpage-main .work_item {
-            height: 100px !important;
+        .work_item {
             flex-shrink: 0;
-            display: flex;
-            justify-content: center;
-        }
-
-        /* Ensure link wrapper propagates height */
-        .subpage-main .work_item a {
-            display: block;
             height: 100%;
+            display: flex;
+            align-items: center;
         }
 
-        /* Ensure images inside shrink proportionally without cropping top/bottom */
-        .subpage-main .work_item img {
-            height: 100% !important;
-            width: auto !important;
-            /* Width auto ensures aspect-ratio constraint dynamically pulls in the sides */
-            object-fit: contain !important;
-            display: block !important;
-            cursor: pointer;
-            /* 'contain' fits entire image completely visible inside the 100px height limit */
-            transition: filter 0.3s ease, transform 0.3s ease;
+        .work_item img {
+            height: 100%;
+            width: auto;
+            object-fit: cover;
+            border-radius: 3px;
+            display: block;
         }
 
-        /* Restore slider hover darkening and add zoom */
-        @media (hover: hover) {
-            .subpage-main .work_item:hover img {
-                transform: scale(1.05) !important;
-            }
-        }
-
-        /* Mobile specific adjustments */
         @media (max-width: 768px) {
+            body {
+                overflow: auto;
+            }
 
-            .subpage-main .projects-wrapper,
-            .subpage-main .projects_wrapper,
+            .subpage-main {
+                position: relative;
+                top: auto;
+                left: auto;
+                right: auto;
+                bottom: auto;
+                height: calc(100vh - 60px);
+                overflow: hidden;
+            }
+
             .projects-wrapper,
             .projects_wrapper {
                 display: none !important;
@@ -407,7 +323,6 @@
                 overflow: hidden;
             }
 
-            /* Mobile: fill remaining space */
             .galleries-clip {
                 position: relative;
                 flex: 1;
@@ -418,7 +333,6 @@
                 margin: 0 auto 10px auto;
                 padding: 10px 15px;
                 box-sizing: border-box;
-                /* overflow removed for arrows */
             }
 
             .galleries-container {
@@ -431,12 +345,10 @@
                 position: relative;
             }
 
-            /* Mobile: hide all grids by default (they sit absolute, stacked) */
             .gallery-grid {
                 display: none;
             }
 
-            /* Mobile: show active grid as flex-flow masonry */
             .gallery-grid.active {
                 display: flex;
                 flex-wrap: wrap;
@@ -454,7 +366,6 @@
                 align-content: flex-start;
             }
 
-            /* All items: dynamic height based on aspect ratio */
             .gallery-grid.active>a {
                 width: calc(50% - 2.5px);
                 height: auto;
@@ -467,7 +378,6 @@
                 box-sizing: border-box;
             }
 
-            /* Large items: 100% width */
             .gallery-grid.active>a:nth-child(5n+1) {
                 width: 100%;
                 height: auto;
@@ -479,7 +389,6 @@
                 object-fit: contain;
             }
 
-            /* Stack title and tabs vertically on mobile */
             .top-header-area {
                 flex-direction: column;
                 align-items: flex-start;
@@ -487,7 +396,6 @@
                 gap: 18px;
             }
 
-            /* Center tabs below the title */
             .gallery-tabs {
                 justify-content: center;
                 width: 100%;
@@ -521,7 +429,7 @@
                             <li class="sub-menu active">
                                 <a href="../2dprojects/">2D PROJECTS</a>
                                 <ul>
-                                    <li><a href="../illustrations/">Illustrations &amp; Sketches</a></li>
+                                    <li class="active"><a href="../illustrations/">Illustrations &amp; Sketches</a></li>
                                     <li><a href="../graphicdesign/">Graphic Design</a></li>
                                 </ul>
                             </li>
@@ -535,8 +443,8 @@
                             <li class="scroll_btn"><a href="../arts/">ARTWORK</a></li>
                             <li class="scroll_btn"><a href="../contact/">CONTACT</a></li>
                             <li class="theme-switch-wrapper">
-                                <label class="theme-switch" for="themeToggle2d">
-                                    <input type="checkbox" id="themeToggle2d" />
+                                <label class="theme-switch" for="themeToggleIll">
+                                    <input type="checkbox" id="themeToggleIll" />
                                     <div class="slider round">
                                         <i class="fas fa-sun"></i>
                                         <i class="fas fa-moon"></i>
@@ -549,16 +457,16 @@
             </div>
         </div>
     </header>
+
     <div id="pjax-container">
         <!-- MAIN CONTENT -->
         <main class="subpage-main">
             <div style="width: 100%;">
                 <div class="container">
                     <div class="top-header-area">
-                        <h2><b>Featured</b> Graphics</h2>
+                        <h2><b>Illustrations</b> &amp; Sketches</h2>
                         <div class="gallery-tabs">
-                            <button class="tab-btn active" data-target="gallery-ill"
-                                data-url="../illustrations/">Illustrations</button>
+                            <button class="tab-btn active" data-target="gallery-ill">Illustrations</button>
                             <div class="tab-divider"></div>
                             <button class="tab-btn" data-target="gallery-graphic" data-url="../graphicdesign/">Graphic
                                 Design</button>
@@ -576,7 +484,6 @@
                     <div class="galleries-container">
                         <!-- Illustrations & Sketches Gallery -->
                         <div class="gallery-grid active" id="gallery-ill">
-                            <!-- Replace these with actual images later -->
                             <a href="../images/works/5.jpg" class="glightbox"
                                 data-description="Salvador Dali (2016) Digital Portrait"><img
                                     src="../images/works/5_thumbnail_900.jpg" alt="Artwork" /></a>
@@ -605,7 +512,7 @@
                                 data-description="Jaguar Sketch (2018) Digital Art"><img
                                     src="../images/works/34_thumbnail_600.jpg" alt="Artwork" /></a>
                             <a href="../images/works/35.jpg" class="glightbox"
-                                data-description="Sun & Moon collide (2019) Digital illustration"><img
+                                data-description="Sun &amp; Moon collide (2019) Digital illustration"><img
                                     src="../images/works/35_thumbnail_900.jpg" alt="Artwork" /></a>
                             <a href="../images/works/36.jpg" class="glightbox"
                                 data-description="Anatomy studies (2015) Digital Sketch"><img
@@ -620,7 +527,7 @@
                                 data-description="Outer shells, Inner child (2020) Digital illustration"><img
                                     src="../images/works/38 (2)_thumbnail_600.jpg" alt="Artwork" /></a>
                             <a href="../images/works/39.jpg" class="glightbox"
-                                data-description="Creation & Destruction when energies collide (2018) Digital illustration Adobe Photoshop"><img
+                                data-description="Creation &amp; Destruction when energies collide (2018) Digital illustration Adobe Photoshop"><img
                                     src="../images/works/39_thumbnail_600.jpg" alt="Artwork" /></a>
                             <a href="../images/works/39.png" class="glightbox"
                                 data-description="Geometry Tree, 2025"><img src="../images/works/39_thumbnail_900.png"
@@ -652,8 +559,7 @@
                             <a href="../images/works/47.jpg" class="glightbox"
                                 data-description="Digital Sketch (2022) Adobe Photoshop"><img
                                     src="../images/works/47_thumbnail_900.jpg" alt="Artwork" /></a>
-                            <a href="../images/works/50.jpg" class="glightbox" What does a fish know about the water in
-                                which it swims all its life?" - Albert Einstein - Digital illustration"
+                            <a href="../images/works/50.jpg" class="glightbox"
                                 data-description="&quot;What does a fish know about the water in which it swims all its life?&quot;  - Albert Einstein - Digital illustration (2013)"><img
                                     src="../images/works/50_thumbnail_900.jpg" alt="Artwork" /></a>
                             <a href="../images/works/130.jpg" class="glightbox"
@@ -678,7 +584,7 @@
                                 data-description="Paternal Grandparents (2020) Digital Portrait"><img
                                     src="../images/works/53_thumbnail_900.jpg" alt="Artwork" /></a>
                             <a href="../images/works/54.jpg" class="glightbox"
-                                data-description="Niblings - Luciano & Léna (2021) Digital Portrait"><img
+                                data-description="Niblings - Luciano &amp; Léna (2021) Digital Portrait"><img
                                     src="../images/works/54_thumbnail_600.jpg" alt="Artwork" /></a>
                             <a href="../images/works/54 (2).jpg" class="glightbox"
                                 data-description="Wolverine Fan Art (2021) Comics - Digital illustration"><img
@@ -705,25 +611,25 @@
                                 data-description="Character Design - Water girl (2015) Digital Sketch"><img
                                     src="../images/works/136_thumbnail_600.jpg" alt="Artwork" /></a>
                             <a href="../images/works/60.jpg" class="glightbox"
-                                data-description="Illustrations and Graphic Design to honor people with disabilities.  Cali, Colombia, 2015."><img
+                                data-description="Illustrations and Graphic Design to honor people with disabilities. Cali, Colombia, 2015."><img
                                     src="../images/works/60_thumbnail_900.jpg" alt="Artwork" /></a>
                             <a href="../images/works/61.jpg" class="glightbox"
-                                data-description="Illustrations and Graphic Design to honor people with disabilities.  Cali, Colombia, 2015."><img
+                                data-description="Illustrations and Graphic Design to honor people with disabilities. Cali, Colombia, 2015."><img
                                     src="../images/works/61_thumbnail_900.jpg" alt="Artwork" /></a>
                             <a href="../images/works/62.jpg" class="glightbox"
-                                data-description="Illustrations and Graphic Design to honor people with disabilities.  Cali, Colombia, 2015."><img
+                                data-description="Illustrations and Graphic Design to honor people with disabilities. Cali, Colombia, 2015."><img
                                     src="../images/works/62_thumbnail_600.jpg" alt="Artwork" /></a>
                             <a href="../images/works/63.jpg" class="glightbox"
-                                data-description="Illustrations and Graphic Design to honor people with disabilities.  Cali, Colombia, 2015."><img
+                                data-description="Illustrations and Graphic Design to honor people with disabilities. Cali, Colombia, 2015."><img
                                     src="../images/works/63_thumbnail_600.jpg" alt="Artwork" /></a>
                             <a href="../images/works/64.jpg" class="glightbox"
-                                data-description="Illustrations and Graphic Design to honor people with disabilities.  Cali, Colombia, 2015."><img
+                                data-description="Illustrations and Graphic Design to honor people with disabilities. Cali, Colombia, 2015."><img
                                     src="../images/works/64_thumbnail_900.jpg" alt="Artwork" /></a>
                             <a href="../images/works/65.jpg" class="glightbox"
-                                data-description="Illustrations and Graphic Design to honor people with disabilities.  Cali, Colombia, 2015."><img
+                                data-description="Illustrations and Graphic Design to honor people with disabilities. Cali, Colombia, 2015."><img
                                     src="../images/works/65_thumbnail_900.jpg" alt="Artwork" /></a>
                             <a href="../images/works/66.jpg" class="glightbox"
-                                data-description="Illustrations and Graphic Design to honor people with disabilities.  Cali, Colombia, 2015."><img
+                                data-description="Illustrations and Graphic Design to honor people with disabilities. Cali, Colombia, 2015."><img
                                     src="../images/works/66_thumbnail_600.jpg" alt="Artwork" /></a>
                             <a href="../images/works/67.jpg" class="glightbox"
                                 data-description="Character Design and illustrations for Café Communications, Budapest, Hungary (2012)"><img
@@ -749,70 +655,6 @@
                             <a href="../images/works/140.jpg" class="glightbox"
                                 data-description="Self Portrait (2021) Digital Sketch"><img
                                     src="../images/works/140_thumbnail_600.jpg" alt="Artwork" /></a>
-
-                        </div>
-                        <!-- Graphic Design Gallery -->
-                        <div class="gallery-grid" id="gallery-graphic">
-                            <a href="../images/works/16.jpg" class="glightbox"
-                                data-description="Cover Design for published book &quot;Absolutamente Todo&quot;, Random House, 2021."><img
-                                    src="../images/works/16_thumbnail_600.jpg" alt="Artwork" /></a>
-                            <a href="../images/works/17.jpg" class="glightbox"
-                                data-description="Cover for published book &quot;Absolutamente Todo&quot;, Random House, 2021. Digital illustration"><img
-                                    src="../images/works/17_thumbnail_600.jpg" alt="Artwork" /></a>
-                            <a href="../images/works/18.jpg" class="glightbox"
-                                data-description="Graphics for album cover Magdalena, by Black Mambo (2022)"><img
-                                    src="../images/works/18_thumbnail_900.jpg" alt="Artwork" /></a>
-                            <a href="../images/works/19.jpg" class="glightbox"
-                                data-description="Graphic Design for album cover Magdalena, by Black Mambo (2022)"><img
-                                    src="../images/works/19_thumbnail_600.jpg" alt="Artwork" /></a>
-                            <a href="../images/works/REDES LANZAMIENTO -01.jpg" class="glightbox"
-                                data-description="Graphic Design for album cover Magdalena, by Black Mambo (2022)"><img
-                                    src="../images/works/REDES LANZAMIENTO -01_thumbnail_900.jpg" alt="Artwork" /></a>
-                            <a href="../images/works/20 2.jpg" class="glightbox"
-                                data-description="Tune in - Earth Day. Digital illustration for Vitalsetas (2022)"><img
-                                    src="../images/works/20 2_thumbnail_900.jpg" alt="Artwork" /></a>
-                            <a href="../images/works/27.jpg" class="glightbox"
-                                data-description="Illustrations and Graphic Design to honor people with disabilities.  Cali, Colombia, 2015."><img
-                                    src="../images/works/27_thumbnail_600.jpg" alt="Artwork" /></a>
-                            <a href="../images/works/21.png" class="glightbox"
-                                data-description="Christmas poster for Rosewood Home & Condo. Graphic Design, 2024"><img
-                                    src="../images/works/21_thumbnail_600.png" alt="Artwork" /></a>
-                            <a href="../images/works/30 (4).png" class="glightbox"
-                                data-description="Sale Poster for Rosewood Home & Condo. Graphic Design, 2024"><img
-                                    src="../images/works/30 (4)_thumbnail_900.png" alt="Artwork" /></a>
-                            <a href="../images/works/30 (2).png" class="glightbox"
-                                data-description="Sale Poster for Rosewood Home & Condo. Graphic Design, 2024"><img
-                                    src="../images/works/30 (2)_thumbnail_900.png" alt="Artwork" /></a>
-                            <a href="../images/works/30 (3).png" class="glightbox"
-                                data-description="Sale Poster for Rosewood Home & Condo. Graphic Design, 2024"><img
-                                    src="../images/works/30 (3)_thumbnail_600.png" alt="Artwork" /></a>
-                            <a href="../images/works/22.png" class="glightbox"
-                                data-description="Closing Sale poster for Rosewood Home & Condo. Graphic Design, 2024"><img
-                                    src="../images/works/22_thumbnail_900.png" alt="Artwork" /></a>
-                            <a href="../images/works/23.jpg" class="glightbox"
-                                data-description="Logo Design for Boston Blockchain (2021)"><img
-                                    src="../images/works/23_thumbnail_600.jpg" alt="Artwork" /></a>
-                            <a href="../images/works/24.jpg" class="glightbox"
-                                data-description="Landing page Design for Boston Blockchain (2021)"><img
-                                    src="../images/works/24_thumbnail_900.jpg" alt="Artwork" /></a>
-                            <a href="../images/works/25.png" class="glightbox"
-                                data-description="Logo Design for ZenZone brand (2022)"><img
-                                    src="../images/works/25_thumbnail_600.png" alt="Artwork" /></a>
-                            <a href="../images/works/26.jpg" class="glightbox"
-                                data-description="Graphic Design for ZenZone brand, logo and labels (2022)"><img
-                                    src="../images/works/26_thumbnail_600.jpg" alt="Artwork" /></a>
-                            <a href="../images/works/29 (5).jpg" class="glightbox"
-                                data-description="Logo and label Design for Unicum, a typical Hungarian drink (2011)"><img
-                                    src="../images/works/29 (5)_thumbnail_900.jpg" alt="Artwork" /></a>
-                            <a href="../images/works/29 (4).jpg" class="glightbox"
-                                data-description="Logo and label Design for Hungarian Brand (2011)"><img
-                                    src="../images/works/29 (4)_thumbnail_600.jpg" alt="Artwork" /></a>
-                            <a href="../images/works/29.jpg" class="glightbox"
-                                data-description="Logo Design for Hungarian Brand (2011)"><img
-                                    src="../images/works/29_thumbnail_900.jpg" alt="Artwork" /></a>
-                            <a href="../images/works/28.jpg" class="glightbox"
-                                data-description="Logo, Character Design and illustrations for Café Communications, Budapest, Hungary (2012)"><img
-                                    src="../images/works/28_thumbnail_900.jpg" alt="Artwork" /></a>
                         </div>
                     </div>
                 </div><!-- /.galleries-clip -->
@@ -821,71 +663,39 @@
             <div class="projects-wrapper">
                 <!-- Continuous Marquee Bottom Slider -->
                 <div class="bottom-gallery-track" id="bottom-track">
-                    <div class="work_item"><a class="glightbox" href="../images/works/16.jpg"
-                            data-description="Cover Design for published book &quot;Absolutamente Todo&quot;, Random House, 2021."><img
-                                src="../images/works/16_thumbnail_600.jpg" alt="Artwork" /></a></div>
-                    <div class="work_item"><a class="glightbox" href="../images/works/17.jpg"
-                            data-description="Cover for published book &quot;Absolutamente Todo&quot;, Random House, 2021. Digital illustration"><img
-                                src="../images/works/17_thumbnail_600.jpg" alt="Artwork" /></a></div>
-                    <div class="work_item"><a class="glightbox" href="../images/works/18.jpg"
-                            data-description="Graphics for album cover Magdalena, by Black Mambo (2022)"><img
-                                src="../images/works/18_thumbnail_600.jpg" alt="Artwork" /></a></div>
-                    <div class="work_item"><a class="glightbox" href="../images/works/19.jpg"
-                            data-description="Graphic Design for album cover Magdalena, by Black Mambo (2022)"><img
-                                src="../images/works/19_thumbnail_600.jpg" alt="Artwork" /></a></div>
-                    <div class="work_item"><a class="glightbox" href="../images/works/20.jpg"
-                            data-description="Tune in - Earth Day. Digital illustration for Vitalsetas (2022)"><img
-                                src="../images/works/20_thumbnail_600.jpg" alt="Artwork" /></a></div>
-                    <div class="work_item"><a class="glightbox" href="../images/works/23.jpg"
-                            data-description="Logo Design for Boston Blockchain (2021)"><img
-                                src="../images/works/23_thumbnail_600.jpg" alt="Artwork" /></a></div>
-                    <div class="work_item"><a class="glightbox" href="../images/works/25.png"
-                            data-description="Logo Design for ZenZone brand (2022)"><img
-                                src="../images/works/25_thumbnail_600.png" alt="Artwork" /></a></div>
-                    <div class="work_item"><a class="glightbox" href="../images/works/26.jpg"
-                            data-description="Graphic Design for ZenZone brand, logo and labels (2022)"><img
-                                src="../images/works/26_thumbnail_600.jpg" alt="Artwork" /></a></div>
-                    <div class="work_item"><a class="glightbox" href="../images/works/21.png"
-                            data-description="Christmas poster for Rosewood Home & Condo. Graphic Design, 2024"><img
-                                src="../images/works/21_thumbnail_600.png" alt="Artwork" /></a></div>
-                    <div class="work_item"><a class="glightbox" href="../images/works/22.png"
-                            data-description="Closing Sale poster for Rosewood Home & Condo. Graphic Design, 2024"><img
-                                src="../images/works/22_thumbnail_600.png" alt="Artwork" /></a></div>
-                    <div class="work_item"><a class="glightbox" href="../images/works/39.png"
-                            data-description="Geometry Tree, 2025"><img src="../images/works/39_thumbnail_600.png"
-                                alt="Artwork" /></a></div>
-                    <div class="work_item"><a class="glightbox" href="../images/works/30.jpg"
-                            data-description="Map for published book &quot;Absolutamente Todo&quot;, Random House, 2021. Digital illustration"><img
-                                src="../images/works/30_thumbnail_600.jpg" alt="Artwork" /></a></div>
-                    <div class="work_item"><a class="glightbox" href="../images/works/45.jpg"
-                            data-description="Kadupul Flower (2018) Digital Sketch Adobe Photoshop"><img
-                                src="../images/works/45_thumbnail_600.jpg" alt="Artwork" /></a></div>
+                    <div class="work_item"><a class="glightbox" href="../images/works/5.jpg"
+                            data-description="Salvador Dali (2016) Digital Portrait"><img
+                                src="../images/works/5_thumbnail_900.jpg" alt="Artwork" /></a></div>
                     <div class="work_item"><a class="glightbox" href="../images/works/33.jpg"
                             data-description="Howling Wolf (2014) Digital illustration"><img
                                 src="../images/works/33_thumbnail_600.jpg" alt="Artwork" /></a></div>
-                    <div class="work_item"><a class="glightbox" href="../images/works/34 (2).jpg"
-                            data-description="Rebirth takes courage (2022) Digital illustration"><img
-                                src="../images/works/34 (2)_thumbnail_600.jpg" alt="Artwork" /></a></div>
-                    <div class="work_item"><a class="glightbox" href="../images/works/34.jpg"
-                            data-description="Jaguar Sketch (2018) Digital Art"><img
-                                src="../images/works/34_thumbnail_600.jpg" alt="Artwork" /></a></div>
                     <div class="work_item"><a class="glightbox" href="../images/works/35.jpg"
-                            data-description="Sun & Moon collide (2019) Digital illustration"><img
+                            data-description="Sun &amp; Moon collide (2019) Digital illustration"><img
                                 src="../images/works/35_thumbnail_600.jpg" alt="Artwork" /></a></div>
                     <div class="work_item"><a class="glightbox" href="../images/works/32.jpg"
                             data-description="General Manolo (2021) Digital illustration"><img
                                 src="../images/works/32_thumbnail_600.jpg" alt="Artwork" /></a></div>
+                    <div class="work_item"><a class="glightbox" href="../images/works/39.png"
+                            data-description="Geometry Tree, 2025"><img src="../images/works/39_thumbnail_600.png"
+                                alt="Artwork" /></a></div>
+                    <div class="work_item"><a class="glightbox" href="../images/works/30.jpg"
+                            data-description="Map for published book &quot;Absolutamente Todo&quot;"><img
+                                src="../images/works/30_thumbnail_600.jpg" alt="Artwork" /></a></div>
+                    <div class="work_item"><a class="glightbox" href="../images/works/45.jpg"
+                            data-description="Kadupul Flower (2018) Digital Sketch"><img
+                                src="../images/works/45_thumbnail_600.jpg" alt="Artwork" /></a></div>
+                    <div class="work_item"><a class="glightbox" href="../images/works/34 (2).jpg"
+                            data-description="Rebirth takes courage (2022) Digital illustration"><img
+                                src="../images/works/34 (2)_thumbnail_600.jpg" alt="Artwork" /></a></div>
                     <div class="work_item"><a class="glightbox" href="../images/works/40.png"
                             data-description="Geometry Wolf, 2025"><img src="../images/works/40_thumbnail_600.png"
                                 alt="Artwork" /></a></div>
-                    <div class="work_item"><a class="glightbox" href="../images/works/50.jpg" What does a fish know
-                            about the water in which it swims all its life?" - Albert Einstein - Digital illustration"
-                            data-description="&quot;What does a fish know about the water in which it swims all its life?&quot;  - Albert Einstein - Digital illustration (2013)"><img
+                    <div class="work_item"><a class="glightbox" href="../images/works/50.jpg"
+                            data-description="Albert Einstein quote - Digital illustration (2013)"><img
                                 src="../images/works/50_thumbnail_600.jpg" alt="Artwork" /></a></div>
                 </div>
             </div>
         </main>
-
 
         <!-- TAB SWITCHING SCRIPT -->
         <script src="../js/gallery-engine.js"></script>

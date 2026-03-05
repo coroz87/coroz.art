@@ -15,6 +15,19 @@ window.initGalleryEngine = function () {
 
     tabs.forEach(tab => {
         tab.addEventListener('click', () => {
+            const targetUrl = tab.getAttribute('data-url');
+
+            // If this tab has a URL, navigate to the dedicated page instead of switching inline
+            if (targetUrl) {
+                // Use PJAX navigation if available (myscript.js exposes window.pjaxNavigate)
+                if (typeof window.pjaxNavigate === 'function') {
+                    window.pjaxNavigate(targetUrl);
+                } else {
+                    window.location.href = targetUrl;
+                }
+                return; // Don't do inline switching
+            }
+
             // Remove active from all tabs & grids
             tabs.forEach(t => t.classList.remove('active'));
             grids.forEach(g => g.classList.remove('active'));

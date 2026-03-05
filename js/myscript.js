@@ -59,12 +59,8 @@ document.addEventListener('DOMContentLoaded', function () {
 	});
 
 	function getContentFromDoc(doc) {
-		// Try each known page content container in priority order
-		return doc.querySelector('.subpage-main')
-			|| doc.querySelector('.about-page')
-			|| doc.querySelector('#home')
-			|| doc.querySelector('main')
-			|| doc.querySelector('body');
+		// Strictly target the unfailing pjax wrapper we added to all pages
+		return doc.querySelector('#pjax-container');
 	}
 
 	function getBodyClassesFromDoc(doc) {
@@ -138,9 +134,11 @@ document.addEventListener('DOMContentLoaded', function () {
 					document.head.appendChild(styleTag);
 				}
 
-				// Swap body content while keeping headers
+				// Swap body content safely by replacing inner contents of the permanent container
 				if (newContent && currentContent) {
-					currentContent.outerHTML = newContent.outerHTML;
+					currentContent.innerHTML = newContent.innerHTML;
+					// Crucial: scroll to top on new page load so fixed headers align correctly
+					window.scrollTo(0, 0);
 				}
 
 				// Update history
@@ -166,12 +164,13 @@ document.addEventListener('DOMContentLoaded', function () {
 				document.body.classList.remove('page-leaving');
 				document.body.classList.add('page-entering');
 
-				// Wait for two animation frames so the browser fully paints and lays out the new DOM
-				// before re-initialising any scripts (otherwise homeHeight, Swiper widths etc get wrong values)
+				// Wait for animation frames so the browser fully paints and lays out the new DOM
 				requestAnimationFrame(function () {
 					requestAnimationFrame(function () {
-						window.dispatchEvent(new Event('pjax:complete'));
-						window.dispatchEvent(new Event('resize'));
+						setTimeout(function () {
+							window.dispatchEvent(new Event('pjax:complete'));
+							window.dispatchEvent(new Event('resize'));
+						}, 50); // Small 50ms buffer ensures DOM insertion is finalized
 					});
 				});
 
@@ -193,6 +192,9 @@ document.addEventListener('DOMContentLoaded', function () {
 				window.location.href = dest;
 			});
 	}
+
+	// Expose PJAX navigation globally so other scripts (e.g. gallery-engine.js) can trigger it
+	window.pjaxNavigate = navigateTo;
 
 	// Intercept all nav clicks
 	document.body.addEventListener('click', function (e) {
@@ -238,9 +240,14 @@ window.initCorozScripts = function () {
 		$('.navmenu ul').superfish();
 	}
 
-	// Forcibly close any dropdowns that may have stayed open across PJAX navigations
-	$('.navmenu ul li').removeClass('sfHover');
-	$('.navmenu ul ul').css('display', 'none');
+	// Forcibly close any dropdowns that may have stayed open across PJAX navigations (desktop only)
+	if ($(window).width() >= 992) {
+		$('.navmenu ul li').removeClass('sfHover');
+		$('.navmenu ul ul').css('display', 'none');
+	} else {
+		// On mobile, ensure inline styles don't override the style.css native layout
+		$('.navmenu ul ul').css('display', '');
+	}
 
 	// Close mobile menu on navigation (desktop nav always stays visible)
 	if ($(window).width() < 992) {
@@ -398,19 +405,22 @@ window.initCorozScripts = function () {
 
 
 	/*-----------------------------------------------------------------------------------*/
-	/*	IFRAME TRANSPARENT
+	/*	IFRAME TRANSPARENT (video iframes only – skip Maps, etc.)
 	/*-----------------------------------------------------------------------------------*/
 	$("iframe").each(function () {
 		var ifr_source = $(this).attr('src');
+		// Only apply wmode trick to YouTube/Vimeo video embeds, NOT Maps or other iframes
+		if (!ifr_source) return;
+		if (ifr_source.indexOf('youtube') === -1 && ifr_source.indexOf('vimeo') === -1) return;
 		var wmode = "wmode=transparent";
-		if (ifr_source && ifr_source.indexOf('?') != -1) {
-			var getQString = ifr_source.split('?');
-			var oldString = getQString[1];
-			var newString = getQString[0];
-			$(this).attr('src', newString + '?' + wmode + '&' + oldString);
+		if (ifr_source.indexOf('?') !== -1) {
+			var parts = ifr_source.split('?');
+			$(this).attr('src', parts[0] + '?' + wmode + '&' + parts[1]);
+		} else {
+			$(this).attr('src', ifr_source + '?' + wmode);
 		}
-		else if (ifr_source) $(this).attr('src', ifr_source + '?' + wmode);
 	});
+
 
 	/*-----------------------------------------------------------------------------------*/
 	/*	BLOG MIN HEIGHT
@@ -425,14 +435,7 @@ window.initCorozScripts = function () {
 	/*-----------------------------------------------------------------------------------*/
 	/*	FOOTER MAP
 	/*-----------------------------------------------------------------------------------*/
-	$('.map_show').off('click').on('click', function () {
-		$('#map').addClass('showed');
-	});
-
-	$('.map_hide').off('click').on('click', function () {
-		$('#map').removeClass('showed');
-	});
-
+	// Kept blank. Map events are delegated for PJAX safety further down.
 
 	/*-----------------------------------------------------------------------------------*/
 	/*	MAGNIFIC POPUP / GLIGHTBOX
@@ -507,17 +510,12 @@ window.initCorozScripts = function () {
 
 
 
-	// Map Modal (Contact page) - using event delegation for PJAX safety
-	$(document).off('click.mapModalOpen').on('click.mapModalOpen', '#map-icon-btn', function () {
-		$('#map-modal').css('display', 'flex');
+	// Map Panel (Contact page) - using event delegation for PJAX safety
+	$(document).off('click.mapShow').on('click.mapShow', '.map_show', function () {
+		$('#map').addClass('showed');
 	});
-	$(document).off('click.mapModalClose').on('click.mapModalClose', '#map-close', function () {
-		$('#map-modal').css('display', 'none');
-	});
-	$(document).off('click.mapModalBg').on('click.mapModalBg', '#map-modal', function (e) {
-		if (e.target === this) {
-			$(this).css('display', 'none');
-		}
+	$(document).off('click.mapHide').on('click.mapHide', '.map_hide', function () {
+		$('#map').removeClass('showed');
 	});
 
 	/*-----------------------------------------------------------------------------------*/

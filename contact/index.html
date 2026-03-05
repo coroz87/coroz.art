@@ -267,6 +267,90 @@
                 padding-bottom: 40px !important;
             }
         }
+
+        /* ── Map Modal ── */
+        #map-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            background: rgba(0, 0, 0, 0.75);
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(3px);
+            -webkit-backdrop-filter: blur(3px);
+            animation: mapFadeIn 0.2s ease;
+        }
+
+        #map-modal.open {
+            display: flex;
+        }
+
+        @keyframes mapFadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        #map-modal-box {
+            position: relative;
+            width: 90vw;
+            max-width: 720px;
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: mapBoxIn 0.25s ease;
+        }
+
+        @keyframes mapBoxIn {
+            from {
+                transform: scale(0.92);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        #map-modal-box iframe {
+            display: block;
+            width: 100%;
+            height: 55vw;
+            max-height: 450px;
+            min-height: 250px;
+            border: 0;
+        }
+
+        #map-modal-close {
+            position: absolute;
+            top: 10px;
+            right: 12px;
+            z-index: 10;
+            width: 36px;
+            height: 36px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.55);
+            color: #fff;
+            font-size: 22px;
+            line-height: 1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        #map-modal-close:hover {
+            background: rgba(0, 0, 0, 0.85);
+        }
     </style>
 
 </head>
@@ -294,15 +378,15 @@
                         <li class="sub-menu">
                             <a href="../2dprojects/">2D PROJECTS</a>
                             <ul>
-                                <li><a href="../2dprojects/#ill">Illustrations &amp; Sketches</a></li>
-                                <li><a href="../2dprojects/#graphic">Graphic Design</a></li>
+                                <li><a href="../illustrations/">Illustrations &amp; Sketches</a></li>
+                                <li><a href="../graphicdesign/">Graphic Design</a></li>
                             </ul>
                         </li>
                         <li class="sub-menu">
                             <a href="../3dprojects/">3D PROJECTS</a>
                             <ul>
-                                <li><a href="../3dprojects/#3ddesign">3D Design</a></li>
-                                <li><a href="../3dprojects/#3dart">3D Art</a></li>
+                                <li><a href="../3ddesign/">3D Design</a></li>
+                                <li><a href="../3dart/">3D Art</a></li>
                             </ul>
                         </li>
                         <li class="scroll_btn"><a href="../arts/">ARTWORK</a></li>
@@ -322,116 +406,105 @@
         </div><!-- //MENU BLOCK -->
     </div><!-- //CONTAINER -->
 
-    <div class="about-page">
-
-        <!-- Clients Stripe -->
-        <div class="clients-stripe">
-            <div class="client_img"><img src="../images/clients/1.jpg" alt="" /></div>
-            <div class="client_img"><img src="../images/clients/2.jpg" alt="" /></div>
-            <div class="client_img"><img src="../images/clients/3.jpg" alt="" /></div>
-            <div class="client_img"><img src="../images/clients/4.jpg" alt="" /></div>
-            <div class="client_img"><img src="../images/clients/5.jpg" alt="" /></div>
-            <div class="client_img"><img src="../images/clients/6.jpg" alt="" /></div>
-            <div class="client_img"><img src="../images/clients/7.jpg" alt="" /></div>
-            <div class="client_img"><img src="../images/clients/8.jpg" alt="" /></div>
-            <div class="client_img"><img src="../images/clients/9.jpg" alt="" /></div>
-            <div class="client_img"><img src="../images/clients/10.jpg" alt="" /></div>
-        </div>
-
-        <!-- Combined Contact Content -->
-        <div class="contact-content">
-            <footer>
-                <div class="container">
-                    <div class="row">
-
-                        <div class="col-lg-4 col-md-5 col-sm-6 padbot30 foot_about_block">
-                            <h4><b>About</b> Coroz</h4>
-                            <p>Coroz is a creative studio founded by Carlos Orozco, a Colombian artist and designer
-                                experienced in coding, traditional
-                                and digital arts, spatial design, 3D modeling & rendering.</p>
-                            <ul class="social">
-                                <li><a href="https://www.behance.net/corozarts" target="_blank"><i
-                                            class="fa-brands fa-behance"></i></a></li>
-                                <li><a href="https://www.instagram.com/coroz.arts" target="_blank"><i
-                                            class="fa-brands fa-instagram"></i></a></li>
-                                <li><a href="https://www.linkedin.com/in/coroz-arts" target="_blank"><i
-                                            class="fa-brands fa-linkedin"></i></a></li>
-                                <li><a href="https://wa.me/17785864452" target="_blank"><i
-                                            class="fa-brands fa-whatsapp"></i></a></li>
-                                <li><a href="javascript:void(0);" id="map-icon-btn" title="Montreal Location"><i
-                                            class="fa-solid fa-location-dot"></i></a></li>
-                            </ul>
-                        </div>
-
-                        <div class="col-lg-4 col-md-5 padbot30">
-                            <h4><b>Contact</b> Us</h4>
-                            <div class="span9 contact_form">
-                                <div id="note"></div>
-                                <div id="fields">
-                                    <form id="contact-form-face" class="clearfix"
-                                        action="https://formsubmit.co/coroz.art@gmail.com" method="POST">
-                                        <input type="hidden" name="_captcha" value="false">
-                                        <input type="hidden" name="_subject" value="New message from Coroz Portfolio">
-                                        <input type="hidden" name="_template" value="table">
-                                        <input type="text" name="name" placeholder="Your Name" required />
-                                        <input type="email" name="email" placeholder="Your Email" required />
-                                        <textarea name="message" placeholder="Your Message" required></textarea>
-                                        <input class="contact_btn" type="submit" value="Send Message" />
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </footer>
-        </div>
-
-    </div>
-
-
-
-
-    <!-- MAP MODAL -->
-    <div id="map-modal" style="
-        display:none;
-        position:fixed;
-        inset:0;
-        z-index:9999;
-        background:rgba(0,0,0,0.75);
-        align-items:center;
-        justify-content:center;">
-        <div style="
-            position:relative;
-            width:90%;
-            max-width:680px;
-            background:#111;
-            box-shadow:0 8px 40px rgba(0,0,0,0.6);">
-            <button id="map-close" style="
-                position:absolute;
-                top:-16px;
-                right:-16px;
-                width:34px;
-                height:34px;
-                border-radius:50%;
-                border:none;
-                background:#fff;
-                color:#333;
-                font-size:18px;
-                line-height:34px;
-                text-align:center;
-                cursor:pointer;
-                z-index:10;
-                box-shadow:0 2px 8px rgba(0,0,0,0.3);">&times;</button>
+    <!-- MAP MODAL OVERLAY -->
+    <div id="map-modal" role="dialog" aria-modal="true" aria-label="Location map">
+        <div id="map-modal-box">
+            <button id="map-modal-close" aria-label="Close map">&times;</button>
             <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63308.77523151947!2d-73.62183682003582!3d45.472240981123264!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4cc910fa9cbdea19%3A0x57f86e154e8da1ed!2s6759%20Bd%20Monk%2C%20Montr%C3%A9al%2C%20QC%20H4E%203J2!5e0!3m2!1sen!2sca!4v1771974117049!5m2!1sen!2sca"
-                width="100%" height="380" style="border:0;display:block;" allowfullscreen="" loading="lazy"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d89511.19214671678!2d-73.66400158935447!3d45.485463994960575!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4cc910fa9cbdea19%3A0x57f86e154e8da1ed!2s6759%20Bd%20Monk%2C%20Montr%C3%A9al%2C%20QC%20H4E%203J2!5e0!3m2!1sen!2sca!4v1772732239269!5m2!1sen!2sca""
+                width=" 600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
                 referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
     </div>
 
+    <div id="pjax-container">
+        <div class="about-page">
 
+            <!-- Clients Stripe -->
+            <div class="clients-stripe">
+                <div class="client_img"><img src="../images/clients/1.jpg" alt="" /></div>
+                <div class="client_img"><img src="../images/clients/2.jpg" alt="" /></div>
+                <div class="client_img"><img src="../images/clients/3.jpg" alt="" /></div>
+                <div class="client_img"><img src="../images/clients/4.jpg" alt="" /></div>
+                <div class="client_img"><img src="../images/clients/5.jpg" alt="" /></div>
+                <div class="client_img"><img src="../images/clients/6.jpg" alt="" /></div>
+                <div class="client_img"><img src="../images/clients/7.jpg" alt="" /></div>
+                <div class="client_img"><img src="../images/clients/8.jpg" alt="" /></div>
+                <div class="client_img"><img src="../images/clients/9.jpg" alt="" /></div>
+                <div class="client_img"><img src="../images/clients/10.jpg" alt="" /></div>
+            </div>
 
+            <!-- Combined Contact Content -->
+            <div class="contact-content">
+                <footer>
+                    <div class="container">
+                        <div class="row">
+
+                            <div class="col-lg-4 col-md-5 col-sm-6 padbot30 foot_about_block">
+                                <h4><b>About</b> Coroz</h4>
+                                <p>Coroz is a creative studio founded by Carlos Orozco, a Colombian artist and designer
+                                    experienced in coding, traditional
+                                    and digital arts, spatial design, 3D modeling & rendering.</p>
+                                <ul class="social">
+                                    <li><a href="https://www.behance.net/corozarts" target="_blank"><i
+                                                class="fa-brands fa-behance"></i></a></li>
+                                    <li><a href="https://www.instagram.com/coroz.arts" target="_blank"><i
+                                                class="fa-brands fa-instagram"></i></a></li>
+                                    <li><a href="https://www.linkedin.com/in/coroz-arts" target="_blank"><i
+                                                class="fa-brands fa-linkedin"></i></a></li>
+                                    <li><a href="https://wa.me/17785864452" target="_blank"><i
+                                                class="fa-brands fa-whatsapp"></i></a></li>
+                                    <li><a href="javascript:void(0);" id="map-icon-btn" title="Montreal Location"><i
+                                                class="fa-solid fa-location-dot"></i></a></li>
+                                </ul>
+                            </div>
+
+                            <div class="col-lg-4 col-md-5 padbot30">
+                                <h4><b>Contact</b> Us</h4>
+                                <div class="span9 contact_form">
+                                    <div id="note"></div>
+                                    <div id="fields">
+                                        <form id="contact-form-face" class="clearfix"
+                                            action="https://formsubmit.co/coroz.art@gmail.com" method="POST">
+                                            <input type="hidden" name="_captcha" value="false">
+                                            <input type="hidden" name="_subject"
+                                                value="New message from Coroz Portfolio">
+                                            <input type="hidden" name="_template" value="table">
+                                            <input type="text" name="name" placeholder="Your Name" required />
+                                            <input type="email" name="email" placeholder="Your Email" required />
+                                            <textarea name="message" placeholder="Your Message" required></textarea>
+                                            <input class="contact_btn" type="submit" value="Send Message" />
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </footer>
+            </div>
+
+        </div>
+
+    </div><!-- //pjax-container -->
+
+    <!-- MAP MODAL SCRIPT (self-contained) -->
+    <script>
+        (function initMapModal() {
+            var modal = document.getElementById('map-modal');
+            var iconBtn = document.getElementById('map-icon-btn');
+            var closeBtn = document.getElementById('map-modal-close');
+            if (!modal || !iconBtn) return;
+
+            function openMap(e) { e.preventDefault(); e.stopPropagation(); modal.classList.add('open'); document.body.style.overflow = 'hidden'; }
+            function closeMap() { modal.classList.remove('open'); document.body.style.overflow = ''; }
+
+            iconBtn.addEventListener('click', openMap);
+            if (closeBtn) closeBtn.addEventListener('click', closeMap);
+            modal.addEventListener('click', function (e) { if (e.target === modal) closeMap(); });
+            document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeMap(); });
+        })();
+    </script>
 
 </body>
 

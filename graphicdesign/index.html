@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <title>Graphic Design | Coroz – Logo, Brand &amp; Visual Design – Montreal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Browse the graphic design portfolio of Coroz (Carlos Orozco) in Montreal. Logo design, brand identity, poster design, and more.">
+    <meta name="keywords"
+        content="Coroz, Carlos Orozco, Graphic Design, Logo Design, Brand Identity, Portfolio, Montreal">
+    <meta name="author" content="Carlos Orozco">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://coroz.art/graphicdesign/">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://coroz.art/graphicdesign/">
+    <meta property="og:title" content="Graphic Design | Coroz – Logo & Visual Design">
+    <meta property="og:image" content="https://coroz.art/images/works/16.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Graphic Design | Coroz">
+    <meta name="twitter:image" content="https://coroz.art/images/works/16.jpg">
+
+    <link rel="shortcut icon" href="../images/favicon.ico">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
+    <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="../css/flexslider.css" rel="stylesheet" type="text/css" />
+    <link href="../css/animate.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="../css/style.css" rel="stylesheet" type="text/css" />
+    <link href="../css/transitions.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link
+        href='https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500italic,700,500,700italic,900,900italic'
+        rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <script src="../js/jquery.min.js" type="text/javascript"></script>
+    <script src="../js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="../js/superfish.min.js" type="text/javascript"></script>
+    <script src="../js/jquery.flexslider-min.js" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="../js/animate.js" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+    <script src="../js/myscript.js" type="text/javascript"></script>
+
+    <style>
+        body {
+            overflow: hidden;
+        }
+
+        .subpage-main {
+            position: fixed;
+            top: 60px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            padding-bottom: 10px;
+            background: #fff;
+        }
+
+        .subpage-main h2 {
+            font-size: 32px;
+            line-height: 1;
+            flex-shrink: 0;
+            margin: 0;
+            text-align: left;
+        }
+
+        .top-header-area {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            padding: 38px 0 26px 0;
+            width: 100%;
+        }
+
+        .gallery-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: #fff;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .gallery-tabs {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            background: transparent;
+        }
+
+        .gallery-tabs button {
+            background: none;
+            border: none;
+            font-size: 19px;
+            color: #999;
+            cursor: pointer;
+            transition: color 0.3s;
+            padding: 0 15px;
+            outline: none;
+        }
+
+        .gallery-tabs button.active {
+            color: #333;
+            font-weight: 500;
+        }
+
+        .gallery-tabs .tab-divider {
+            width: 1px;
+            height: 16px;
+            background: #ccc;
+            margin: 0 5px;
+        }
+
+        .galleries-clip {
+            position: relative;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 1170px;
+            margin: 0 auto 10px auto;
+            padding: 10px 15px;
+            box-sizing: border-box;
+        }
+
+        .galleries-container {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            border: none;
+            box-sizing: border-box;
+        }
+
+        .gallery-arrow {
+            display: none;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 20;
+            width: 50px;
+            height: 50px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 32px;
+            color: #fff;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            transition: text-shadow 0.2s, transform 0.2s;
+        }
+
+        .gallery-arrow:hover {
+            text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9);
+            transform: translateY(-50%) scale(1.15);
+        }
+
+        .gallery-arrow.arrow-left {
+            left: -50px;
+        }
+
+        .gallery-arrow.arrow-right {
+            right: -50px;
+        }
+
+        @media (max-width: 1300px) {
+            .gallery-arrow.arrow-left {
+                left: 0px;
+            }
+
+            .gallery-arrow.arrow-right {
+                right: 0px;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .gallery-arrow {
+                display: inline-flex;
+            }
+        }
+
+        .gallery-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            padding: 0;
+            display: grid;
+            grid-template-rows: repeat(2, calc(50% - 2.5px));
+            grid-auto-flow: column;
+            grid-auto-columns: max-content;
+            gap: 5px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .gallery-grid.active.grid-loaded {
+            opacity: 1;
+            visibility: visible;
+            z-index: 2;
+        }
+
+        .gallery-grid>a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            aspect-ratio: 3/2;
+            overflow: hidden;
+            background: #f0f0f0;
+        }
+
+        .gallery-grid>a:nth-child(3n+1) {
+            grid-row: span 2;
+            width: auto;
+        }
+
+        .gallery-grid>a:nth-child(3n+1) img {
+            width: auto;
+            height: 100%;
+            object-fit: contain;
+            background: #f0f0f0;
+        }
+
+        .gallery-grid img {
+            flex: 1;
+            min-height: 0;
+            min-width: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+            border-radius: 4px;
+            object-fit: contain;
+            background: #f0f0f0;
+            cursor: pointer;
+            transition: filter 0.3s ease, transform 0.3s ease;
+        }
+
+        @media (hover: hover) {
+            .gallery-grid img:hover {
+                transform: scale(1.05);
+            }
+        }
+
+        .subpage-main .projects-wrapper {
+            flex-shrink: 0;
+            height: 100px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+            background: #fff;
+        }
+
+        .bottom-gallery-track {
+            display: flex;
+            height: 100%;
+            gap: 8px;
+            padding: 4px 0;
+            overflow: hidden;
+        }
+
+        .work_item {
+            flex-shrink: 0;
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .work_item img {
+            height: 100%;
+            width: auto;
+            object-fit: cover;
+            border-radius: 3px;
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                overflow: auto;
+            }
+
+            .subpage-main {
+                position: relative;
+                top: auto;
+                left: auto;
+                right: auto;
+                bottom: auto;
+                height: calc(100vh - 60px);
+                overflow: hidden;
+            }
+
+            .projects-wrapper,
+            .projects_wrapper {
+                display: none !important;
+            }
+
+            .gallery-area {
+                justify-content: flex-start;
+                overflow: hidden;
+            }
+
+            .galleries-clip {
+                position: relative;
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                max-width: 1170px;
+                margin: 0 auto 10px auto;
+                padding: 10px 15px;
+                box-sizing: border-box;
+            }
+
+            .galleries-container {
+                margin-bottom: 0 !important;
+                margin-top: 10px;
+                width: 100%;
+                height: 100%;
+                border: none;
+                overflow: hidden;
+                position: relative;
+            }
+
+            .gallery-grid {
+                display: none;
+            }
+
+            .gallery-grid.active {
+                display: flex;
+                flex-wrap: wrap;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                overflow-x: hidden;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+                gap: 5px;
+                padding: 0;
+                box-sizing: border-box;
+                align-content: flex-start;
+            }
+
+            .gallery-grid.active>a {
+                width: calc(50% - 2.5px);
+                height: auto;
+                aspect-ratio: unset;
+                overflow: hidden;
+                background: #f0f0f0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-sizing: border-box;
+            }
+
+            .gallery-grid.active>a:nth-child(5n+1) {
+                width: 100%;
+                height: auto;
+            }
+
+            .gallery-grid.active>a img {
+                width: 100%;
+                height: auto;
+                object-fit: contain;
+            }
+
+            .top-header-area {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 20px 0 12px 0;
+                gap: 18px;
+            }
+
+            .gallery-tabs {
+                justify-content: center;
+                width: 100%;
+            }
+
+            .gallery-tabs button {
+                font-size: 18px;
+                padding: 0 18px;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <header>
+        <div class="menu_block">
+            <div class="container clearfix">
+                <div class="logo pull-left">
+                    <a href="../home/"><span class="b1">COROZ</span><span class="b3">|</span><span class="b4">Arts &amp;
+                            Design</span></a>
+                </div>
+                <a class="menu_toggler" href="javascript:void(0);"><i class="fa fa-bars"></i></a>
+                <div class="pull-right">
+                    <nav class="navmenu center">
+                        <ul>
+                            <li class="first scroll_btn"><a href="../home/">HOME</a></li>
+                            <li class="sub-menu active">
+                                <a href="../2dprojects/">2D PROJECTS</a>
+                                <ul>
+                                    <li><a href="../illustrations/">Illustrations &amp; Sketches</a></li>
+                                    <li class="active"><a href="../graphicdesign/">Graphic Design</a></li>
+                                </ul>
+                            </li>
+                            <li class="sub-menu">
+                                <a href="../3dprojects/">3D PROJECTS</a>
+                                <ul>
+                                    <li><a href="../3ddesign/">3D Design</a></li>
+                                    <li><a href="../3dart/">3D Art</a></li>
+                                </ul>
+                            </li>
+                            <li class="scroll_btn"><a href="../arts/">ARTWORK</a></li>
+                            <li class="scroll_btn"><a href="../contact/">CONTACT</a></li>
+                            <li class="theme-switch-wrapper">
+                                <label class="theme-switch" for="themeToggleGfx">
+                                    <input type="checkbox" id="themeToggleGfx" />
+                                    <div class="slider round">
+                                        <i class="fas fa-sun"></i>
+                                        <i class="fas fa-moon"></i>
+                                    </div>
+                                </label>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div id="pjax-container">
+        <main class="subpage-main">
+            <div style="width: 100%;">
+                <div class="container">
+                    <div class="top-header-area">
+                        <h2><b>Graphic</b> Design</h2>
+                        <div class="gallery-tabs">
+                            <button class="tab-btn" data-target="gallery-ill"
+                                data-url="../illustrations/">Illustrations</button>
+                            <div class="tab-divider"></div>
+                            <button class="tab-btn active" data-target="gallery-graphic">Graphic Design</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-area">
+                <div class="galleries-clip">
+                    <button class="gallery-arrow arrow-left" id="gallery-arrow-left" aria-label="Scroll left"><i
+                            class="fa fa-angle-left"></i></button>
+                    <button class="gallery-arrow arrow-right" id="gallery-arrow-right" aria-label="Scroll right"><i
+                            class="fa fa-angle-right"></i></button>
+                    <div class="galleries-container">
+                        <div class="gallery-grid active" id="gallery-graphic">
+                            <a href="../images/works/16.jpg" class="glightbox"
+                                data-description="Cover Design for published book &quot;Absolutamente Todo&quot;, Random House, 2021."><img
+                                    src="../images/works/16_thumbnail_600.jpg" alt="Artwork" /></a>
+                            <a href="../images/works/17.jpg" class="glightbox"
+                                data-description="Cover for published book &quot;Absolutamente Todo&quot;, Random House, 2021. Digital illustration"><img
+                                    src="../images/works/17_thumbnail_600.jpg" alt="Artwork" /></a>
+                            <a href="../images/works/18.jpg" class="glightbox"
+                                data-description="Graphics for album cover Magdalena, by Black Mambo (2022)"><img
+                                    src="../images/works/18_thumbnail_900.jpg" alt="Artwork" /></a>
+                            <a href="../images/works/19.jpg" class="glightbox"
+                                data-description="Graphic Design for album cover Magdalena, by Black Mambo (2022)"><img
+                                    src="../images/works/19_thumbnail_600.jpg" alt="Artwork" /></a>
+                            <a href="../images/works/REDES LANZAMIENTO -01.jpg" class="glightbox"
+                                data-description="Graphic Design for album cover Magdalena, by Black Mambo (2022)"><img
+                                    src="../images/works/REDES LANZAMIENTO -01_thumbnail_900.jpg" alt="Artwork" /></a>
+                            <a href="../images/works/20 2.jpg" class="glightbox"
+                                data-description="Tune in - Earth Day. Digital illustration for Vitalsetas (2022)"><img
+                                    src="../images/works/20 2_thumbnail_900.jpg" alt="Artwork" /></a>
+                            <a href="../images/works/27.jpg" class="glightbox"
+                                data-description="Illustrations and Graphic Design to honor people with disabilities. Cali, Colombia, 2015."><img
+                                    src="../images/works/27_thumbnail_600.jpg" alt="Artwork" /></a>
+                            <a href="../images/works/21.png" class="glightbox"
+                                data-description="Christmas poster for Rosewood Home &amp; Condo. Graphic Design, 2024"><img
+                                    src="../images/works/21_thumbnail_600.png" alt="Artwork" /></a>
+                            <a href="../images/works/30 (4).png" class="glightbox"
+                                data-description="Sale Poster for Rosewood Home &amp; Condo. Graphic Design, 2024"><img
+                                    src="../images/works/30 (4)_thumbnail_900.png" alt="Artwork" /></a>
+                            <a href="../images/works/30 (2).png" class="glightbox"
+                                data-description="Sale Poster for Rosewood Home &amp; Condo. Graphic Design, 2024"><img
+                                    src="../images/works/30 (2)_thumbnail_900.png" alt="Artwork" /></a>
+                            <a href="../images/works/30 (3).png" class="glightbox"
+                                data-description="Sale Poster for Rosewood Home &amp; Condo. Graphic Design, 2024"><img
+                                    src="../images/works/30 (3)_thumbnail_600.png" alt="Artwork" /></a>
+                            <a href="../images/works/22.png" class="glightbox"
+                                data-description="Closing Sale poster for Rosewood Home &amp; Condo. Graphic Design, 2024"><img
+                                    src="../images/works/22_thumbnail_900.png" alt="Artwork" /></a>
+                            <a href="../images/works/23.jpg" class="glightbox"
+                                data-description="Logo Design for Boston Blockchain (2021)"><img
+                                    src="../images/works/23_thumbnail_600.jpg" alt="Artwork" /></a>
+                            <a href="../images/works/24.jpg" class="glightbox"
+                                data-description="Landing page Design for Boston Blockchain (2021)"><img
+                                    src="../images/works/24_thumbnail_900.jpg" alt="Artwork" /></a>
+                            <a href="../images/works/25.png" class="glightbox"
+                                data-description="Logo Design for ZenZone brand (2022)"><img
+                                    src="../images/works/25_thumbnail_600.png" alt="Artwork" /></a>
+                            <a href="../images/works/26.jpg" class="glightbox"
+                                data-description="Graphic Design for ZenZone brand, logo and labels (2022)"><img
+                                    src="../images/works/26_thumbnail_600.jpg" alt="Artwork" /></a>
+                            <a href="../images/works/29 (5).jpg" class="glightbox"
+                                data-description="Logo and label Design for Unicum, a typical Hungarian drink (2011)"><img
+                                    src="../images/works/29 (5)_thumbnail_900.jpg" alt="Artwork" /></a>
+                            <a href="../images/works/29 (4).jpg" class="glightbox"
+                                data-description="Logo and label Design for Hungarian Brand (2011)"><img
+                                    src="../images/works/29 (4)_thumbnail_600.jpg" alt="Artwork" /></a>
+                            <a href="../images/works/29.jpg" class="glightbox"
+                                data-description="Logo Design for Hungarian Brand (2011)"><img
+                                    src="../images/works/29_thumbnail_900.jpg" alt="Artwork" /></a>
+                            <a href="../images/works/28.jpg" class="glightbox"
+                                data-description="Logo, Character Design and illustrations for Café Communications, Budapest, Hungary (2012)"><img
+                                    src="../images/works/28_thumbnail_900.jpg" alt="Artwork" /></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="projects-wrapper">
+                <div class="bottom-gallery-track" id="bottom-track">
+                    <div class="work_item"><a class="glightbox" href="../images/works/16.jpg"
+                            data-description="Cover Design for published book &quot;Absolutamente Todo&quot;, Random House, 2021."><img
+                                src="../images/works/16_thumbnail_600.jpg" alt="Artwork" /></a></div>
+                    <div class="work_item"><a class="glightbox" href="../images/works/18.jpg"
+                            data-description="Graphics for album cover Magdalena, by Black Mambo (2022)"><img
+                                src="../images/works/18_thumbnail_600.jpg" alt="Artwork" /></a></div>
+                    <div class="work_item"><a class="glightbox" href="../images/works/23.jpg"
+                            data-description="Logo Design for Boston Blockchain (2021)"><img
+                                src="../images/works/23_thumbnail_600.jpg" alt="Artwork" /></a></div>
+                    <div class="work_item"><a class="glightbox" href="../images/works/25.png"
+                            data-description="Logo Design for ZenZone brand (2022)"><img
+                                src="../images/works/25_thumbnail_600.png" alt="Artwork" /></a></div>
+                    <div class="work_item"><a class="glightbox" href="../images/works/21.png"
+                            data-description="Christmas poster for Rosewood Home &amp; Condo. Graphic Design, 2024"><img
+                                src="../images/works/21_thumbnail_600.png" alt="Artwork" /></a></div>
+                    <div class="work_item"><a class="glightbox" href="../images/works/22.png"
+                            data-description="Closing Sale poster for Rosewood Home &amp; Condo. Graphic Design, 2024"><img
+                                src="../images/works/22_thumbnail_600.png" alt="Artwork" /></a></div>
+                    <div class="work_item"><a class="glightbox" href="../images/works/26.jpg"
+                            data-description="Graphic Design for ZenZone brand, logo and labels (2022)"><img
+                                src="../images/works/26_thumbnail_600.jpg" alt="Artwork" /></a></div>
+                </div>
+            </div>
+        </main>
+
+        <script src="../js/gallery-engine.js"></script>
+    </div>
+
+</body>
+
+</html>
