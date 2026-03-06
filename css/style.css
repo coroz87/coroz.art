@@ -3426,37 +3426,73 @@ html {
 }
 
 
+/* -----------------------------------------------------------------------
+   GLIGHTBOX: Image + Caption Layout Fix
+   Description always sits BELOW the image on the dark background.
+   Image auto-shrinks to leave room for the caption text.
+----------------------------------------------------------------------- */
+
+/* Outer slide container — vertical flex column: image then caption */
+.ginner-container {
+	display: flex !important;
+	flex-direction: column !important;
+	align-items: center !important;
+	justify-content: center !important;
+	height: 100% !important;
+}
+
+/* Image section sits on top */
+.gslide-media {
+	flex-shrink: 1 !important;
+	/* Allow image to shrink to give caption room */
+	display: flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	overflow: visible !important;
+	/* Let GLightbox zoom escape the bounds */
+}
+
+/* Allow GLightbox zoom to scale freely — NO !important so GLightbox's own
+   transform: scale() override can take effect when user zooms */
 .gslide-image img {
-	max-height: 82vh !important;
-	/* Limit height to leave room for text below */
+	max-height: 72vh;
+	/* Reduced from 80vh to leave guaranteed space for captions */
+	max-width: 100%;
 	object-fit: contain;
 }
 
+/* Caption sits directly below the image, inside the same flex column */
 .gslide-description {
+	flex-shrink: 0 !important;
+	position: relative !important;
+	/* Detach from absolute bottom anchor */
+	bottom: auto !important;
+	width: 100% !important;
+	max-width: 900px !important;
+	background: transparent !important;
+	box-shadow: none !important;
+	max-height: none !important;
+	padding: 10px 20px 20px !important;
+	text-align: center !important;
 	color: #ffffff !important;
 	opacity: 1 !important;
-	font-size: 1.1em !important;
-	text-align: center !important;
+	font-size: 1.05em !important;
+}
+
+.gslide-description-content {
+	width: 100% !important;
+	padding: 0 !important;
 }
 
 .gslide-title {
 	color: #ffffff !important;
 	opacity: 1 !important;
 	font-weight: bold;
-	font-size: 1.25em !important;
+	font-size: 1.2em !important;
 	text-align: center !important;
 }
 
-.gslide-description-content,
-.gslide-description {
-	background: transparent !important;
-	box-shadow: none !important;
-	max-height: none !important;
-	width: 100% !important;
-	padding-top: 5px !important;
-	/* Space between image and text */
-}
-
+.gshow-more,
 .gslide-description.description-bottom {
 	text-align: center !important;
 }
@@ -3526,10 +3562,25 @@ html {
 	/* Force full description text in GLightbox on mobile, hide the 'See More' collapse button */
 	.gdesc-inner {
 		max-height: none !important;
+		padding-bottom: 30px !important;
+		/* Add some padding so it doesn't touch the screen bottom */
 	}
 
 	.gdesc-more {
 		display: none !important;
+	}
+
+	/* Force description to sit IMMEDIATELY below the image instead of anchored to the bottom of the screen */
+	.gslide-description {
+		position: relative !important;
+		bottom: auto !important;
+		background: transparent !important;
+		/* Removes the hard black gradient box if any */
+		width: 100% !important;
+	}
+
+	.ginner-container {
+		justify-content: center !important;
 	}
 }
 

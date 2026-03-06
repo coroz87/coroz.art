@@ -379,6 +379,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		if (window.corozLightbox) {
 			try { window.corozLightbox.destroy(); } catch (e) { }
 		}
+
 		window.corozLightbox = GLightbox({
 			selector: '.glightbox, .zoom',
 			touchNavigation: true,
@@ -387,37 +388,53 @@ document.addEventListener('DOMContentLoaded', function () {
 			dragToleranceX: 40,
 			dragToleranceY: 150,
 			zoomable: true,
-			draggable: true,
-			moreLength: 0 // 0 disables the "See more" truncation completely
+			draggable: false, // Disabling draggable fixes the desktop click-to-zoom and mobile pinch-to-zoom conflicts
+			moreLength: 1000 // A massive number natively disables the "See more" truncation
 		});
 
-		// Native Mouse Wheel to switch Images within Lightbox (Globally applied to all GLightbox instances)
+		// Mouse Wheel to switch Images within Lightbox — only fires when image is at 1x zoom
 		window.addEventListener('wheel', (e) => {
 			const lightboxContainer = document.querySelector('.glightbox-container');
 			const bodyHasOpenClass = document.body.classList.contains('glightbox-open');
 
-			// If the lightbox is open globally
 			if (lightboxContainer && bodyHasOpenClass) {
 				const nextBtn = document.querySelector('.gnext');
 				const prevBtn = document.querySelector('.gprev');
 
 				if (nextBtn && prevBtn) {
-					e.preventDefault(); // Prevent page scroll
-
-					// Add a small debounce buffer to prevent rapid fire skipping
-					if (window.glightboxWheelTimer) return;
-
-					window.glightboxWheelTimer = setTimeout(() => {
-						window.glightboxWheelTimer = null;
-					}, 300);
-
-					if (e.deltaY > 0) {
-						// Reverse for mobile: Scroll down (push up) -> Prev image 
-						prevBtn.click();
-					} else if (e.deltaY < 0) {
-						// Scroll up (pull down) -> Next image
-						nextBtn.click();
+					// Check if GLightbox has zoomed the active image
+					// GLightbox applies transform: scale(N) to .gslide-image img when zooming
+					const activeImg = lightboxContainer.querySelector('.current .gslide-image img');
+					let currentScale = 1;
+					if (activeImg) {
+						const style = window.getComputedStyle(activeImg);
+						const matrix = style.transform || style.webkitTransform;
+						if (matrix && matrix !== 'none') {
+							const values = matrix.match(/matrix\(([^)]+)\)/);
+							if (values) {
+								currentScale = parseFloat(values[1].split(',')[0]);
+							}
+						}
 					}
+
+					// Only intercept wheel for next/prev navigation when at 1x zoom.
+					// If the user has zoomed in (scale > 1.05 to give slight tolerance),
+					// let GLightbox handle panning natively — do not preventDefault.
+					if (currentScale <= 1.05) {
+						e.preventDefault();
+
+						if (window.glightboxWheelTimer) return;
+						window.glightboxWheelTimer = setTimeout(() => {
+							window.glightboxWheelTimer = null;
+						}, 300);
+
+						if (e.deltaY > 0) {
+							prevBtn.click();
+						} else if (e.deltaY < 0) {
+							nextBtn.click();
+						}
+					}
+					// If zoomed in, we let the browser / GLightbox handle panning natively
 				}
 			}
 		}, { passive: false });
