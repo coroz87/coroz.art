@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://coroz.art/sitemap.xml
