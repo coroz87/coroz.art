@@ -39,9 +39,23 @@ document.addEventListener('DOMContentLoaded', function () {
 	const savedTheme = localStorage.getItem('coroz_theme');
 	if (savedTheme === 'dark') {
 		document.body.classList.add('dark-mode');
+
+		// Prevent the toggle from animating when first loading the page in dark mode
+		const noTransitionStyle = document.createElement('style');
+		noTransitionStyle.innerHTML = '.theme-switch .slider:before, .theme-switch .slider { transition: none !important; }';
+		document.head.appendChild(noTransitionStyle);
+
 		// Set the toggle switch to checked if we're in dark mode
 		const themeSwitches = document.querySelectorAll('.theme-switch input');
 		themeSwitches.forEach(sw => sw.checked = true);
+
+		// Force the browser to reflow and apply the instantaneous position
+		void document.body.offsetHeight;
+
+		// Re-enable normal animations
+		setTimeout(() => {
+			noTransitionStyle.remove();
+		}, 50);
 	}
 
 	// 2. Listen for clicks on the theme switch
@@ -77,8 +91,11 @@ document.addEventListener('DOMContentLoaded', function () {
 		document.body.classList.add('page-leaving');
 
 		setTimeout(function () {
+			var currentUrlNoHash = window.location.href.split('#')[0];
+			var destUrlNoHash = dest.split('#')[0];
+			var isSamePage = (currentUrlNoHash === destUrlNoHash);
+
 			// On file:// (local preview) browsers won't auto-resolve directory/ → directory/index.html
-			// so we do it manually. On https:// this branch never runs.
 			if (window.location.protocol === 'file:') {
 				var parts = dest.split('#');
 				var base = parts[0];
@@ -90,6 +107,13 @@ document.addEventListener('DOMContentLoaded', function () {
 				window.location.href = base + hash;
 			} else {
 				window.location.href = dest;
+			}
+
+			// If the user navigates directly to the exact same pathname they are already on, 
+			// the browser avoids a full page load. To meet the requirement of natively resetting
+			// the gallery and acting like a "refresh", we force a hard reload here!
+			if (isSamePage) {
+				window.location.reload();
 			}
 		}, 350); // matches the CSS leave animation duration
 	}
@@ -116,8 +140,15 @@ document.addEventListener('DOMContentLoaded', function () {
 			if (destUrl.protocol !== window.location.protocol) return;
 		} catch (ex) { return; }
 
+		// If user clicks the exact menu item they are already on, force a full refresh sequence
+		if (destUrl.pathname === window.location.pathname && destUrl.hash === window.location.hash) {
+			e.preventDefault();
+			navigateTo(link.href);
+			return;
+		}
+
 		// Same-page hash-only change (same path, different hash) — switch tab directly
-		if (destUrl.pathname === new URL(window.location.href).pathname && destUrl.hash) {
+		if (destUrl.pathname === window.location.pathname && destUrl.hash) {
 			e.preventDefault();
 			var hashId = destUrl.hash.slice(1);
 			var tabBtn = document.querySelector('[data-target="gallery-' + hashId + '"]');

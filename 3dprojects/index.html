@@ -12,6 +12,21 @@
         content="Coroz, Carlos Orozco, 3D Design, 3D Art, 3D Modelling, Rendering, Spatial Design, Montreal, Portfolio">
     <meta name="author" content="Carlos Orozco">
     <meta name="robots" content="index, follow">
+
+    <!-- Render-blocking Dark Mode & Toggle Initialization -->
+    <script>
+        (function () {
+            const savedTheme = localStorage.getItem('coroz_theme');
+            if (savedTheme === 'dark') {
+                document.documentElement.classList.add('dark-mode-preload');
+                const style = document.createElement('style');
+                style.id = 'theme-transition-killer';
+                style.innerHTML = '.theme-switch .slider, .theme-switch .slider:before { transition: none !important; }';
+                document.head.appendChild(style);
+            }
+        })();
+    </script>
+
     <link rel="canonical" href="https://coroz.art/3dprojects/">
     <!-- Open Graph / Social Sharing -->
     <meta property="og:type" content="website">

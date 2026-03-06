@@ -262,6 +262,10 @@ window.initGalleryEngine = function () {
 
         tryInitDesktopGeometry() {
             if (this.boundSize === 0 && this.grid.scrollWidth > 0 && this.grid.children.length > this.baseCount) {
+                // RACE CONDITION FIX: Do not lock in the geometry until all images are fully loaded.
+                // Otherwise, 'scrollWidth' will be calculated based on empty frames, causing cropped loops.
+                if (!this.grid.classList.contains('grid-loaded')) return;
+
                 // Since we explicitly multiplied the content by exactly 5, 
                 // the mathematically perfect width of 1 block is exactly scrollWidth / 5.
                 // This completely avoids subpixel layout and CSS gap rounding errors.

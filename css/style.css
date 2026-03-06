@@ -3820,8 +3820,14 @@ body.dark-mode .padbot20 {
 	box-shadow: 0 0 1px #444;
 }
 
-.theme-switch input:checked+.slider:before {
+.theme-switch input:checked+.slider:before,
+html.dark-mode-preload .theme-switch .slider:before {
 	transform: translateX(30px);
+}
+
+/* Base override for preload dark mode so the slider is dark without native "checked" state */
+html.dark-mode-preload .theme-switch .slider {
+	background-color: #444;
 }
 
 /* ----------------------------------------------------------------------------------- */

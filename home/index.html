@@ -12,6 +12,24 @@
 		content="Coroz, Carlos Orozco, Art, Design, Studio, Montreal, Portfolio, 3D Art, 2D Illustration, Graphic Design, Fine Arts">
 	<meta name="author" content="Carlos Orozco">
 	<meta name="robots" content="index, follow">
+
+	<!-- Render-blocking Dark Mode & Toggle Initialization -->
+	<script>
+		(function () {
+			const savedTheme = localStorage.getItem('coroz_theme');
+			if (savedTheme === 'dark') {
+				// Inject the dark-mode class immediately before body renders
+				document.documentElement.classList.add('dark-mode-preload');
+
+				// Inject a temporary style to completely disable the toggle switch transition
+				const style = document.createElement('style');
+				style.id = 'theme-transition-killer';
+				style.innerHTML = '.theme-switch .slider, .theme-switch .slider:before { transition: none !important; }';
+				document.head.appendChild(style);
+			}
+		})();
+	</script>
+
 	<link rel="canonical" href="https://coroz.art/home/">
 	<!-- Open Graph / Social Sharing -->
 	<meta property="og:type" content="website">
