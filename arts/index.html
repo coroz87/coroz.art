@@ -1,0 +1,666 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <title>Artwork | Coroz – Traditional & Digital Fine Arts – Carlos Orozco Montreal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="The fine arts gallery of Coroz (Carlos Orozco) in Montreal. Paintings, drawings, and mixed media traditional and digital artwork.">
+    <meta name="keywords"
+        content="Coroz, Carlos Orozco, Artwork, Fine Arts, Painting, Drawing, Digital Art, Traditional Art, Mixed Media, Montreal">
+    <meta name="author" content="Carlos Orozco">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://coroz.art/arts/">
+    <!-- Open Graph / Social Sharing -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://coroz.art/arts/">
+    <meta property="og:title" content="Artwork | Coroz – Fine Arts Gallery">
+    <meta property="og:description"
+        content="Fine arts gallery by Carlos Orozco (Coroz): paintings, drawings, and mixed media in Montreal.">
+    <meta property="og:image" content="https://coroz.art/images/works/7.jpg">
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Artwork | Coroz – Fine Arts Gallery">
+    <meta name="twitter:description"
+        content="Paintings, drawings, and mixed media traditional and digital artwork by Carlos Orozco.">
+    <meta name="twitter:image" content="https://coroz.art/images/works/7.jpg">
+
+    <link rel="shortcut icon" href="../images/favicon.ico">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
+    <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="../css/flexslider.css" rel="stylesheet" type="text/css" />
+    <link href="../css/animate.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="../css/style.css" rel="stylesheet" type="text/css" />
+    <link href="../css/transitions.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+    <link
+        href='https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500italic,700,500,700italic,900,900italic'
+        rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <script src="../js/jquery.min.js" type="text/javascript"></script>
+    <script src="../js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="../js/superfish.min.js" type="text/javascript"></script>
+    <script src="../js/jquery.flexslider-min.js" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="../js/animate.js" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+    <script src="../js/myscript.js" type="text/javascript"></script>
+
+    <style>
+        body {
+            overflow: hidden;
+        }
+
+        .subpage-main {
+            position: fixed;
+            top: 60px;
+            /* Claim the adjusted 60px header space */
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            padding-bottom: 10px;
+            /* Padding for slider at the bottom */
+            background: #fff;
+        }
+
+        .subpage-main h2 {
+            font-size: 32px;
+            line-height: 1;
+            flex-shrink: 0;
+            margin: 0;
+            text-align: left;
+        }
+
+        /* Top Header Area (Title) */
+        .top-header-area {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            padding: 38px 0 26px 0;
+            width: 100%;
+        }
+
+        /* Center Gallery Area */
+        .gallery-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: #fff;
+            align-items: center;
+            /* Center the grid wrapper */
+            justify-content: center;
+            /* Vertically center the square */
+        }
+
+        /* Clip wrapper */
+        .galleries-clip {
+            position: relative;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 1170px;
+            margin: 0 auto 10px auto;
+            padding: 10px 15px;
+            box-sizing: border-box;
+            /* overflow removed for arrows */
+        }
+
+        /* Scrollable Container */
+        .galleries-container {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            border: none;
+            box-sizing: border-box;
+        }
+
+        /* Gallery scroll arrows â€” GLightbox style */
+        .gallery-arrow {
+            display: none;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 20;
+            width: 50px;
+            height: 50px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 32px;
+            color: #fff;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            transition: text-shadow 0.2s, transform 0.2s;
+        }
+
+        .gallery-arrow:hover {
+            text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9);
+            transform: translateY(-50%) scale(1.15);
+        }
+
+        .gallery-arrow.arrow-left {
+            left: -50px;
+        }
+
+        .gallery-arrow.arrow-right {
+            right: -50px;
+        }
+
+        @media (max-width: 1300px) {
+            .gallery-arrow.arrow-left {
+                left: 0px;
+            }
+
+            .gallery-arrow.arrow-right {
+                right: 0px;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .gallery-arrow {
+                display: inline-flex;
+            }
+        }
+
+        .gallery-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            padding: 0;
+
+            /* CSS Grid for predictable alternating masonry pattern */
+            display: grid;
+            grid-template-rows: repeat(2, calc(50% - 2.5px));
+            /* Force exactly 50% height rows minus half the 5px gap */
+            grid-auto-flow: column;
+            /* Fill column by column left-to-right */
+            grid-auto-columns: max-content;
+            /* Size column to fit explicit item widths */
+            gap: 5px;
+            /* Tighter gap as requested */
+
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+            /* Scrollbar styling for inner grid - Hidden */
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .gallery-grid.grid-loaded {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .gallery-grid::-webkit-scrollbar {
+            display: none;
+        }
+
+        .gallery-grid::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .gallery-grid::-webkit-scrollbar-thumb {
+            background-color: #ccc;
+            border-radius: 10px;
+        }
+
+        /* Alternating grid masonry layout */
+        .gallery-grid>a {
+            display: flex;
+            box-sizing: border-box;
+            height: 100%;
+            width: 100%;
+            min-height: 0;
+            min-width: 0;
+            overflow: hidden;
+            background: #f0f0f0;
+        }
+
+        /* 1 complete (spans 2 full rows) */
+        .gallery-grid>a:nth-child(3n+1) {
+            grid-row: span 2;
+            width: auto;
+        }
+
+        /* Natural aspect ratio for full-height single images */
+        .gallery-grid>a:nth-child(3n+1) img {
+            width: auto;
+            height: 100%;
+            object-fit: contain;
+            background: #f0f0f0;
+        }
+
+        .gallery-grid img {
+            flex: 1;
+            min-height: 0;
+            min-width: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+            border-radius: 4px;
+            object-fit: contain;
+            background: #f0f0f0;
+            cursor: pointer;
+            transition: filter 0.3s ease, transform 0.3s ease;
+        }
+
+        @media (hover: hover) {
+            .gallery-grid img:hover {
+                transform: scale(1.05);
+                /* Magnify effect */
+            }
+        }
+
+        /* Bottom Slider wrapper */
+        .subpage-main .projects-wrapper {
+            flex-shrink: 0;
+            height: 100px;
+            /* Restored to exactly 100px */
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+            background: #fff;
+        }
+
+        .bottom-gallery-track {
+            display: flex;
+            height: 100%;
+            width: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            /* Hide scrollbar */
+
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        .bottom-gallery-track.grid-loaded {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .bottom-gallery-track::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Override global work_item height for this subpage */
+        .subpage-main .work_item {
+            height: 100px !important;
+            flex-shrink: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Ensure link wrapper propagates height */
+        .subpage-main .work_item a {
+            display: block;
+            height: 100%;
+        }
+
+        /* Ensure images inside shrink proportionally without cropping top/bottom */
+        .subpage-main .work_item img {
+            height: 100% !important;
+            width: auto !important;
+            /* Width auto ensures aspect-ratio constraint dynamically pulls in the sides */
+            object-fit: contain !important;
+            display: block !important;
+            cursor: pointer;
+            /* 'contain' fits entire image completely visible inside the 100px height limit */
+            transition: filter 0.3s ease, transform 0.3s ease;
+        }
+
+        /* Restore slider hover darkening and add zoom */
+        @media (hover: hover) {
+            .subpage-main .work_item:hover img {
+                transform: scale(1.05) !important;
+            }
+        }
+
+        /* Mobile specific adjustments */
+        @media (max-width: 768px) {
+
+            .subpage-main .projects-wrapper,
+            .subpage-main .projects_wrapper,
+            .projects-wrapper,
+            .projects_wrapper {
+                display: none !important;
+            }
+
+            .gallery-area {
+                justify-content: flex-start;
+                overflow: hidden;
+            }
+
+            /* Mobile: fill remaining space */
+            .galleries-clip {
+                position: relative;
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                max-width: 1170px;
+                margin: 0 auto 10px auto;
+                padding: 10px 15px;
+                box-sizing: border-box;
+                /* overflow removed for arrows */
+            }
+
+            .galleries-container {
+                margin-bottom: 0 !important;
+                margin-top: 18px;
+                width: 100%;
+                height: 100%;
+                border: none;
+                overflow: hidden;
+                position: relative;
+            }
+
+            /* Mobile: hide all grids by default */
+            .gallery-grid {
+                display: none;
+            }
+
+            /* Mobile: show active grid as flex-flow masonry */
+            .gallery-grid.active {
+                display: flex;
+                flex-wrap: wrap;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                overflow-x: hidden;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+                gap: 5px;
+                padding: 0;
+                box-sizing: border-box;
+                align-content: flex-start;
+            }
+
+            /* All items: dynamic height based on aspect ratio */
+            .gallery-grid.active>a {
+                width: calc(50% - 2.5px);
+                height: auto;
+                aspect-ratio: unset;
+                overflow: hidden;
+                background: #f0f0f0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-sizing: border-box;
+            }
+
+            /* Large items: 100% width */
+            .gallery-grid.active>a:nth-child(5n+1) {
+                width: 100%;
+                height: auto;
+            }
+
+            .gallery-grid.active>a img {
+                width: 100%;
+                height: auto;
+                object-fit: contain;
+                display: block;
+            }
+
+            .top-header-area {
+                padding: 20px 0 12px 0;
+            }
+
+            .subpage-main h2 {
+                font-size: 24px;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <header>
+        <div class="menu_block">
+            <div class="container clearfix">
+                <div class="logo pull-left">
+                    <a href="../home/"><span class="b1">COROZ</span><span class="b3">|</span><span class="b4">Arts
+                            &amp; Design</span></a>
+                </div>
+
+                <a class="menu_toggler" href="javascript:void(0);"><i class="fa fa-bars"></i></a>
+
+                <div class="pull-right">
+                    <nav class="navmenu center">
+                        <ul>
+                            <li class="first scroll_btn"><a href="../home/">HOME</a></li>
+                            <li class="sub-menu">
+                                <a href="../2dprojects/#illustrations">2D PROJECTS</a>
+                                <ul>
+                                    <li><a href="../2dprojects/#illustrations">Illustrations &amp; Sketches</a></li>
+                                    <li><a href="../2dprojects/#graphic_design">Graphic Design</a></li>
+                                </ul>
+                            </li>
+                            <li class="sub-menu">
+                                <a href="../3dprojects/#3d_design">3D PROJECTS</a>
+                                <ul>
+                                    <li><a href="../3dprojects/#3d_design">3D Design</a></li>
+                                    <li><a href="../3dprojects/#3d_art">3D Art</a></li>
+                                </ul>
+                            </li>
+                            <li class="scroll_btn active"><a href="../arts/">ARTWORK</a></li>
+                            <li class="scroll_btn"><a href="../contact/">CONTACT</a></li>
+                            <li class="theme-switch-wrapper">
+                                <label class="theme-switch" for="themeToggleArts">
+                                    <input type="checkbox" id="themeToggleArts" />
+                                    <div class="slider round">
+                                        <i class="fas fa-sun"></i>
+                                        <i class="fas fa-moon"></i>
+                                    </div>
+                                </label>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div id="pjax-container">
+        <main class="subpage-main">
+            <div style="width: 100%;">
+                <div class="container">
+                    <div class="top-header-area">
+                        <h2><b>Featured</b> Artwork</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-area">
+                <div class="galleries-clip">
+                    <button class="gallery-arrow arrow-left" id="gallery-arrow-left" aria-label="Scroll left"><i
+                            class="fa fa-angle-left"></i></button>
+                    <button class="gallery-arrow arrow-right" id="gallery-arrow-right" aria-label="Scroll right"><i
+                            class="fa fa-angle-right"></i></button>
+                    <div class="galleries-container">
+                        <div class="gallery-grid active" id="gallery-main">
+                            <a href="../images/works/1.jpg" class="glightbox"
+                                data-description="Portrait (2006) Pencil drawing"><img
+                                    src="../images/works/1_thumbnail_900.jpg" alt="Artwork" /></a>
+                            <a href="../images/works/coroz.art-1691131084724.jpg" class="glightbox"
+                                data-description="Portrait (2006) Pencil drawing"><img
+                                    src="../images/works/coroz.art-1691131084724_thumbnail_600.jpg" alt="Artwork" /></a>
+                            <a href="../images/works/2.jpg" class="glightbox"
+                                data-description="Portrait (2006) Pencil drawing"><img
+                                    src="../images/works/2_thumbnail_600.jpg" alt="Artwork" /></a>
+                            <a href="../images/works/DSC_00272.jpg" class="glightbox"
+                                data-description="Portrait (2016) Pencil drawing"><img
+                                    src="../images/works/DSC_00272_thumbnail_900.jpg" alt="Artwork" /></a>
+                            <a href="../images/works/3.jpg" class="glightbox"
+                                data-description="Self Portrait (2013) Pencil drawing and ink pen"><img
+                                    src="../images/works/3_thumbnail_600.jpg" alt="Artwork" /></a>
+                            <a href="../images/works/4.jpg" class="glightbox"
+                                data-description="Cosmic Friendship - Sketch (2016) Pencil drawing"><img
+                                    src="../images/works/4_thumbnail_900.jpg" alt="Artwork" /></a>
+                            <a href="../images/works/7.jpg" class="glightbox"
+                                data-description="Ancestral Chaos (2006) Acrylic Painting"><img
+                                    src="../images/works/7_thumbnail_900.jpg" alt="Artwork" /></a>
+                            <a href="../images/works/8.jpg" class="glightbox"
+                                data-description="Wonder (2010) Oil Painting"><img
+                                    src="../images/works/8_thumbnail_600.jpg" alt="Artwork" /></a>
+                            <a href="../images/works/900.jpg" class="glightbox"
+                                data-description="Abstract Red (2011) Acrylic Painting 2m x 1m"><img
+                                    src="../images/works/900_thumbnail_600.jpg" alt="Artwork" /></a>
+                            <a href="../images/works/10.jpg" class="glightbox"
+                                data-description="Fatal Kiss (2011) Oil Painting"><img
+                                    src="../images/works/10_thumbnail_900.jpg" alt="Artwork" /></a>
+                            <a href="../images/works/11.jpg" class="glightbox"
+                                data-description="3 cats (2015) Digital illustration printed onto pine wood, subsequently cut and intricately intervened with acrylic painting"><img
+                                    src="../images/works/11_thumbnail_900.jpg" alt="Artwork" /></a>
+                            <a href="../images/works/101.jpg" class="glightbox"
+                                data-description="3 cats (2015) Digital illustration printed onto pine wood, subsequently cut and intricately intervened with acrylic painting"><img
+                                    src="../images/works/101_thumbnail_900.jpg" alt="Artwork" /></a>
+                            <a href="../images/works/12.jpg" class="glightbox" What does a fish know about the water in
+                                which it swims all its life?" - Albert Einstein - Digital illustration printed onto pine
+                                wood, subsequently cut, carved, and intricately intervened with acrylic painting."
+                                data-description="&quot;What does a fish know about the water in which it swims all its life?&quot; - Albert Einstein - Digital illustration printed onto pine wood, subsequently cut, carved, and intricately intervened with acrylic painting."><img
+                                    src="../images/works/12_thumbnail_900.jpg" alt="Artwork" /></a>
+                            <a href="../images/works/3 (2).jpg" class="glightbox" What does a fish know about the water
+                                in which it swims all its life?" - Albert Einstein - Digital illustration printed onto
+                                canvas and intricately intervened with UV acrylic painting."
+                                data-description="&quot;What does a fish know about the water in which it swims all its life?&quot; - Albert Einstein - Digital illustration printed onto canvas and intricately intervened with UV acrylic painting."><img
+                                    src="../images/works/3 (2)_thumbnail_600.jpg" alt="Artwork" /></a>
+                            <a href="../images/works/2 (4).jpg" class="glightbox" What does a fish know about the water
+                                in which it swims all its life?" - Albert Einstein - Digital illustration printed onto
+                                canvas and intricately intervened with UV acrylic painting."
+                                data-description="&quot;What does a fish know about the water in which it swims all its life?&quot; - Albert Einstein - Digital illustration printed onto canvas and intricately intervened with UV acrylic painting."><img
+                                    src="../images/works/2 (4)_thumbnail_600.jpg" alt="Artwork" /></a>
+                            <a href="../images/works/13.jpg" class="glightbox"
+                                data-description="Léna Kahlo (2018) Digital illustration Adobe Photoshop"><img
+                                    src="../images/works/13_thumbnail_900.jpg" alt="Artwork" /></a>
+                            <a href="../images/works/14.jpg" class="glightbox"
+                                data-description="Balance (2021) Acrylic Painting"><img
+                                    src="../images/works/14_thumbnail_600.jpg" alt="Artwork" /></a>
+                            <a href="../images/works/15.jpg" class="glightbox"
+                                data-description="Drowned (2021) UV Reactive Acrylic Painting"><img
+                                    src="../images/works/15_thumbnail_600.jpg" alt="Artwork" /></a>
+                            <a href="../images/works/38.jpg" class="glightbox"
+                                data-description="Creation & Destruction when energies collide (2018) Triptyque Art"><img
+                                    src="../images/works/38_thumbnail_900.jpg" alt="Artwork" /></a>
+                            <a href="../images/works/IMG_20190803_155406_553.jpg" class="glightbox"
+                                data-description="Orcinus Orca (2007) Colored pencils"><img
+                                    src="../images/works/IMG_20190803_155406_553_thumbnail_600.jpg" alt="Artwork" /></a>
+                            <a href="../images/works/g4.jpg" class="glightbox"
+                                data-description="Anatomy studies (2025) Pencil Sketch"><img
+                                    src="../images/works/g4_thumbnail_900.jpg" alt="Artwork" /></a>
+                            <a href="../images/works/IMG_20161208_134725_20161218164051299.jpg" class="glightbox"
+                                data-description="Portrait (2016) Pencil drawing"><img
+                                    src="../images/works/IMG_20161208_134725_20161218164051299_thumbnail_900.jpg"
+                                    alt="Artwork" /></a>
+                            <a href="../images/works/120.jpg" class="glightbox"
+                                data-description="The Hulk - Unfinished (2007) Pencil drawing"><img
+                                    src="../images/works/120_thumbnail_600.jpg" alt="Artwork" /></a>
+                            <a href="../images/works/g2.jpg" class="glightbox"
+                                data-description="Portrait (2006) Pencil drawing"><img
+                                    src="../images/works/g2_thumbnail_600.jpg" alt="Artwork" /></a>
+                            <a href="../images/works/121.jpg" class="glightbox"
+                                data-description="Portrait (2006) Pencil drawing"><img
+                                    src="../images/works/121_thumbnail_600.jpg" alt="Artwork" /></a>
+                        </div>
+                    </div>
+                </div><!-- /.galleries-clip -->
+            </div>
+
+            <div class="projects-wrapper">
+                <!-- Continuous Marquee Bottom Slider -->
+                <div class="bottom-gallery-track" id="bottom-track">
+                    <div class="work_item"><a class="glightbox" href="../images/works/1.jpg"
+                            data-description="Portrait (2006) Pencil drawing"><img
+                                src="../images/works/1_thumbnail_600.jpg" alt="Artwork" /></a></div>
+                    <div class="work_item"><a class="glightbox" href="../images/works/3.jpg"
+                            data-description="Self Portrait (2013) Pencil drawing and ink pen"><img
+                                src="../images/works/3_thumbnail_600.jpg" alt="Artwork" /></a></div>
+                    <div class="work_item"><a class="glightbox" href="../images/works/5.jpg"
+                            data-description="Salvador Dali (2016) Digital Portrait"><img
+                                src="../images/works/5_thumbnail_600.jpg" alt="Artwork" /></a></div>
+                    <div class="work_item"><a class="glightbox" href="../images/works/7.jpg"
+                            data-description="Ancestral Chaos (2006) Acrylic Painting"><img
+                                src="../images/works/7_thumbnail_600.jpg" alt="Artwork" /></a></div>
+                    <div class="work_item"><a class="glightbox" href="../images/works/9.jpg"
+                            data-description="Abstract Red (2011) Acrylic Painting 2m x 1m"><img
+                                src="../images/works/9_thumbnail_600.jpg" alt="Artwork" /></a></div>
+                    <div class="work_item"><a class="glightbox" href="../images/works/11.jpg"
+                            data-description="3 cats (2015) Digital illustration printed onto pine wood, subsequently cut and intricately intervened with acrylic painting"><img
+                                src="../images/works/11_thumbnail_600.jpg" alt="Artwork" /></a></div>
+                    <div class="work_item"><a class="glightbox" href="../images/works/13.jpg"
+                            data-description="Léna Kahlo (2018) Digital illustration Adobe Photoshop"><img
+                                src="../images/works/13_thumbnail_600.jpg" alt="Artwork" /></a></div>
+                    <div class="work_item"><a class="glightbox" href="../images/works/15.jpg"
+                            data-description="Drowned (2021) UV Reactive Acrylic Painting"><img
+                                src="../images/works/15_thumbnail_600.jpg" alt="Artwork" /></a></div>
+                    <div class="work_item"><a class="glightbox" href="../images/works/2.jpg"
+                            data-description="Portrait (2006) Pencil drawing"><img
+                                src="../images/works/2_thumbnail_600.jpg" alt="Artwork" /></a></div>
+                    <div class="work_item"><a class="glightbox" href="../images/works/4.jpg"
+                            data-description="Cosmic Friendship - Sketch (2016) Pencil drawing"><img
+                                src="../images/works/4_thumbnail_600.jpg" alt="Artwork" /></a></div>
+                    <div class="work_item"><a class="glightbox" href="../images/works/6.jpg"
+                            data-description="Cara Delevinge (2017) Digital Portrait"><img
+                                src="../images/works/6_thumbnail_600.jpg" alt="Artwork" /></a></div>
+                    <div class="work_item"><a class="glightbox" href="../images/works/8.jpg"
+                            data-description="Wonder (2010) Oil Painting"><img src="../images/works/8_thumbnail_600.jpg"
+                                alt="Artwork" /></a></div>
+                    <div class="work_item"><a class="glightbox" href="../images/works/10.jpg"
+                            data-description="Fatal Kiss (2011) Oil Painting"><img
+                                src="../images/works/10_thumbnail_600.jpg" alt="Artwork" /></a></div>
+                    <div class="work_item"><a class="glightbox" href="../images/works/12.jpg" What does a fish know
+                            about the water in which it swims all its life?" - Albert Einstein - Digital illustration
+                            printed onto pine wood, subsequently cut, carved, and intricately intervened with acrylic
+                            painting."
+                            data-description="&quot;What does a fish know about the water in which it swims all its life?&quot; - Albert Einstein - Digital illustration printed onto pine wood, subsequently cut, carved, and intricately intervened with acrylic painting."><img
+                                src="../images/works/12_thumbnail_600.jpg" alt="Artwork" /></a></div>
+                    <div class="work_item"><a class="glightbox" href="../images/works/14.jpg"
+                            data-description="Balance (2021) Acrylic Painting"><img
+                                src="../images/works/14_thumbnail_600.jpg" alt="Artwork" /></a></div>
+                    <div class="work_item"><a href="../images/works/2 (4).jpg" class="glightbox"
+                            data-description="&quot;What does a fish know about the water in which it swims all its life?&quot; - Albert Einstein - Digital illustration printed onto canvas and intricately intervened with UV acrylic painting."><img
+                                src="../images/works/2 (4)_thumbnail_600.jpg" alt="Artwork" /></a></div>
+                    <div class="work_item"><a href="../images/works/IMG_20190803_155406_553.jpg" class="glightbox"
+                            data-description="Orcinus Orca (2007) Colored pencils"><img
+                                src="../images/works/IMG_20190803_155406_553_thumbnail_600.jpg" alt="Artwork" /></a>
+                    </div>
+                    <div class="work_item"><a class="glightbox" href="../images/works/Padres.jpeg"
+                            data-description="Artwork"><img src="../images/works/Padres_thumbnail_600.jpg"
+                                alt="Artwork" /></a></div>
+                </div>
+            </div>
+        </main>
+
+
+        <script src="../js/gallery-engine.js"></script>
+    </div>
+
+</body>
+
+</html>
