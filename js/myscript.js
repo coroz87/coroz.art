@@ -450,11 +450,21 @@ document.addEventListener('DOMContentLoaded', function () {
 				data: form.serialize(),
 				dataType: "json",
 				success: function (response) {
-					$('#note').html('<div class="notification_ok">Thank you! Your message has been sent.</div>');
+					$('#note').html('<div class="notification_ok">Your message was sent successfully!</div>').fadeIn();
 					form.trigger('reset');
+					setTimeout(function () {
+						$('#note').fadeOut(1000, function () {
+							$(this).html('');
+						});
+					}, 5000);
 				},
 				error: function (err) {
-					$('#note').html('<div class="notification_error">There was an error sending your message. Please try again later.</div>');
+					$('#note').html('<div class="notification_error">There was an error sending your message. Please try again later.</div>').fadeIn();
+					setTimeout(function () {
+						$('#note').fadeOut(1000, function () {
+							$(this).html('');
+						});
+					}, 5000);
 				}
 			});
 		});
