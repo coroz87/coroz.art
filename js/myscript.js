@@ -24,6 +24,7 @@ window.addEventListener('load', function () {
 window.addEventListener('pageshow', function (e) {
 	if (e.persisted) {
 		document.body.classList.remove('page-leaving');
+		document.body.classList.add('page-entering');
 	}
 });
 
