@@ -481,15 +481,29 @@ window.initGalleryEngine = function () {
         }, 250);
     });
 
-    // Bottom Slider Continuous Autoplay Clone Approach
+    // Bottom Slider – Robust 5-block infinite scroll (Safari/WebKit safe)
+    // ─────────────────────────────────────────────────────────────────────
+    // We repeat content exactly 5 times so each block = scrollWidth / 5.
+    // This is the SAME math used by InfiniteGrid and avoids subpixel errors
+    // that cause Safari to flicker when using a simple "double & half"
+    // approach. We start scrolled to block 3 (offset = blockWidth × 2) and
+    // teleport between 1.5× and 2.5× — giving a full block of runway on
+    // both sides regardless of viewport width or number of images.
     const bottomTrack = document.getElementById('bottom-track');
     if (bottomTrack) {
         bottomTrack.addEventListener('dragstart', (e) => e.preventDefault());
 
-        const originalBottomHTML = bottomTrack.innerHTML;
-        bottomTrack.innerHTML = originalBottomHTML + originalBottomHTML; // Double items
+        // Promote to its own GPU composite layer — eliminates Safari repaint
+        // flicker during JS-driven scrollLeft assignments.
+        bottomTrack.style.willChange = 'scroll-position';
+        bottomTrack.style.webkitTransform = 'translateZ(0)';
+        bottomTrack.style.transform = 'translateZ(0)';
 
-        // Wait for layout calculation and image load
+        const originalBottomHTML = bottomTrack.innerHTML;
+        // 5 clones → each block is exactly 1/5 of total scrollWidth
+        bottomTrack.innerHTML = originalBottomHTML.repeat(5);
+
+        // Wait for layout + images before locking geometry
         setTimeout(() => {
             if (typeof GLightbox !== 'undefined') {
                 GLightbox({
@@ -503,61 +517,85 @@ window.initGalleryEngine = function () {
                 });
             }
 
-            // Force browser to calculate width AFTER cloned images render
             const images = bottomTrack.querySelectorAll('img');
             let imagesLoaded = 0;
+            let sliderInitialized = false;
 
             const initializeSlider = () => {
-                const halfScrollWidth = bottomTrack.scrollWidth / 2;
-                bottomTrack.scrollLeft = halfScrollWidth; // Start in middle
+                if (sliderInitialized) return;
+                sliderInitialized = true;
+
+                // --- Geometry ---
+                // blockWidth is the pixel-exact width of one content repetition.
+                // Because we have exactly 5 copies, this is always exact.
+                const blockWidth = bottomTrack.scrollWidth / 5;
+
+                // Anchor to the START of block 3 (zero-indexed block 2).
+                // This gives us two full blocks of runway to the left and two to the right
+                // before we'd ever hit a hard edge — more than enough for any scroll speed.
+                let exactScrollLeft = blockWidth * 2;
+                bottomTrack.scrollLeft = exactScrollLeft;
 
                 // Bottom Slider Interaction State
                 let isDown = false;
                 let isDragging = false;
                 let startX;
-                let scrollLeftStart;
+                let scrollLeftStart = exactScrollLeft;
                 let velocity = 0;
                 let prevMouseX = 0;
                 let prevTime = 0;
 
-                let exactScrollLeft = bottomTrack.scrollLeft;
-
                 // Unified Momentum + Autoplay Loop
+                // ─────────────────────────────────────────────────────────────────
+                // firstFramePainted: mirrors the masonry-gallery pattern exactly.
+                // The 'grid-loaded' fade-in is deferred until the FIRST rendered
+                // animation frame of the loop — the same moment the browser paints
+                // the correctly-positioned slider. No arbitrary setTimeout needed.
+                let firstFramePainted = false;
                 const momentumLoop = () => {
-                    // ALWAYS apply constant baseline flow (conveyor belt)
-                    if (!isDown) { // Only drift if NOT holding it, otherwise it fights the user's cursor
+                    // Constant conveyor-belt drift (only when user isn't holding)
+                    if (!isDown) {
                         exactScrollLeft += 0.25;
                     }
 
                     if (!isDown) {
                         if (Math.abs(velocity) > 0.1) {
-                            // Fling Momentum Physics
                             velocity *= 0.98;
                             exactScrollLeft -= velocity;
-                            bottomTrack.scrollLeft = exactScrollLeft;
                         } else {
                             velocity = 0;
-                            bottomTrack.scrollLeft = exactScrollLeft; // Apply drift
                         }
+                        bottomTrack.scrollLeft = exactScrollLeft;
                     }
 
-                    // Teleport Logic (Seamless Loop)
-                    const maxScroll = bottomTrack.scrollWidth - bottomTrack.clientWidth;
+                    // ── Seamless teleport ──────────────────────────────────────────
+                    // When we pass 1.5× boundary scroll back by exactly one block.
+                    // When we drop below 1.5× pull forward by one block.
+                    // The 0.5-block dead-zone around the 2× anchor gives us well over
+                    // enough runway in both directions for any reasonable scroll velocity.
+                    if (exactScrollLeft >= blockWidth * 2.5) {
+                        exactScrollLeft -= blockWidth;
+                        bottomTrack.scrollLeft = exactScrollLeft;
+                        scrollLeftStart -= blockWidth;
+                    } else if (exactScrollLeft <= blockWidth * 1.5) {
+                        exactScrollLeft += blockWidth;
+                        bottomTrack.scrollLeft = exactScrollLeft;
+                        scrollLeftStart += blockWidth;
+                    }
 
-                    if (exactScrollLeft <= 0) {
-                        exactScrollLeft += halfScrollWidth;
-                        bottomTrack.scrollLeft = exactScrollLeft;
-                        scrollLeftStart += halfScrollWidth;
-                    } else if (exactScrollLeft >= maxScroll - 5) {
-                        exactScrollLeft -= halfScrollWidth;
-                        bottomTrack.scrollLeft = exactScrollLeft;
-                        scrollLeftStart -= halfScrollWidth;
+                    // Fade in: reveal the slider on the very first painted frame —
+                    // geometry is locked, scroll position is committed, images are
+                    // fully rendered. Identical timing to the masonry gallery.
+                    if (!firstFramePainted) {
+                        firstFramePainted = true;
+                        bottomTrack.classList.add('grid-loaded');
                     }
 
                     requestAnimationFrame(momentumLoop);
                 };
                 requestAnimationFrame(momentumLoop);
 
+                // ── Interactions ──────────────────────────────────────────────────
                 bottomTrack.addEventListener('click', (e) => {
                     if (isDragging) {
                         e.preventDefault();
@@ -599,8 +637,8 @@ window.initGalleryEngine = function () {
                     exactScrollLeft = scrollLeftStart - walk;
                     bottomTrack.scrollLeft = exactScrollLeft;
 
-                    let now = Date.now();
-                    let dt = now - prevTime;
+                    const now = Date.now();
+                    const dt = now - prevTime;
                     if (dt > 0) {
                         velocity = ((x - prevMouseX) / dt) * 3.6;
                     }
@@ -615,13 +653,13 @@ window.initGalleryEngine = function () {
                     }
                 }, { passive: false });
 
-                // Add fade-in class securely AFTER math is initialized and images are loaded
-                setTimeout(() => {
-                    bottomTrack.classList.add('grid-loaded');
-                }, 50);
+                // (fade-in is now handled inside momentumLoop on first rendered frame)
 
-            }; // End initializeSlider
+            }; // end initializeSlider
 
+            // ── Image-load gate ───────────────────────────────────────────────
+            // We must wait for images to paint their intrinsic widths before
+            // calling scrollWidth, otherwise Safari returns wrong values.
             images.forEach(img => {
                 if (img.complete) {
                     imagesLoaded++;
@@ -638,17 +676,16 @@ window.initGalleryEngine = function () {
             });
 
             if (imagesLoaded === images.length) {
+                // All images were already cached – safe to initialize immediately
                 initializeSlider();
             } else {
-                // Wait up to 800ms for images to load, otherwise force initialize (failsafe)
+                // Failsafe: if images haven't loaded within 1 s, initialize anyway
                 setTimeout(() => {
-                    if (!bottomTrack.classList.contains('grid-loaded')) {
-                        initializeSlider();
-                    }
-                }, 800);
+                    if (!sliderInitialized) initializeSlider();
+                }, 1000);
             }
 
-        }, 100);
+        }, 150); // Slightly longer initial delay gives Safari time to build layout
     }
 };
 
